@@ -8,16 +8,7 @@ myChatTemplate.innerHTML = `
             <div class="col-4"></div>
 
             <!--Dropdown button-->
-            <div class="col dropdown show">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Block</a>
-                    <a class="dropdown-item" href="#">Clear Conversation</a>
-                    <a class="dropdown-item" href="#">Close Conversation</a>
-                </div>
-            </div>
+            <slot></slot>
 
             <!--Actual text goes here-->
             <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box">

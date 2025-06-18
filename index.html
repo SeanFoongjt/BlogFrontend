@@ -20,7 +20,7 @@
                 <div class="col-11">
                     <h1>Conversation title</h1>
                 </div>
-                <div class="col dropdown show mt-1">
+                <div class="col dropleft show mt-1">
                     <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
@@ -35,8 +35,30 @@
 
         <!-- Space where chats exist -->
         <div class="container">
-            <my-chat></my-chat>
-            <my-chat></my-chat>
+            <my-chat>
+                <div class="col dropdown show">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Delete</a>
+                        <a class="dropdown-item" href="#">Forward</a>
+                        <a class="dropdown-item" href="#">Reply</a>
+                    </div>
+                </div>
+            </my-chat>
+            <my-chat>
+                <div class="col dropdown show">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Delete</a>
+                        <a class="dropdown-item" href="#">Forward</a>
+                        <a class="dropdown-item" href="#">Reply</a>
+                    </div>
+                </div>
+            </my-chat>
             <other-chat></other-chat>
         </div>
         
