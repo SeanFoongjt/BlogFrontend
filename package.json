@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "bootstrap": "^5.3.6",
     "handlebars": "^4.7.8",
     "node": "^24.2.0",

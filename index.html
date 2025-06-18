@@ -107,8 +107,15 @@
         </div>
         
         <!-- Create the editor container -->
-        <div class="container pb-3">
+
+        <div class="container pb-2">
             <div class="container editor-container" id="editor">
+            </div>
+            <div class="toolbar mt-1">
+                <button class="btn btn-outline-primary" id="mike-button">
+                    <i class="fa-solid fa-lg fa-microphone"></i>
+                </button>
+                <button class="btn btn-outline-primary" id="send-button">Send</button>
             </div>
         </div>
     </div>
@@ -120,6 +127,7 @@
     <!-- Initialize Quill editor -->
     <script>
     const quill = new Quill('#editor', {
+
         theme: 'snow'
     });
     </script>
