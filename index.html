@@ -13,77 +13,6 @@
 </head>
 
 <body>
-    <template id="my-chat">
-        <script src="https://kit.fontawesome.com/986bcdd23b.js" crossorigin="anonymous"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="myStyle.css">
-        <div class="row justify-content-end">
-            <!--Empty space padding-->
-            <div class="col-4"></div>
-
-            <!--Dropdown button-->
-
-            <!--Actual text goes here-->
-            <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box">
-                <span>
-                    Placeholder text here, testing overflow overflow overflow overflow
-                    Placeholder text here, testing overflow overflow overflow overflow
-                </span>
-            </div>
-        </div>
-
-        <!--Timestamp-->
-        <div class="row justify-content-end">
-            <div class="col-6 text-end">
-                <p style="font-size: 12px;">9.00 a.m.</p>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </template>
-
-    <template id="other-chat">
-        <head>
-            <script src="https://kit.fontawesome.com/986bcdd23b.js" crossorigin="anonymous"></script>
-            <link rel="stylesheet" href="myStyle.css">
-        </head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <body>
-            <div class="container">
-                <div class="row justify-content-start">
-                    <!--Image of the person being conversed with-->
-                    <div class="col">
-                        <i class="fa-solid fa-image-portrait fa-xl"></i>
-                    </div>
-
-                    <!--Box where the actual text goes-->
-                    <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box">
-                        <span>
-                            More reasonable amounts of text
-                        </span>
-                    </div>
-
-                    <!--empty space at the end-->
-                    <div class="col-4">
-                    </div>
-                </div>
-
-                <!--Placeholder for the timestamp at the bottom-->
-                <div class="row justify-content-start">
-                    <div class="col-1"></div>
-                    <div class="col-7 text-start">
-                        <p style="font-size: 12px;">9.00 a.m.</p>
-                    </div>
-                </div>
-            </div>
-
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        </body>
-    </template>
-
 <!-- Create the blog container -->
     <div class="container rounded border border-1 border-dark mt-2 mb-2">
         <div class="container pb-3 pt-2" id="textlog">
@@ -91,13 +20,14 @@
                 <div class="col-11">
                     <h1>Conversation title</h1>
                 </div>
-                <div class="col dropdown show">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="col dropdown show mt-1">
+                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Test</a>
-                        <a class="dropdown-item" href="#">Test 2</a>
+                        <a class="dropdown-item" href="#">Block</a>
+                        <a class="dropdown-item" href="#">Clear Conversation</a>
+                        <a class="dropdown-item" href="#">Close Conversation</a>
                     </div>
                 </div>
             </div>

@@ -19,8 +19,9 @@ sendButton.addEventListener("click", sendFunction);
 // Function for when the send button is clicked
 function sendFunction() {
   const text = quill.getText()
+  const currDate = new Date(Date.now());
   quill.setText("");
-  console.log(text);
+  console.log(text.trim() + " at " + currDate.toDateString());
 }
 
 // Logic for mike button
