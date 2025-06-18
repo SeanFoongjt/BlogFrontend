@@ -1,7 +1,6 @@
 import Quill from "quill";
 
 const options = {
-  debug: 'info',
   modules: {
     toolbar: true,
   },
