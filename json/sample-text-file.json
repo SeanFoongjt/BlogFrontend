@@ -1,0 +1,19 @@
+{
+    "chats" : [
+        {
+            "type" : "other-chat",
+            "text" : "Hey how are you doing?",
+            "time" : "19 June, 2025 09:00"
+        },
+        {
+            "type" : "my-chat",
+            "text" : "I'm fine thanks",
+            "time" : "19 June, 2025 09:14"
+        },
+        {
+            "type" : "my-chat",
+            "text" : "placeholder",
+            "time" : "19 June, 2025 09:29"
+        }
+    ]
+}
