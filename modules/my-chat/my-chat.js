@@ -19,7 +19,7 @@ myChatTemplate.innerHTML = `
         <!--Timestamp-->
         <div class="row justify-content-end">
             <div class="col-6 text-end">
-                <p style="font-size: 12px;">9.00 a.m.</p>
+                <p style="font-size: 12px;" name="time"><slot name="time">9.00 a.m.</slot></p>
             </div>
         </div>
 `

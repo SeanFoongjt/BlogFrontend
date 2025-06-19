@@ -35,12 +35,13 @@
 
         <!-- Space where chats exist -->
         <div class="container" id="chatlog">
-            <my-chat>
+            <my-chat id="my-chat-1">
                 <div slot="dropdown" class="col dropdown show">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Delete</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#" onclick="getElementById('my-chat-1').remove()">Delete</a>
                         <a class="dropdown-item" href="#">Forward</a>
                         <a class="dropdown-item" href="#">Reply</a>
                     </div>
@@ -50,12 +51,13 @@
                     overflow overflow overflow overflow
                 </span>
             </my-chat>
-            <my-chat>
+            <my-chat id="my-chat-2">
                 <div slot="dropdown" class="col dropdown show">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Delete</a>
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#" onclick="document.getElementById('my-chat-2').remove()">Delete</a>
                         <a class="dropdown-item" href="#">Forward</a>
                         <a class="dropdown-item" href="#">Reply</a>
                     </div>
@@ -71,7 +73,6 @@
         </div>
         
         <!-- Create the editor container -->
-
         <div class="container pb-2">
             <div class="container editor-container" id="editor">
             </div>
@@ -80,6 +81,7 @@
                     <i class="fa-solid fa-lg fa-microphone"></i>
                 </button>
                 <button class="btn btn-outline-primary" id="send-button">Send</button>
+                <button class="btn btn-outline-danger" id="cancel-button" hidden>Cancel</button>
             </div>
         </div>
     </div>

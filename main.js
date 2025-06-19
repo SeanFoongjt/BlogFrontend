@@ -63,6 +63,13 @@ function sendFunction() {
   dropdown.appendChild(dropdownMenu);
   //console.log("dropdownMenu created");
 
+  var editButton = document.createElement("a");
+  editButton.setAttribute("class", "dropdown-item");
+  editButton.setAttribute("href", "#");
+  editButton.innerText = "Edit";
+  dropdownMenu.appendChild(editButton);
+  editButton.addEventListener("click", () => editFunction(chatbox));
+
   var deleteButton = document.createElement("a");
   deleteButton.setAttribute("class", "dropdown-item");
   deleteButton.setAttribute("href", "#");
@@ -85,8 +92,27 @@ function sendFunction() {
   // Create text to go into the slot for actual text of the chat
   var chatText = document.createElement("div");
   chatText.setAttribute("slot", "chatText");
+  chatText.setAttribute("name", "text");
   chatText.appendChild(document.createTextNode(text.trim()));
   chatbox.appendChild(chatText);
+
+  var time = document.createElement("span");
+  time.setAttribute("slot", "time");
+  var timeHour = currDate.getHours();
+  var timeMinutes = currDate.getMinutes();
+
+  if (timeMinutes < 10) {
+    timeMinutes = "0" + timeMinutes;
+  }
+
+  if (timeHour < 13) {
+    time.innerText = timeHour.toString() + "." + timeMinutes + " a.m.";
+  } else if (timeHour == 0) {
+    time.innerText = "12." + timeMinutes + " a.m."
+  } else {
+    time.innerText = (timeHour - 12).toString() + "." + timeMinutes + " p.m.";
+  }
+  chatbox.appendChild(time);
 
   chatlog.appendChild(chatbox);
 }
@@ -132,6 +158,36 @@ recognition.onresult = function(event) {
     .insert(speechText)
   );
   console.log(speechText);
+}
+
+function editFunction(object) {
+  var textToEdit = object.querySelector("div[name='text']");
+  quill.setText(textToEdit.innerText);  
+  
+  var cancelButton = document.getElementById("cancel-button");
+  cancelButton.removeAttribute("hidden");
+
+
+  cancelButton.addEventListener("click", cleanup);
+
+
+  var editButton = document.getElementById("send-button");
+  editButton.innerText = "Edit";
+  editButton.removeEventListener("click", sendFunction);
+  editButton.addEventListener("click", edit);
+
+  function edit() {
+    textToEdit.innerText = quill.getText().trim();
+    cleanup();
+  }
+
+  function cleanup() {
+    cancelButton.setAttribute("hidden", "");
+    quill.setText("");
+    editButton.removeEventListener("click", edit);
+    editButton.addEventListener("click", sendFunction);
+    editButton.innerText="Send";
+  }
 }
 
 //import { Marked } from "marked";
