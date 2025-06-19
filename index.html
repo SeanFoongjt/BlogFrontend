@@ -34,7 +34,7 @@
         </div>
 
         <!-- Space where chats exist -->
-        <div class="container" id="chatlog">
+        <div class="container chatlog" id="chatlog">
             <my-chat id="my-chat-1">
                 <div slot="dropdown" class="col dropdown show">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,7 +56,7 @@
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Edit</a>
+                        <a class="dropdown-item" href="#" onclick="editFunction(this)">Edit</a>
                         <a class="dropdown-item" href="#" onclick="document.getElementById('my-chat-2').remove()">Delete</a>
                         <a class="dropdown-item" href="#">Forward</a>
                         <a class="dropdown-item" href="#">Reply</a>

@@ -1,3 +1,5 @@
+import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
+
 // Web Speech API as supported by major browsers
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -20,33 +22,22 @@ sendButton.addEventListener("click", sendFunction);
 function sendFunction() {
   // Get text from editor as well as date
   const text = quill.getText()
-  const currDate = new Date(Date.now());
+  
   quill.setText("");
-  console.log(text.trim() + " at " + currDate.toDateString());
+  console.log(text.trim());
 
   // Initialise chatbox, add dropdown menu
   var chatlog = document.getElementById("chatlog");
   var chatbox = document.createElement("my-chat");
-  /** 
-  chatbox.innerHTML = `
-    <div slot="dropdown" class="col dropdown show">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" name="delete-my-chat" href="#">Delete</a>
-            <a class="dropdown-item" href="#">Forward</a>
-            <a class="dropdown-item" href="#">Reply</a>
-        </div>
-    </div>
-  `
-  */
 
+  // Create Dropdown container
   var dropdown = document.createElement("div");
   dropdown.setAttribute("slot", "dropdown")
   dropdown.setAttribute("class", "col dropdown show");
   chatbox.appendChild(dropdown);
   //console.log("dropdown created");
 
+  // Create Dropdown button
   var dropdownButton = document.createElement("button");
   dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
   dropdownButton.setAttribute("type", "button");
@@ -57,12 +48,14 @@ function sendFunction() {
   dropdown.appendChild(dropdownButton);
   //console.log("dropdownButton created");
 
+  // Create Dropdown menu
   var dropdownMenu = document.createElement("div");
   dropdownMenu.setAttribute("class", "dropdown-menu");
   dropdownMenu.setAttribute("aria-labelledby", "dropdownMenuButton");
   dropdown.appendChild(dropdownMenu);
   //console.log("dropdownMenu created");
 
+  // Create Edit button
   var editButton = document.createElement("a");
   editButton.setAttribute("class", "dropdown-item");
   editButton.setAttribute("href", "#");
@@ -70,6 +63,7 @@ function sendFunction() {
   dropdownMenu.appendChild(editButton);
   editButton.addEventListener("click", () => editFunction(chatbox));
 
+  // Create Delete button
   var deleteButton = document.createElement("a");
   deleteButton.setAttribute("class", "dropdown-item");
   deleteButton.setAttribute("href", "#");
@@ -77,12 +71,14 @@ function sendFunction() {
   dropdownMenu.appendChild(deleteButton);
   deleteButton.addEventListener("click", () => chatbox.remove());
 
+  // Create Forward button
   var forwardButton = document.createElement("a");
   forwardButton.setAttribute("class", "dropdown-item");
   forwardButton.setAttribute("href", "#");
   forwardButton.innerText = "Forward";
   dropdownMenu.appendChild(forwardButton);
 
+  // Create Reply button
   var replyButton = document.createElement("a");
   replyButton.setAttribute("class", "dropdown-item");
   replyButton.setAttribute("href", "#");
@@ -98,22 +94,10 @@ function sendFunction() {
 
   var time = document.createElement("span");
   time.setAttribute("slot", "time");
-  var timeHour = currDate.getHours();
-  var timeMinutes = currDate.getMinutes();
+  time.setAttribute("name", "time");
+  time.innerText = getCurrTimeFormatted();
 
-  if (timeMinutes < 10) {
-    timeMinutes = "0" + timeMinutes;
-  }
-
-  if (timeHour < 13) {
-    time.innerText = timeHour.toString() + "." + timeMinutes + " a.m.";
-  } else if (timeHour == 0) {
-    time.innerText = "12." + timeMinutes + " a.m."
-  } else {
-    time.innerText = (timeHour - 12).toString() + "." + timeMinutes + " p.m.";
-  }
   chatbox.appendChild(time);
-
   chatlog.appendChild(chatbox);
 }
 
@@ -178,6 +162,10 @@ function editFunction(object) {
 
   function edit() {
     textToEdit.innerText = quill.getText().trim();
+    var subtext = object.querySelector("span[name='time']");
+    if (subtext.innerText.slice(-8) != "(edited)") {
+      subtext.innerText += " (edited)"
+    }
     cleanup();
   }
 
@@ -190,5 +178,6 @@ function editFunction(object) {
   }
 }
 
+export {editFunction};
 //import { Marked } from "marked";
 
