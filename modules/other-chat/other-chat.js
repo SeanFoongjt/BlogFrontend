@@ -10,7 +10,7 @@ otherChatTemplate.innerHTML = `
                 <div class="row justify-content-start">
                     <!--Image of the person being conversed with-->
                     <div class="col">
-                        <i class="fa-solid fa-image-portrait fa-xl"></i>
+                        <slot></slot>
                     </div>
 
                     <!--Box where the actual text goes-->

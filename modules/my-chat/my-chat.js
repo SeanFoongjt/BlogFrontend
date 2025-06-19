@@ -7,15 +7,12 @@ myChatTemplate.innerHTML = `
             <!--Empty space padding-->
             <div class="col-4"></div>
 
-            <!--Dropdown button-->
-            <slot></slot>
+            <!--Slot for dropdown button-->
+            <slot name="dropdown"></slot>
 
             <!--Actual text goes here-->
             <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box">
-                <span>
-                    Placeholder text here, testing overflow overflow overflow overflow
-                    Placeholder text here, testing overflow overflow overflow overflow
-                </span>
+                <slot name="chatText"></slot>
             </div>
         </div>
 

@@ -34,11 +34,10 @@
         </div>
 
         <!-- Space where chats exist -->
-        <div class="container">
+        <div class="container" id="chatlog">
             <my-chat>
-                <div class="col dropdown show">
+                <div slot="dropdown" class="col dropdown show">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Delete</a>
@@ -46,11 +45,14 @@
                         <a class="dropdown-item" href="#">Reply</a>
                     </div>
                 </div>
+                <span slot="chatText">
+                    Placeholder Text test overflow overflow overflow overflow
+                    overflow overflow overflow overflow
+                </span>
             </my-chat>
             <my-chat>
-                <div class="col dropdown show">
+                <div slot="dropdown" class="col dropdown show">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Delete</a>
@@ -58,8 +60,14 @@
                         <a class="dropdown-item" href="#">Reply</a>
                     </div>
                 </div>
+                <span slot="chatText">
+                    Placeholder Text test overflow overflow overflow overflow
+                    overflow overflow overflow overflow
+                </span>
             </my-chat>
-            <other-chat></other-chat>
+            <other-chat>
+                <i class="fa-solid fa-image-portrait fa-xl"></i>
+            </other-chat>
         </div>
         
         <!-- Create the editor container -->
