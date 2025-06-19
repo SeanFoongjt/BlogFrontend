@@ -1,17 +1,19 @@
 import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
 
-// Web Speech API as supported by major browsers
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const SpeechGrammarList =
-  window.SpeechGrammarList || window.webkitSpeechGrammarList;
-const SpeechRecognitionEvent =
-  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
 const editor = document.getElementById('editor');
 
 const quill = new Quill("#editor", {
   theme: "snow",
+  modules : {
+    toolbar:
+    [
+      [{ 'size': ['small', false, 'large', 'huge']}],
+      ['bold', 'italic', 'underline'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      [{'script':'sub'}, {'script': 'super'}],
+      [{ 'encoding': ['Plaintext', 'HTML', 'Markdown']}]
+    ]
+  }
 });
 
 // Logic for send button
@@ -101,6 +103,14 @@ function sendFunction() {
   chatlog.appendChild(chatbox);
 }
 
+// Web Speech API as supported by major browsers
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechGrammarList =
+  window.SpeechGrammarList || window.webkitSpeechGrammarList;
+const SpeechRecognitionEvent =
+  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
 // Logic for mike button
 const mikeButton = document.getElementById('mike-button');
 mikeButton.addEventListener("touchstart", mikeStart);
@@ -179,5 +189,4 @@ function editFunction(object) {
 }
 
 export {editFunction};
-//import { Marked } from "marked";
 

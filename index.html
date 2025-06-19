@@ -5,11 +5,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://kit.fontawesome.com/986bcdd23b.js" crossorigin="anonymous"></script>
-    <script type="module" src="modules/my-chat/my-chat.js"></script>
-    <script type="module" src="modules/other-chat/other-chat.js"></script>
+    <script type="module" src="modules/web-components/my-chat.js"></script>
+    <script type="module" src="modules/web-components/other-chat.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-    <link rel="stylesheet" href="myStyle.css">
+    <link rel="stylesheet" href="my-style.css">
 </head>
 
 <body>
@@ -25,9 +25,9 @@
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Block</a>
-                        <a class="dropdown-item" href="#">Clear Conversation</a>
-                        <a class="dropdown-item" href="#">Close Conversation</a>
+                        <a class="dropdown-item" href="#" id="block">Block</a>
+                        <a class="dropdown-item" href="#" id="clear-conversation" onclick = "getElementById('chatlog').replaceChildren()">Clear Conversation</a>
+                        <a class="dropdown-item" href="#" id="close-conversation">Close Conversation</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
         <div class="container pb-2">
             <div class="container editor-container" id="editor">
             </div>
-            <div class="toolbar mt-1">
+            <div class="mt-1">
                 <button class="btn btn-outline-primary mike-button" id="mike-button">
                     <i class="fa-solid fa-lg fa-microphone"></i>
                 </button>
