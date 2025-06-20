@@ -11,7 +11,7 @@ const quill = new Quill("#editor", {
       ['bold', 'italic', 'underline'],
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'script':'sub'}, {'script': 'super'}],
-      [{ 'encoding': ['Plaintext', 'HTML', 'Markdown']}]
+      ['clean']
     ]
   }
 });
@@ -22,11 +22,25 @@ sendButton.addEventListener("click", sendFunction);
 
 // Function for when the send button is clicked
 function sendFunction() {
-  // Get text from editor as well as date
-  const text = quill.getText()
+  console.log(document.getElementById("encoding-dropup").getAttribute("value"));
+  var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
+
+  var rawtext = quill.getText()
   
+  // Get text from the editor
   quill.setText("");
-  console.log(text.trim());
+  rawtext = rawtext.trim();
+  if (rawtext == "") {
+    return;
+  }
+
+  if (encodingType == "Plaintext") {
+
+  } else if (encodingType == "HTML") {
+
+  }  else if (encodingType == "Markdown") {
+
+  }
 
   // Initialise chatbox, add dropdown menu
   var chatlog = document.getElementById("chatlog");
@@ -87,17 +101,31 @@ function sendFunction() {
   replyButton.innerText = "Reply";
   dropdownMenu.appendChild(replyButton);
 
+
+  const html = marked.parse('# Marked in Node.js\n\nRendered by **marked**.');
+
   // Create text to go into the slot for actual text of the chat
   var chatText = document.createElement("div");
   chatText.setAttribute("slot", "chatText");
   chatText.setAttribute("name", "text");
-  chatText.appendChild(document.createTextNode(text.trim()));
+  
+  if (encodingType == "Plaintext") {
+    chatText.appendChild(document.createTextNode(rawtext));
+  } else if (encodingType == "HTML") {
+    chatText.innerHTML = rawtext;
+  }  else if (encodingType == "Markdown") {
+    chatText.innerHTML = marked.parse(rawtext);
+  }
   chatbox.appendChild(chatText);
 
+  // Get time, formatted using module
   var time = document.createElement("span");
   time.setAttribute("slot", "time");
   time.setAttribute("name", "time");
   time.innerText = getCurrTimeFormatted();
+
+  
+
 
   chatbox.appendChild(time);
   chatlog.appendChild(chatbox);
