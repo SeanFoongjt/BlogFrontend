@@ -1,4 +1,5 @@
 import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
+import { readJson, createConversation } from "./modules/setup/readConversationFromJson.js"
 
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
@@ -15,6 +16,9 @@ const quill = new Quill("#editor", {
     ]
   }
 });
+
+readJson("./json/sample-text-file.json")
+  .then(data => createConversation(data));
 
 // Logic for send button
 const sendButton = document.getElementById('send-button');
@@ -37,8 +41,8 @@ function sendFunction() {
   }
 
   // Initialise chatbox, add dropdown menu
-  var chatlog = document.getElementById("chatlog");
-  var chatbox = document.createElement("my-chat");
+  const chatlog = document.getElementById("chatlog");
+  const chatbox = document.createElement("my-chat");
 
   // Create Dropdown container
   var dropdown = document.createElement("div");
@@ -121,8 +125,10 @@ function sendFunction() {
 
   chatbox.appendChild(time);
   chatlog.appendChild(chatbox);
+  chatlog.scrollTop = chatlog.scrollHeight;
 }
 
+// TODO start
 // Web Speech API as supported by major browsers
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -173,6 +179,8 @@ recognition.onresult = function(event) {
   );
   console.log(speechText);
 }
+
+// TODO end
 
 // Edit function
 function editFunction(object) {

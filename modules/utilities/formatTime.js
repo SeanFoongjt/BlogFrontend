@@ -1,9 +1,8 @@
-function getCurrTimeFormatted() {
-    const currDate = new Date(Date.now());
-    // Get and parse time
+function formatTime(timeString) {
+    const timeDate = new Date(timeString);
     
-    var timeHour = currDate.getHours();
-    var timeMinutes = currDate.getMinutes();
+    var timeHour = timeDate.getHours();
+    var timeMinutes = timeDate.getMinutes();
     var timeString = ""
 
     if (timeMinutes < 10) {
@@ -21,4 +20,4 @@ function getCurrTimeFormatted() {
     return timeString;
 }
 
-export { getCurrTimeFormatted }
+export { formatTime }

@@ -15,9 +15,11 @@ otherChatTemplate.innerHTML = `
 
                     <!--Box where the actual text goes-->
                     <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box">
-                        <span>
-                            More reasonable amounts of text
-                        </span>
+                        <slot name="chatText">
+                            <span>
+                                More reasonable amounts of text
+                            </span>
+                        </slot>
                     </div>
 
                     <!--empty space at the end-->
@@ -29,7 +31,7 @@ otherChatTemplate.innerHTML = `
                 <div class="row justify-content-start">
                     <div class="col-1"></div>
                     <div class="col-7 text-start">
-                        <p style="font-size: 12px;">9.00 a.m.</p>
+                        <p style="font-size: 12px;"><slot name="time">9.00 a.m.</slot></p>
                     </div>
                 </div>
             </div>
