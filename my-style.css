@@ -1,5 +1,4 @@
 .editor-container {
-    height: 100px;
     max-height: 100px;
     overflow: auto;
 }
@@ -10,7 +9,5 @@
 }
 
 .chatlog {
-    height: 300px;
-    max-height: 300px;
     overflow: auto;
 }

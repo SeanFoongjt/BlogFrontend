@@ -15,14 +15,14 @@
 
 <body>
 <!-- Create the blog container -->
-    <div class="container rounded border border-1 border-dark mt-2 mb-2">
-        <div class="container pb-3 pt-2" id="textlog">
+    <div class="container rounded border border-1 border-dark mt-2 mb-2 vh-100">
+        <div class="container pb-3 pt-2 h-10" id="textlog">
             <div class="row">
-                <div class="col-11">
+                <div class="col-md-11 col-10">
                     <h1>Conversation title</h1>
                 </div>
-                <div class="col dropleft show mt-1">
-                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="col-md-1 col-2 dropleft show mt-1">
+                    <button class="btn btn-secondary ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -35,11 +35,11 @@
         </div>
 
         <!-- Space where chats exist -->
-        <div class="container chatlog" id="chatlog">
+        <div class="container chatlog h-50" id="chatlog">
         </div>
         
         <!-- Create the editor container -->
-        <div class="container pb-2">
+        <div class="container pb-2 h-50">
             <div class="container editor-container" id="editor">
             </div>
             <div class="mt-1">

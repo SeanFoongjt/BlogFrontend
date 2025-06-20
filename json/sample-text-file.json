@@ -8,12 +8,14 @@
         {
             "type" : "my-chat",
             "text" : "I'm fine thanks",
-            "time" : "19 June, 2025 09:14"
+            "time" : "19 June, 2025 09:14",
+            "encoding" : "Plaintext"
         },
         {
             "type" : "my-chat",
             "text" : "placeholder",
-            "time" : "19 June, 2025 09:29"
+            "time" : "19 June, 2025 09:29",
+            "encoding" : "Plaintext"
         }
     ]
 }

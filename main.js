@@ -1,5 +1,6 @@
 import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
-import { readJson, createConversation } from "./modules/setup/readConversationFromJson.js"
+import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
+import { createConversation } from "./modules/utilities/createConversation.js";
 
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
@@ -18,7 +19,7 @@ const quill = new Quill("#editor", {
 });
 
 readJson("./json/sample-text-file.json")
-  .then(data => createConversation(data));
+  .then(data => createConversationFromJson(data));
 
 // Logic for send button
 const sendButton = document.getElementById('send-button');
@@ -26,7 +27,6 @@ sendButton.addEventListener("click", sendFunction);
 
 // Function for when the send button is clicked
 function sendFunction() {
-
   // Retrieve encoding type
   var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
 
@@ -40,91 +40,10 @@ function sendFunction() {
     return;
   }
 
-  // Initialise chatbox, add dropdown menu
-  const chatlog = document.getElementById("chatlog");
-  const chatbox = document.createElement("my-chat");
+  // use createConversation to create html component
+  createConversation("my-chat", rawtext, Date.now(), encodingType);
 
-  // Create Dropdown container
-  var dropdown = document.createElement("div");
-  dropdown.setAttribute("slot", "dropdown")
-  dropdown.setAttribute("class", "col dropdown show");
-  chatbox.appendChild(dropdown);
-  //console.log("dropdown created");
-
-  // Create Dropdown button
-  var dropdownButton = document.createElement("button");
-  dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
-  dropdownButton.setAttribute("type", "button");
-  dropdownButton.setAttribute("id", "dropdownMenuButton");
-  dropdownButton.setAttribute("data-toggle", "dropdown");
-  dropdownButton.setAttribute("aria-haspopup", "true");
-  dropdownButton.setAttribute("aria-expanded", "false");
-  dropdown.appendChild(dropdownButton);
-  //console.log("dropdownButton created");
-
-  // Create Dropdown menu
-  var dropdownMenu = document.createElement("div");
-  dropdownMenu.setAttribute("class", "dropdown-menu");
-  dropdownMenu.setAttribute("aria-labelledby", "dropdownMenuButton");
-  dropdown.appendChild(dropdownMenu);
-  //console.log("dropdownMenu created");
-
-  // Create Edit button
-  var editButton = document.createElement("a");
-  editButton.setAttribute("class", "dropdown-item");
-  editButton.setAttribute("href", "#");
-  editButton.innerText = "Edit";
-  dropdownMenu.appendChild(editButton);
-  editButton.addEventListener("click", () => editFunction(chatbox));
-
-  // Create Delete button
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("class", "dropdown-item");
-  deleteButton.setAttribute("href", "#");
-  deleteButton.innerText = "Delete";
-  dropdownMenu.appendChild(deleteButton);
-  deleteButton.addEventListener("click", () => chatbox.remove());
-
-  // Create Forward button
-  var forwardButton = document.createElement("a");
-  forwardButton.setAttribute("class", "dropdown-item");
-  forwardButton.setAttribute("href", "#");
-  forwardButton.innerText = "Forward";
-  dropdownMenu.appendChild(forwardButton);
-
-  // Create Reply button
-  var replyButton = document.createElement("a");
-  replyButton.setAttribute("class", "dropdown-item");
-  replyButton.setAttribute("href", "#");
-  replyButton.innerText = "Reply";
-  dropdownMenu.appendChild(replyButton);
-
-
-  const html = marked.parse('# Marked in Node.js\n\nRendered by **marked**.');
-
-  // Create text to go into the slot for actual text of the chat
-  var chatText = document.createElement("div");
-  chatText.setAttribute("slot", "chatText");
-  chatText.setAttribute("name", "text");
-  
-  // Process text based on encoding type selected
-  if (encodingType == "Plaintext") {
-    chatText.appendChild(document.createTextNode(rawtext));
-  } else if (encodingType == "HTML") {
-    chatText.innerHTML = rawtext;
-  }  else if (encodingType == "Markdown") {
-    chatText.innerHTML = marked.parse(rawtext).trim();
-  }
-  chatbox.appendChild(chatText);
-
-  // Get time, formatted using module
-  var time = document.createElement("span");
-  time.setAttribute("slot", "time");
-  time.setAttribute("name", "time");
-  time.innerText = getCurrTimeFormatted();
-
-  chatbox.appendChild(time);
-  chatlog.appendChild(chatbox);
+  // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
 }
 
@@ -187,6 +106,9 @@ function editFunction(object) {
   // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
   quill.setText(textToEdit.innerText);  
+
+  // Scroll to editor
+  window.scrollTo(0, document.body.scrollHeight);
   
   // Make the cancel button visible
   var cancelButton = document.getElementById("cancel-button");
