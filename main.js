@@ -1,7 +1,7 @@
 import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
 
+// Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
-
 const quill = new Quill("#editor", {
   theme: "snow",
   modules : {
@@ -22,24 +22,18 @@ sendButton.addEventListener("click", sendFunction);
 
 // Function for when the send button is clicked
 function sendFunction() {
-  console.log(document.getElementById("encoding-dropup").getAttribute("value"));
+
+  // Retrieve encoding type
   var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
 
-  var rawtext = quill.getText()
-  
   // Get text from the editor
+  var rawtext = quill.getText()
   quill.setText("");
   rawtext = rawtext.trim();
+
+  // Terminate function early if no actual text is sent
   if (rawtext == "") {
     return;
-  }
-
-  if (encodingType == "Plaintext") {
-
-  } else if (encodingType == "HTML") {
-
-  }  else if (encodingType == "Markdown") {
-
   }
 
   // Initialise chatbox, add dropdown menu
@@ -109,12 +103,13 @@ function sendFunction() {
   chatText.setAttribute("slot", "chatText");
   chatText.setAttribute("name", "text");
   
+  // Process text based on encoding type selected
   if (encodingType == "Plaintext") {
     chatText.appendChild(document.createTextNode(rawtext));
   } else if (encodingType == "HTML") {
     chatText.innerHTML = rawtext;
   }  else if (encodingType == "Markdown") {
-    chatText.innerHTML = marked.parse(rawtext);
+    chatText.innerHTML = marked.parse(rawtext).trim();
   }
   chatbox.appendChild(chatText);
 
@@ -123,9 +118,6 @@ function sendFunction() {
   time.setAttribute("slot", "time");
   time.setAttribute("name", "time");
   time.innerText = getCurrTimeFormatted();
-
-  
-
 
   chatbox.appendChild(time);
   chatlog.appendChild(chatbox);
@@ -182,22 +174,26 @@ recognition.onresult = function(event) {
   console.log(speechText);
 }
 
+// Edit function
 function editFunction(object) {
+  // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
   quill.setText(textToEdit.innerText);  
   
+  // Make the cancel button visible
   var cancelButton = document.getElementById("cancel-button");
   cancelButton.removeAttribute("hidden");
 
-
+  // Skip to cleanup if no edit is done
   cancelButton.addEventListener("click", cleanup);
 
-
+  // Change the send button to edit button
   var editButton = document.getElementById("send-button");
   editButton.innerText = "Edit";
   editButton.removeEventListener("click", sendFunction);
   editButton.addEventListener("click", edit);
 
+  // Change text in chatbox to edited text, display '(edited)' after time
   function edit() {
     textToEdit.innerText = quill.getText().trim();
     var subtext = object.querySelector("span[name='time']");
@@ -207,6 +203,7 @@ function editFunction(object) {
     cleanup();
   }
 
+  // Turn edit button back to send button, clear editor, make cancel button hidden again
   function cleanup() {
     cancelButton.setAttribute("hidden", "");
     quill.setText("");
