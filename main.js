@@ -1,6 +1,10 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { createConversation } from "./modules/utilities/createConversation.js";
 
+/**
+ * Setup logic
+ */
+
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
 const quill = new Quill("#editor", {
@@ -20,6 +24,10 @@ const quill = new Quill("#editor", {
 // Initialise data from json
 readJson("./json/sample-text-file.json")
   .then(data => createConversationFromJson(data));
+
+/**
+ * Send button logic
+ */
 
 // Logic for send button
 const sendButton = document.getElementById('send-button');
@@ -47,30 +55,50 @@ function sendFunction() {
   chatlog.scrollTop = chatlog.scrollHeight;
 }
 
-// Listener and function for when conversation is blocked
-const blockButton = document.getElementById("block-conversation");
-blockButton.addEventListener("click", blockFunction);
+/**
+ * Confirmation popup logic, consisting of constant and variable declarations and an
+ * abstract function to create confirmation popups.
+ */
 
+// Constant and variable declarations for confirmation popup
 const confirmationPopup = document.getElementById("confirmation-popup-modal");
-const confirmationPopupBody = confirmationPopup.querySelector(".modal-body");
+const confirmationPopupBodyText = confirmationPopup.querySelector(".modal-body-text");
 const confirmationPopupTitle = confirmationPopup.querySelector(".modal-title");
 const confirmationPopupFooter = confirmationPopup.querySelector(".modal-footer");
 var confirmButton = confirmationPopupFooter.querySelector("button[name='continue']");
 
-function clearConversationConfirmation() {
+// Function for confirmation popup, takes in header, body and a function to create the popup
+function confirmationPopupFunction(header, body, functionToExecute) {
+  // cloneNode and reassign to remove all event listeners
   const newButton = confirmButton.cloneNode(true);
   confirmButton.parentNode.replaceChild(newButton, confirmButton);
   confirmButton = newButton;
-  confirmButton.addEventListener("click", () => document.getElementById('chatlog').replaceChildren());
-  const body = document.createElement("p");
-  body.innerText="Are you sure you want to clear the conversation?"
-  confirmationPopupBody.appendChild(body);
-  confirmationPopupTitle.innerText = "Clear conversation?"
+
+  // Link function to button, set body and title text
+  confirmButton.addEventListener("click", functionToExecute);
+  confirmationPopupBodyText.innerText = body;
+  confirmationPopupTitle.innerText = header;
 }
 
+/**
+ * Add appropriate listener to clear conversation button.
+ */
 const clearConversationButton = document.getElementById("clear-conversation");
-clearConversationButton.addEventListener("click", clearConversationConfirmation);
+clearConversationButton.addEventListener(
+  "click", 
+  () => confirmationPopupFunction(
+    "Clear conversation?", 
+    "Are you sure you want to clear the conversation?", 
+    () => document.getElementById('chatlog').replaceChildren()
+  )
+);
 
+/**
+ * Logic to block and unblock a conversation as well as adding of the function
+ * to the block conversation button.
+ */
+
+// function to block conversation
 function blockFunction() {
   const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
   chatlogEditorContainer.setAttribute("hidden", "");
@@ -88,12 +116,18 @@ function unblockFunction() {
   blockedChat.setAttribute("hidden", "");
   const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
   chatlogEditorContainer.removeAttribute("hidden");
-
-  // Reset event listener to block conversation
-  const blockButton = document.getElementById("block-conversation");
-  blockButton.addEventListener("click", blockFunction);
 }
 
+// Add appropriate listener to the blockButton
+const blockButton = document.getElementById("block-conversation");
+blockButton.addEventListener(
+  "click", 
+  () => confirmationPopupFunction(
+    "Block user?",
+    "Are you sure you want to block this user?",
+    blockFunction
+  )
+);
 
 // TODO start
 // Web Speech API as supported by major browsers
