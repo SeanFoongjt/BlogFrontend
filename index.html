@@ -7,6 +7,7 @@
     <script src="https://kit.fontawesome.com/986bcdd23b.js" crossorigin="anonymous"></script>
     <script type="module" src="modules/web-components/my-chat.js"></script>
     <script type="module" src="modules/web-components/other-chat.js"></script>
+    <script type="module" src="modules/web-components/blocked-chat.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-style.css">
@@ -26,7 +27,7 @@
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" id="block">Block</a>
+                        <a class="dropdown-item" href="#" id="block-conversation">Block</a>
                         <a class="dropdown-item" href="#" id="clear-conversation" onclick = "getElementById('chatlog').replaceChildren()">Clear Conversation</a>
                         <a class="dropdown-item" href="#" id="close-conversation">Close Conversation</a>
                     </div>
@@ -34,35 +35,50 @@
             </div>
         </div>
 
-        <!-- Space where chats exist -->
-        <div class="container chatlog h-50" id="chatlog">
-        </div>
-        
-        <!-- Create the editor container -->
-        <div class="container pb-2 h-50">
-            <div class="container editor-container" id="editor">
-            </div>
-            <div class="mt-1">
-                <button class="btn btn-outline-primary mike-button" id="mike-button">
-                    <i class="fa-solid fa-lg fa-microphone"></i>
+        <div class="container h-100" id="blocked-chat-container" hidden="">
+            <div class="d-flex flex-column h-100 justify-content-center align-items-center">
+                <h2 class="text-black-50">
+                    You have blocked this user
+                </h1>
+                <button class="btn btn-primary" id="unblock-button">
+                    Unblock user
                 </button>
-                <button class="btn btn-outline-primary" id="send-button">Send</button>
-                <button class="btn btn-outline-danger" id="cancel-button" hidden>Cancel</button>
-                <div class="btn-group dropup" id="encoding-dropup" value="Plaintext">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="encoding-dropup-label">
-                        Plaintext
+            </div>
+        </div>
+
+        <div class="container h-100" id="chatlog-editor-container">
+
+            <!-- Space where chats exist -->
+            <div class="container chatlog h-50" id="chatlog">
+            </div>
+            
+            <!-- Create the editor container -->
+            <div class="container pb-2 h-50">
+                <div class="container editor-container" id="editor">
+                </div>
+                <div class="mt-1">
+                    <button class="btn btn-outline-primary mike-button" id="mike-button">
+                        <i class="fa-solid fa-lg fa-microphone"></i>
                     </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Plaintext';
-                            document.getElementById('encoding-dropup').setAttribute('value', 'Plaintext')">Plaintext</a>
-                        <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='HTML';
-                            document.getElementById('encoding-dropup').setAttribute('value', 'HTML')">HTML</a>
-                        <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Markdown';
-                            document.getElementById('encoding-dropup').setAttribute('value', 'Markdown')">Markdown</a>
+                    <button class="btn btn-outline-primary" id="send-button">Send</button>
+                    <button class="btn btn-outline-danger" id="cancel-button" hidden>Cancel</button>
+                    <div class="btn-group dropup" id="encoding-dropup" value="Plaintext">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="encoding-dropup-label">
+                            Plaintext
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Plaintext';
+                                document.getElementById('encoding-dropup').setAttribute('value', 'Plaintext')">Plaintext</a>
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='HTML';
+                                document.getElementById('encoding-dropup').setAttribute('value', 'HTML')">HTML</a>
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Markdown';
+                                document.getElementById('encoding-dropup').setAttribute('value', 'Markdown')">Markdown</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        </body>
     </div>
 
     <!-- Include the Quill library -->

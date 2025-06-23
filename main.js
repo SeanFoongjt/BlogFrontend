@@ -18,6 +18,7 @@ const quill = new Quill("#editor", {
   }
 });
 
+// Initialise data from json
 readJson("./json/sample-text-file.json")
   .then(data => createConversationFromJson(data));
 
@@ -46,6 +47,34 @@ function sendFunction() {
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
 }
+
+// Listener and function for when conversation is blocked
+const blockButton = document.getElementById("block-conversation");
+blockButton.addEventListener("click", blockFunction);
+
+function blockFunction() {
+  const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
+  chatlogEditorContainer.setAttribute("hidden", "");
+  const blockedChat = document.getElementById("blocked-chat-container");
+  blockedChat.removeAttribute("hidden");
+
+  // Unblock conversation when appropriate button is clicked
+  const unblockButton = document.getElementById("unblock-button");
+  unblockButton.addEventListener("click", unblockFunction)
+}
+
+// function to unblock conversation
+function unblockFunction() {
+  const blockedChat = document.getElementById("blocked-chat-container");
+  blockedChat.setAttribute("hidden", "");
+  const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
+  chatlogEditorContainer.removeAttribute("hidden");
+
+  // Reset event listener to block conversation
+  const blockButton = document.getElementById("block-conversation");
+  blockButton.addEventListener("click", blockFunction);
+}
+
 
 // TODO start
 // Web Speech API as supported by major browsers
