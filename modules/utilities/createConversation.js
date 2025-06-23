@@ -1,7 +1,7 @@
 import { formatTime } from "./formatTime.js";
 import { editFunction } from "../../main.js";
 
-function createConversation(type, text, time, encoding = "Plaintext") {
+function createConversation(type, text, time, encoding = "Plaintext", imagePath ="../../img/cornflower.webp") {
     if (type == "my-chat") {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
@@ -19,9 +19,10 @@ function createConversation(type, text, time, encoding = "Plaintext") {
         dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
         dropdownButton.setAttribute("type", "button");
         dropdownButton.setAttribute("id", "dropdownMenuButton");
-        dropdownButton.setAttribute("data-toggle", "dropdown");
+        dropdownButton.setAttribute("data-bs-toggle", "dropdown");
         dropdownButton.setAttribute("aria-haspopup", "true");
         dropdownButton.setAttribute("aria-expanded", "false");
+        
         dropdown.appendChild(dropdownButton);
         //console.log("dropdownButton created");
 
@@ -66,6 +67,13 @@ function createConversation(type, text, time, encoding = "Plaintext") {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("other-chat");
+
+        // Add image
+        var image = document.createElement("img");
+        image.setAttribute("slot", "image");
+        image.setAttribute("class", "mw-100 ")
+        image.src = imagePath;
+        chatbox.appendChild(image);
     }
     
     // Create text to go into the slot for actual text of the chat

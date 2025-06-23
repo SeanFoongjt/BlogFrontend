@@ -1,4 +1,3 @@
-import { getCurrTimeFormatted } from "./modules/utilities/getCurrTimeFormatted.js";
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { createConversation } from "./modules/utilities/createConversation.js";
 
@@ -51,6 +50,26 @@ function sendFunction() {
 // Listener and function for when conversation is blocked
 const blockButton = document.getElementById("block-conversation");
 blockButton.addEventListener("click", blockFunction);
+
+const confirmationPopup = document.getElementById("confirmation-popup-modal");
+const confirmationPopupBody = confirmationPopup.querySelector(".modal-body");
+const confirmationPopupTitle = confirmationPopup.querySelector(".modal-title");
+const confirmationPopupFooter = confirmationPopup.querySelector(".modal-footer");
+var confirmButton = confirmationPopupFooter.querySelector("button[name='continue']");
+
+function clearConversationConfirmation() {
+  const newButton = confirmButton.cloneNode(true);
+  confirmButton.parentNode.replaceChild(newButton, confirmButton);
+  confirmButton = newButton;
+  confirmButton.addEventListener("click", () => document.getElementById('chatlog').replaceChildren());
+  const body = document.createElement("p");
+  body.innerText="Are you sure you want to clear the conversation?"
+  confirmationPopupBody.appendChild(body);
+  confirmationPopupTitle.innerText = "Clear conversation?"
+}
+
+const clearConversationButton = document.getElementById("clear-conversation");
+clearConversationButton.addEventListener("click", clearConversationConfirmation);
 
 function blockFunction() {
   const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
