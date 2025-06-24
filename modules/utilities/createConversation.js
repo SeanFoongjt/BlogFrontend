@@ -83,7 +83,7 @@ function createConversation(type, text, time, encoding = "Plaintext", imagePath 
     
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
-        chatText.appendChild(document.createTextNode(text));
+        chatText.innerHTML = text;
     } else if (encoding == "HTML") {
         chatText.innerHTML = text;
     }  else if (encoding == "Markdown") {

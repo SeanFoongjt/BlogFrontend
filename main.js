@@ -16,6 +16,7 @@ const quill = new Quill("#editor", {
       ['bold', 'italic', 'underline'],
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'script':'sub'}, {'script': 'super'}],
+      ['link', 'image', 'video', 'formula'],
       ['clean']
     ]
   }
@@ -24,6 +25,46 @@ const quill = new Quill("#editor", {
 // Initialise data from json
 readJson("./json/sample-text-file.json")
   .then(data => createConversationFromJson(data));
+
+
+/**
+ * Logic for changing the conversation title
+ */
+
+var conversationTitle = document.getElementById("conversationTitle");
+var conversationTitleInput = document.getElementById("conversationTitleInput");
+conversationTitle.addEventListener("dblclick", renameTitle);
+
+function renameTitle() {
+  var inputContainer = document.getElementById("conversationTitleInputContainer");
+  conversationTitleInput.setAttribute("placeholder", conversationTitle.innerText);
+  conversationTitle.setAttribute("hidden", "");
+  inputContainer.removeAttribute("hidden");
+  conversationTitleInput.focus();
+
+  conversationTitleInput.addEventListener("keypress", afterEnterPress);
+  var cancelButton = document.getElementById("conversationTitleInputCancel");
+  cancelButton.addEventListener("click", cleanup);
+
+  function afterEnterPress(event) {
+    if (event.key == "Enter") {
+      console.log(conversationTitleInput.value);
+      if (conversationTitleInput.value.trim() != "") {
+        event.preventDefault();
+        conversationTitle.innerText = conversationTitleInput.value.trim();
+      }
+      
+      cleanup();
+    }
+  }
+
+  function cleanup() {
+    inputContainer.setAttribute("hidden", "");
+    conversationTitle.removeAttribute("hidden");
+    conversationTitleInput.removeEventListener("keypress", afterEnterPress);
+    cancelButton.removeEventListener("click", cleanup);
+  }
+}
 
 /**
  * Send button logic
@@ -40,6 +81,9 @@ function sendFunction() {
 
   // Get text from the editor
   var rawtext = quill.getText()
+  console.log(quill.getContents());
+  console.log(quill.root.innerHTML);
+  var rawHTML = quill.root.innerHTML;
   quill.setText("");
   rawtext = rawtext.trim();
 
@@ -49,7 +93,7 @@ function sendFunction() {
   }
 
   // use createConversation to create html component
-  createConversation("my-chat", rawtext, Date.now(), encodingType);
+  createConversation("my-chat", rawHTML.trim(), Date.now(), encodingType);
 
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
@@ -158,7 +202,6 @@ recognition.lang = 'en-GB';
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-
 function mikeStart() {
   recognition.start();
   console.log("Begin speech recognition");
@@ -183,12 +226,15 @@ recognition.onresult = function(event) {
 
 // TODO end
 
-// Edit function
+// Edit function, takes in a my-chat web component
 function editFunction(object) {
   // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
   quill.setText(textToEdit.innerText);  
 
+  // Highlight text currently being edited
+  object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#B4CBF0";
+  
   // Scroll to editor
   window.scrollTo(0, document.body.scrollHeight);
   
@@ -199,7 +245,7 @@ function editFunction(object) {
   // Skip to cleanup if no edit is done
   cancelButton.addEventListener("click", cleanup);
 
-  // Change the send button to edit button
+  // Change the send button to edit 
   var editButton = document.getElementById("send-button");
   editButton.innerText = "Edit";
   editButton.removeEventListener("click", sendFunction);
@@ -222,6 +268,7 @@ function editFunction(object) {
     editButton.removeEventListener("click", edit);
     editButton.addEventListener("click", sendFunction);
     editButton.innerText="Send";
+    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#D3D3D3";
   }
 }
 

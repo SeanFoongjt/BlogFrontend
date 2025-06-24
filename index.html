@@ -33,20 +33,34 @@
         </div>
     </div>
 
-    <div class="container rounded border border-1 border-dark mt-2 mb-2 vh-100">
+    <div class="container chat-container rounded border border-1 border-dark mt-2 mb-2 vh-100">
         <div class="container pb-3 pt-2 h-10" id="textlog">
             <div class="row">
                 <div class="col-md-11 col-10">
-                    <h1>Conversation title</h1>
+                    <h1 id="conversationTitle">Conversation title</h1>
+                    <div class="row" id="conversationTitleInputContainer" hidden="">
+                        <div class="col-10">
+                            <input type="text" class="form-control mt-1" id="conversationTitleInput" 
+                                aria-describedby="conversationTitleInput">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-outline-danger mt-1" id="conversationTitleInputCancel">
+                                <i class="fa-solid fa-lg fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-1 col-2 dropleft show mt-1">
                     <button class="btn btn-secondary ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" id="block-conversation" data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Block</a>
-                        <a class="dropdown-item" href="#" id="clear-conversation" data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Clear Conversation</a>
-                        <a class="dropdown-item" href="#" id="close-conversation" data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Close Conversation</a>
+                        <a class="dropdown-item" href="#" id="block-conversation" 
+                            data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Block</a>
+                        <a class="dropdown-item" href="#" id="clear-conversation" 
+                            data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Clear Conversation</a>
+                        <a class="dropdown-item" href="#" id="close-conversation" 
+                            data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Close Conversation</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +78,7 @@
             </div>
         </div>
 
-        <div class="container h-100" id="chatlog-editor-container">
+        <div class="container chatlog-editor-container h-100" id="chatlog-editor-container">
 
             <!-- Space where chats exist -->
             <div class="container chatlog h-50" id="chatlog">
@@ -72,7 +86,9 @@
             
             <!-- Create the editor container -->
             <div class="container pb-2 h-50">
-                <div class="container editor-container" id="editor">
+                <div class="editor-toolbar">
+                    <div class="container editor-container" id="editor">
+                    </div>
                 </div>
                 <div class="mt-1">
                     <button class="btn btn-outline-primary mike-button" id="mike-button">
@@ -81,7 +97,7 @@
                     <button class="btn btn-outline-primary" id="send-button">Send</button>
                     <button class="btn btn-outline-danger" id="cancel-button" hidden>Cancel</button>
                     <div class="btn-group dropup" id="encoding-dropup" value="Plaintext">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="encoding-dropup-label">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="encoding-dropup-label">
                             Plaintext
                         </button>
                         <div class="dropdown-menu">

@@ -1,13 +1,27 @@
 .editor-container {
     max-height: 100px;
     overflow: auto;
+    background-color: #FFFFFF;
+}
+
+.editor-toolbar {
+    height: 50%;
+    background-color: #FFFFFF;
 }
 
 .text-box {
-    background-color:#e7e7e7;
+    background-color:#D3D3D3;
     color: black;
 }
 
 .chatlog {
     overflow: auto;
+}
+
+.faded {
+    background-color: #A6A6A6;
+}
+
+.chat-container {
+    background-color: #FFFFFF;
 }
