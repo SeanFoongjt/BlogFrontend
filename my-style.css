@@ -9,9 +9,14 @@
     background-color: #FFFFFF;
 }
 
+.ql-editor[contenteditable=false] {
+    background-color: #A6A6A6;
+}
+
 .text-box {
     background-color:#D3D3D3;
     color: black;
+    word-wrap: break-word;
 }
 
 .chatlog {

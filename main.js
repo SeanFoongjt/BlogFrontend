@@ -81,19 +81,22 @@ function sendFunction() {
 
   // Get text from the editor
   var rawtext = quill.getText()
-  console.log(quill.getContents());
+  var contents = quill.getContents();
   console.log(quill.root.innerHTML);
   var rawHTML = quill.root.innerHTML;
+  console.log(marked.parse(rawHTML));
   quill.setText("");
   rawtext = rawtext.trim();
+  console.log(rawtext);
 
   // Terminate function early if no actual text is sent
-  if (rawtext == "") {
+  if (rawtext == "" && contents["ops"].length == 1) {
+    console.log("terminated early");
     return;
   }
 
   // use createConversation to create html component
-  createConversation("my-chat", rawHTML.trim(), Date.now(), encodingType);
+  createConversation("my-chat", rawHTML.trim(), Date.now(), rawtext, encodingType);
 
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
@@ -270,6 +273,14 @@ function editFunction(object) {
     editButton.innerText="Send";
     object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#D3D3D3";
   }
+}
+
+/**
+ * Reply to the object passed to the function as an argument
+ */
+function replyFunction(object) {
+  
+
 }
 
 export {editFunction};

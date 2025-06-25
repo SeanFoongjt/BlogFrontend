@@ -14,7 +14,7 @@
 </head>
 
 <body>
-<!-- Create the blog container -->
+    <!-- Modal popup for confirmations -->
     <div class="modal fade" id="confirmation-popup-modal" tabindex="-1" aria-labelled-by="confirmation-popup-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -33,9 +33,12 @@
         </div>
     </div>
 
+    <!-- Header of the conversation, includes title and dropdown for conversation options-->
     <div class="container chat-container rounded border border-1 border-dark mt-2 mb-2 vh-100">
         <div class="container pb-3 pt-2 h-10" id="textlog">
             <div class="row">
+
+                <!-- Conversation title and input to edit it-->
                 <div class="col-md-11 col-10">
                     <h1 id="conversationTitle">Conversation title</h1>
                     <div class="row" id="conversationTitleInputContainer" hidden="">
@@ -50,6 +53,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Dropdown menu for conversation options -->
                 <div class="col-md-1 col-2 dropleft show mt-1">
                     <button class="btn btn-secondary ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -63,10 +68,11 @@
                             data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Close Conversation</a>
                     </div>
                 </div>
+
             </div>
         </div>
         
-
+        <!-- Hidden page used for when recipient is blocked -->
         <div class="container h-100" id="blocked-chat-container" hidden="">
             <div class="d-flex flex-column h-100 justify-content-center align-items-center">
                 <h2 class="text-black-50">
@@ -78,34 +84,41 @@
             </div>
         </div>
 
+        <!-- Create the blog container -->
         <div class="container chatlog-editor-container h-100" id="chatlog-editor-container">
 
             <!-- Space where chats exist -->
             <div class="container chatlog h-50" id="chatlog">
             </div>
             
-            <!-- Create the editor container -->
+            <!-- Create container for user inputs -->
             <div class="container pb-2 h-50">
+                <!-- Container for quill editor and it's toolbar-->
                 <div class="editor-toolbar">
                     <div class="container editor-container" id="editor">
                     </div>
                 </div>
+
+                <!-- Container for the mike, send, cancel buttons etc.-->
                 <div class="mt-1">
+                    <!-- Send, mike, cancel buttons-->
                     <button class="btn btn-outline-primary mike-button" id="mike-button">
                         <i class="fa-solid fa-lg fa-microphone"></i>
                     </button>
                     <button class="btn btn-outline-primary" id="send-button">Send</button>
                     <button class="btn btn-outline-danger" id="cancel-button" hidden>Cancel</button>
+
+                    <!-- Dropdown to select encoding -->
                     <div class="btn-group dropup" id="encoding-dropup" value="Plaintext">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="encoding-dropup-label">
                             Plaintext
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Plaintext';
+                            <a class="dropdown-item" href="#Plaintext" onclick="document.getElementById('encoding-dropup-label').innerText='Plaintext';
                                 document.getElementById('encoding-dropup').setAttribute('value', 'Plaintext')">Plaintext</a>
-                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='HTML';
+                            <a class="dropdown-item" href="#HTML" onclick="document.getElementById('encoding-dropup-label').innerText='HTML';
                                 document.getElementById('encoding-dropup').setAttribute('value', 'HTML')">HTML</a>
-                            <a class="dropdown-item" href="#" onclick="document.getElementById('encoding-dropup-label').innerText='Markdown';
+                            <a class="dropdown-item" href="#Markdown" onclick="document.getElementById('encoding-dropup-label').innerText='Markdown';
                                 document.getElementById('encoding-dropup').setAttribute('value', 'Markdown')">Markdown</a>
                         </div>
                     </div>

@@ -1,9 +1,9 @@
 const otherChatTemplate = document.createElement("template");
 otherChatTemplate.innerHTML = `
         <head>
-            <script src="https://kit.fontawesome.com/986bcdd23b.js" crossorigin="anonymous"></script>
             <link rel="stylesheet" href="my-style.css">
         </head>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <body>
             <div class="container">
@@ -22,9 +22,17 @@ otherChatTemplate.innerHTML = `
                         </slot>
                     </div>
 
-                    <!--empty space at the end-->
-                    <div class="col-4">
+                    <!--Reply icon-->
+                    <div class="col">
+                        <button class="btn btn-outline-secondary">
+                            <slot name="replyIcon">
+                        </button>
                     </div>
+
+                    <!--empty space at the end-->
+                    <div class="col-3">
+                    </div>
+
                 </div>
 
                 <!--Placeholder for the timestamp at the bottom-->

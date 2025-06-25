@@ -1,7 +1,7 @@
 import { formatTime } from "./formatTime.js";
 import { editFunction } from "../../main.js";
 
-function createConversation(type, text, time, encoding = "Plaintext", imagePath ="../../img/cornflower.webp") {
+function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", imagePath ="") {
     if (type == "my-chat") {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
@@ -74,6 +74,12 @@ function createConversation(type, text, time, encoding = "Plaintext", imagePath 
         image.setAttribute("class", "mw-100 ")
         image.src = imagePath;
         chatbox.appendChild(image);
+
+        // Add in reply icon
+        var replyIcon = document.createElement("i");
+        replyIcon.setAttribute("class", "fa-solid fa-lg fa-reply");
+        replyIcon.setAttribute("slot", "replyIcon");
+        chatbox.appendChild(replyIcon);
     }
     
     // Create text to go into the slot for actual text of the chat
@@ -83,11 +89,17 @@ function createConversation(type, text, time, encoding = "Plaintext", imagePath 
     
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
-        chatText.innerHTML = text;
+        chatText.innerHTML = editorHTML;
+        console.log(chatText.innerHTML);
     } else if (encoding == "HTML") {
+        console.log(text);
         chatText.innerHTML = text;
+        console.log(chatText.innerHTML);
     }  else if (encoding == "Markdown") {
-        chatText.innerHTML = marked.parse(text).trim();
+        //chatText.innerHTML = marked.parse(editorHTML).trim();
+        console.log(editorHTML.replace("<p>", "").trim());
+        console.log(marked.parse(editorHTML.replace('/^<p>$/i', "").trim()));
+        chatText.innerHTML = marked.parse(editorHTML.replace("<p>", "").trim());
     }
     chatbox.appendChild(chatText);
 
