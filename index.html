@@ -85,14 +85,18 @@
         </div>
 
         <!-- Create the blog container -->
-        <div class="container chatlog-editor-container h-100" id="chatlog-editor-container">
+        <div class="container chatlog-editor-container h-100 mh-100" id="chatlog-editor-container">
 
             <!-- Space where chats exist -->
-            <div class="container chatlog h-50" id="chatlog">
+            <div class="container chatlog" id="chatlog">
+            </div>
+
+            <div class="container replying-to bg-danger border border-1 border-bottom-0 border-dark" id="replyingTo" hidden>
+                <p>Replying to</p>
             </div>
             
             <!-- Create container for user inputs -->
-            <div class="container pb-2 h-50">
+            <div class="container user-inputs pb-2">
                 <!-- Container for quill editor and it's toolbar-->
                 <div class="editor-toolbar">
                     <div class="container editor-container" id="editor">

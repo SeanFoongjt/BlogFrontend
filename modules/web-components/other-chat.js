@@ -24,13 +24,20 @@ otherChatTemplate.innerHTML = `
 
                     <!--Reply icon-->
                     <div class="col">
-                        <button class="btn btn-outline-secondary">
+                        <button class="btn btn-outline-secondary" name="replyButton">
                             <slot name="replyIcon">
                         </button>
                     </div>
 
                     <!--empty space at the end-->
-                    <div class="col-3">
+                    <div class="col-3 row">
+                        <div class="col-3">
+                        </div>
+                        <div class="col-9" hidden>
+                            <strong>
+                                Replying
+                            </strong>
+                        </div>
                     </div>
 
                 </div>
@@ -54,7 +61,7 @@ class OtherChat extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("Custom element added to webpage");
+        console.log("other-chat element added to webpage");
 
         let template = otherChatTemplate;
         let templateContent = template.content;

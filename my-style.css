@@ -14,13 +14,25 @@
 }
 
 .text-box {
-    background-color:#D3D3D3;
+    background-color:#c8e1cc;
     color: black;
     word-wrap: break-word;
 }
 
 .chatlog {
     overflow: auto;
+    height: 50%;
+    max-height: 100%;
+}
+
+.user-inputs {
+    height: 50%;
+    max-height: 100%;
+}
+
+.replying-to {
+    height:10%;
+    width:96%;
 }
 
 .faded {

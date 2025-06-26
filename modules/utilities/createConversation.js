@@ -1,7 +1,9 @@
 import { formatTime } from "./formatTime.js";
 import { editFunction } from "../../main.js";
+import { replyFunction } from "../../main.js";
 
-function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", imagePath ="") {
+function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", 
+    replyingTo=false, imagePath ="") {
     if (type == "my-chat") {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
@@ -62,6 +64,21 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         replyButton.setAttribute("href", "#");
         replyButton.innerText = "Reply";
         dropdownMenu.appendChild(replyButton);
+        replyButton.addEventListener("click", () => replyFunction(chatbox));
+
+        if (replyingTo) {
+            var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
+            replyBanner.removeAttribute("hidden")
+            var text = replyBanner.querySelector("span[name='replyText']");
+            // Note: Need to process text being replied to
+            text.innerText = replyingTo.querySelector("div[name='text']").innerText;
+            var replyIcon = document.createElement("i");
+            replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
+            replyIcon.setAttribute("slot", "replyingToIcon");
+            chatbox.appendChild(replyIcon);
+            replyBanner.removeAttribute("hidden");
+            document.querySelector(".ql-editor").firstChild.focus();
+        }
                         
     } else if (type == "other-chat") {
         // Initialise chatbox, add dropdown menu
@@ -80,6 +97,13 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         replyIcon.setAttribute("class", "fa-solid fa-lg fa-reply");
         replyIcon.setAttribute("slot", "replyIcon");
         chatbox.appendChild(replyIcon);
+
+        var replyButton = document.createElement("button");
+        replyButton.setAttribute("name", "replyButtonTest");
+        chatbox.appendChild(replyButton);
+        console.log(chatbox.shadowRoot);
+        //console.log(chatbox.shadowRoot.querySelector("button[name='replyButton']"));
+        //console.log(chatbox.children);
     }
     
     // Create text to go into the slot for actual text of the chat
@@ -90,11 +114,11 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
         chatText.innerHTML = editorHTML;
-        console.log(chatText.innerHTML);
+        //console.log(chatText.innerHTML);
     } else if (encoding == "HTML") {
-        console.log(text);
+        //console.log(text);
         chatText.innerHTML = text;
-        console.log(chatText.innerHTML);
+        //console.log(chatText.innerHTML);
     }  else if (encoding == "Markdown") {
         //chatText.innerHTML = marked.parse(editorHTML).trim();
         console.log(editorHTML.replace("<p>", "").trim());
@@ -109,8 +133,20 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     timeSpan.setAttribute("name", "time");
     timeSpan.innerText = formatTime(time);
 
+    console.log(chatbox.shadowRoot);
     chatbox.appendChild(timeSpan);
     chatlog.appendChild(chatbox);
+
+    // Can only access shadow root once chatbox appended to chatlog
+    if (type == "other-chat") {
+        console.log(chatbox.shadowRoot);
+        chatbox
+            .shadowRoot
+            .querySelector("button[name='replyButton']")
+            .addEventListener("click", () => replyFunction(chatbox));
+    }
+    console.log("Check 2");
+    
 }
 
 export { createConversation };

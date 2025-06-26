@@ -5,6 +5,9 @@ import { createConversation } from "./modules/utilities/createConversation.js";
  * Setup logic
  */
 
+const cancelEvent = new Event("cancel");
+const cancellableProcesses = [];
+
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
 const quill = new Quill("#editor", {
@@ -36,19 +39,21 @@ var conversationTitleInput = document.getElementById("conversationTitleInput");
 conversationTitle.addEventListener("dblclick", renameTitle);
 
 function renameTitle() {
+  // Make the correct input block visible, hide the existing title
   var inputContainer = document.getElementById("conversationTitleInputContainer");
   conversationTitleInput.setAttribute("placeholder", conversationTitle.innerText);
   conversationTitle.setAttribute("hidden", "");
   inputContainer.removeAttribute("hidden");
   conversationTitleInput.focus();
 
-  conversationTitleInput.addEventListener("keypress", afterEnterPress);
+  // Add event listener for enter key press, enable cancel button
+  conversationTitleInput.addEventListener("keypress", validate);
   var cancelButton = document.getElementById("conversationTitleInputCancel");
   cancelButton.addEventListener("click", cleanup);
 
-  function afterEnterPress(event) {
+  // Function to validate name
+  function validate(event) {
     if (event.key == "Enter") {
-      console.log(conversationTitleInput.value);
       if (conversationTitleInput.value.trim() != "") {
         event.preventDefault();
         conversationTitle.innerText = conversationTitleInput.value.trim();
@@ -58,10 +63,11 @@ function renameTitle() {
     }
   }
 
+  // Cleanup helper function makes input hidden and the new or old conversation title visible
   function cleanup() {
     inputContainer.setAttribute("hidden", "");
     conversationTitle.removeAttribute("hidden");
-    conversationTitleInput.removeEventListener("keypress", afterEnterPress);
+    conversationTitleInput.removeEventListener("keypress", validate);
     cancelButton.removeEventListener("click", cleanup);
   }
 }
@@ -75,19 +81,19 @@ const sendButton = document.getElementById('send-button');
 sendButton.addEventListener("click", sendFunction);
 
 // Function for when the send button is clicked
-function sendFunction() {
+function sendFunction(event, isReply=false) {
   // Retrieve encoding type
   var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
 
   // Get text from the editor
   var rawtext = quill.getText()
   var contents = quill.getContents();
-  console.log(quill.root.innerHTML);
+  //console.log(quill.root.innerHTML);
   var rawHTML = quill.root.innerHTML;
-  console.log(marked.parse(rawHTML));
+  //console.log(marked.parse(rawHTML));
   quill.setText("");
   rawtext = rawtext.trim();
-  console.log(rawtext);
+  //console.log(rawtext);
 
   // Terminate function early if no actual text is sent
   if (rawtext == "" && contents["ops"].length == 1) {
@@ -96,7 +102,7 @@ function sendFunction() {
   }
 
   // use createConversation to create html component
-  createConversation("my-chat", rawHTML.trim(), Date.now(), rawtext, encodingType);
+  createConversation("my-chat", rawHTML.trim(), Date.now(), rawtext, encodingType, isReply);
 
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
@@ -123,6 +129,8 @@ function confirmationPopupFunction(header, body, functionToExecute) {
 
   // Link function to button, set body and title text
   confirmButton.addEventListener("click", functionToExecute);
+  confirmButton.addEventListener("click", (event) => 
+    cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent)));
   confirmationPopupBodyText.innerText = body;
   confirmationPopupTitle.innerText = header;
 }
@@ -240,6 +248,7 @@ function editFunction(object) {
   
   // Scroll to editor
   window.scrollTo(0, document.body.scrollHeight);
+  quill.focus();
   
   // Make the cancel button visible
   var cancelButton = document.getElementById("cancel-button");
@@ -253,6 +262,8 @@ function editFunction(object) {
   editButton.innerText = "Edit";
   editButton.removeEventListener("click", sendFunction);
   editButton.addEventListener("click", edit);
+  editButton.addEventListener("cancel", cleanup);
+  cancellableProcesses.push(object);
 
   // Change text in chatbox to edited text, display '(edited)' after time
   function edit() {
@@ -269,9 +280,15 @@ function editFunction(object) {
     cancelButton.setAttribute("hidden", "");
     quill.setText("");
     editButton.removeEventListener("click", edit);
+    editButton.removeEventListener("cancel", cleanup);
     editButton.addEventListener("click", sendFunction);
     editButton.innerText="Send";
-    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#D3D3D3";
+    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";
+    const index = cancellableProcesses.indexOf(object);
+    if (index != -1) {
+      cancellableProcesses.splice(index, 1);
+    }
+    console.log("cleanup complete");
   }
 }
 
@@ -279,9 +296,49 @@ function editFunction(object) {
  * Reply to the object passed to the function as an argument
  */
 function replyFunction(object) {
+  // Get the text of the chatbox to be replied to
+  var textReplied = object.querySelector("div[name='text']");
   
+  // Scroll to editor
+  window.scrollTo(0, document.body.scrollHeight);
+  quill.focus();
+  
+  // Make the cancel button visible
+  var cancelButton = document.getElementById("cancel-button");
+  cancelButton.removeAttribute("hidden");
 
+  // Skip to cleanup if no reply is done
+  cancelButton.addEventListener("click", cleanup);
+
+  // Change the send button to reply 
+  var replyButton = document.getElementById("send-button");
+  replyButton.innerText = "Reply";
+  replyButton.removeEventListener("click", sendFunction);
+  replyButton.addEventListener("click", reply);
+  replyButton.addEventListener("cancel", cleanup);
+  cancellableProcesses.push(object);
+
+  function reply() {
+    sendFunction(object, object);
+    cleanup();
+  }
+
+  // Turn reply button back to send button, clear editor, make cancel button hidden again
+  function cleanup() {
+    cancelButton.setAttribute("hidden", "");
+    quill.setText("");
+    replyButton.removeEventListener("click", reply);
+    replyButton.removeEventListener("cancel", cleanup);
+    replyButton.addEventListener("click", sendFunction);
+    replyButton.innerText="Send";
+    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";
+    const index = cancellableProcesses.indexOf(object);
+    if (index != -1) {
+      cancellableProcesses.splice(index, 1);
+    }
+    console.log("cleanup complete");
+  }
 }
 
-export {editFunction};
+export { editFunction, replyFunction };
 
