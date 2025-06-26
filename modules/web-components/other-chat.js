@@ -68,6 +68,7 @@ class OtherChat extends HTMLElement {
 
         const shadowRoot = this.attachShadow({mode: "open"});
         shadowRoot.appendChild(templateContent.cloneNode(true));
+        
     }
 }
 

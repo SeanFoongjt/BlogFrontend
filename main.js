@@ -7,6 +7,7 @@ import { createConversation } from "./modules/utilities/createConversation.js";
 
 const cancelEvent = new Event("cancel");
 const cancellableProcesses = [];
+const replyMap = new Map();
 
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
@@ -28,6 +29,10 @@ const quill = new Quill("#editor", {
 // Initialise data from json
 readJson("./json/sample-text-file.json")
   .then(data => createConversationFromJson(data));
+
+function notifyCancellableProcesses() {
+  cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
+}
 
 
 /**
@@ -102,10 +107,19 @@ function sendFunction(event, isReply=false) {
   }
 
   // use createConversation to create html component
-  createConversation("my-chat", rawHTML.trim(), Date.now(), rawtext, encodingType, isReply);
+  const newChat = createConversation(
+    "my-chat", 
+    rawHTML.trim(), 
+    Date.now(), 
+    rawtext, 
+    encodingType, 
+    isReply
+  );
 
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
+
+  return newChat;
 }
 
 /**
@@ -129,8 +143,7 @@ function confirmationPopupFunction(header, body, functionToExecute) {
 
   // Link function to button, set body and title text
   confirmButton.addEventListener("click", functionToExecute);
-  confirmButton.addEventListener("click", (event) => 
-    cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent)));
+  confirmButton.addEventListener("click", notifyCancellableProcesses);
   confirmationPopupBodyText.innerText = body;
   confirmationPopupTitle.innerText = header;
 }
@@ -239,6 +252,7 @@ recognition.onresult = function(event) {
 
 // Edit function, takes in a my-chat web component
 function editFunction(object) {
+  notifyCancellableProcesses();
   // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
   quill.setText(textToEdit.innerText);  
@@ -262,8 +276,10 @@ function editFunction(object) {
   editButton.innerText = "Edit";
   editButton.removeEventListener("click", sendFunction);
   editButton.addEventListener("click", edit);
-  editButton.addEventListener("cancel", cleanup);
+  object.addEventListener("cancel", cleanup);
+  notifyCancellableProcesses();
   cancellableProcesses.push(object);
+  console.log(cancellableProcesses);
 
   // Change text in chatbox to edited text, display '(edited)' after time
   function edit() {
@@ -272,6 +288,14 @@ function editFunction(object) {
     if (subtext.innerText.slice(-8) != "(edited)") {
       subtext.innerText += " (edited)"
     }
+    if (replyMap.has(object)) {
+      replyMap
+        .get(object)
+        .forEach((chat) => {
+          console.log(chat);
+          chat.shadowRoot.querySelector("span[name='replyText']").innerText = quill.getText().trim();
+        });
+      }
     cleanup();
   }
 
@@ -280,7 +304,7 @@ function editFunction(object) {
     cancelButton.setAttribute("hidden", "");
     quill.setText("");
     editButton.removeEventListener("click", edit);
-    editButton.removeEventListener("cancel", cleanup);
+    object.removeEventListener("cancel", cleanup);
     editButton.addEventListener("click", sendFunction);
     editButton.innerText="Send";
     object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";
@@ -296,8 +320,8 @@ function editFunction(object) {
  * Reply to the object passed to the function as an argument
  */
 function replyFunction(object) {
-  // Get the text of the chatbox to be replied to
-  var textReplied = object.querySelector("div[name='text']");
+  // Only one cancellableProcess should be active at a time
+  notifyCancellableProcesses();
   
   // Scroll to editor
   window.scrollTo(0, document.body.scrollHeight);
@@ -315,11 +339,16 @@ function replyFunction(object) {
   replyButton.innerText = "Reply";
   replyButton.removeEventListener("click", sendFunction);
   replyButton.addEventListener("click", reply);
-  replyButton.addEventListener("cancel", cleanup);
+  object.addEventListener("cancel", cleanup);
   cancellableProcesses.push(object);
 
   function reply() {
-    sendFunction(object, object);
+    const newChat = sendFunction(object, object);
+    if (!replyMap.has(object)) {
+      replyMap.set(object, [newChat]);
+    } else {
+      replyMap.get(object).push(newChat);
+    }
     cleanup();
   }
 
@@ -328,7 +357,7 @@ function replyFunction(object) {
     cancelButton.setAttribute("hidden", "");
     quill.setText("");
     replyButton.removeEventListener("click", reply);
-    replyButton.removeEventListener("cancel", cleanup);
+    object.removeEventListener("cancel", cleanup);
     replyButton.addEventListener("click", sendFunction);
     replyButton.innerText="Send";
     object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";

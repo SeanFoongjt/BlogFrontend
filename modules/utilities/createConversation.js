@@ -146,7 +146,8 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             .addEventListener("click", () => replyFunction(chatbox));
     }
     console.log("Check 2");
-    
+
+    return chatbox;
 }
 
 export { createConversation };
