@@ -1,6 +1,6 @@
 import { formatTime } from "./formatTime.js";
-import { editFunction } from "../../main.js";
-import { replyFunction } from "../../main.js";
+import { editFunction, replyFunction, formatForReply } from "../../main.js";
+// Refector edit, reply delete functions to abstract from one function or something similar
 
 function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", 
     replyingTo=false, imagePath ="") {
@@ -49,7 +49,18 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         deleteButton.setAttribute("href", "#");
         deleteButton.innerText = "Delete";
         dropdownMenu.appendChild(deleteButton);
-        deleteButton.addEventListener("click", () => chatbox.remove());
+        deleteButton.addEventListener("click", () => {
+            // Maybe add formatting to make it faded and italic
+            if (replyMap.has(object)) {
+                replyMap
+                    .get(object)
+                    .forEach((chat) => {
+                    console.log(chat);
+                    chat.shadowRoot.querySelector("span[name='replyText']").innerText = "Message Deleted";
+                    });
+            }
+            chatbox.remove()
+        });
 
         // Create Forward button
         const forwardButton = document.createElement("a");
@@ -70,8 +81,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
             replyBanner.removeAttribute("hidden")
             var text = replyBanner.querySelector("span[name='replyText']");
-            // Note: Need to process text being replied to
-            text.innerText = replyingTo.querySelector("div[name='text']").innerText;
+            text.innerText = formatForReply(replyingTo.querySelector("div[name='text']").innerText);
             var replyIcon = document.createElement("i");
             replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
             replyIcon.setAttribute("slot", "replyingToIcon");
@@ -113,17 +123,20 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
+        console.log(editorHTML);
         chatText.innerHTML = editorHTML;
         //console.log(chatText.innerHTML);
     } else if (encoding == "HTML") {
+        console.log(editorHTML);
+        console.log(unescapeHTML(removeP(editorHTML)));
         //console.log(text);
-        chatText.innerHTML = text;
+        chatText.innerHTML = unescapeHTML(removeP(editorHTML));
         //console.log(chatText.innerHTML);
     }  else if (encoding == "Markdown") {
-        //chatText.innerHTML = marked.parse(editorHTML).trim();
-        console.log(editorHTML.replace("<p>", "").trim());
-        console.log(marked.parse(editorHTML.replace('/^<p>$/i', "").trim()));
-        chatText.innerHTML = marked.parse(editorHTML.replace("<p>", "").trim());
+        console.log(editorHTML);
+        console.log(removeP(editorHTML, "Markdown"));
+        console.log(marked.parse(removeP(editorHTML, "Markdown")));
+        chatText.innerHTML = marked.parse(removeP(editorHTML, "Markdown"));
     }
     chatbox.appendChild(chatText);
 
@@ -148,6 +161,59 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     console.log("Check 2");
 
     return chatbox;
+}
+
+// Use a sliding window to remove the <p> and </p> inserted by the quill editor
+function removeP(string, encoding="HTML") {
+    let count = 0;
+    let finalString = string;
+
+    for (let i = string.length; i >= 3; i--) {
+        // Sliding windows of length 3 and 4 to detect <p> and </p> respectively
+        const pWindow = string.substring(i - 3, i);
+        const slashPWindow = string.substring(i - 4, i);
+
+        if (slashPWindow === "</p>") {
+            count += 1;
+
+            // If count === 1, this is the outermost </p> of a block inserted by quill
+            if (count === 1 && encoding == "HTML") {
+                finalString = finalString.slice(0, i - 4) + "<br>" + finalString.slice(i);
+
+            } else if (encoding == "Markdown") {
+                finalString = finalString.slice(0, i - 4) + "\n" + finalString.slice(i);
+            }   
+        } else if (pWindow === "<p>") {
+            count -= 1;
+
+            // Similarly if count === 0, this is the outermost <p> of a block
+            if (count === 0  && encoding == "HTML") {
+                finalString = finalString.slice(0, i-3) + finalString.slice(i);
+
+            } else if (encoding == "Markdown") {
+                finalString = finalString.slice(0, i - 3) + finalString.slice(i);
+            }
+        }
+    }
+    if (encoding == "Markdown") {
+        finalString = finalString.replaceAll("<br>", "\n");
+        //finalString = finalString.replaceAll("</iframe>", "</iframe>\n\n");
+
+    }
+
+    return finalString
+}
+
+function unescapeHTML(string) {
+    let finalString = string;
+    finalString = finalString.replaceAll("&lt;", "<");
+    finalString = finalString.replaceAll("&gt;", ">");
+    finalString = finalString.replaceAll("&quot", '"');
+    finalString = finalString.replaceAll("&#39", "'");
+    finalString = finalString.replaceAll("&apos", "'");
+    finalString = finalString.replaceAll("&amp", "&");
+
+    return finalString;
 }
 
 export { createConversation };

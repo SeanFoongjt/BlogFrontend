@@ -93,7 +93,7 @@ function sendFunction(event, isReply=false) {
   // Get text from the editor
   var rawtext = quill.getText()
   var contents = quill.getContents();
-  //console.log(quill.root.innerHTML);
+  console.log(quill.root.innerHTML);
   var rawHTML = quill.root.innerHTML;
   //console.log(marked.parse(rawHTML));
   quill.setText("");
@@ -293,9 +293,10 @@ function editFunction(object) {
         .get(object)
         .forEach((chat) => {
           console.log(chat);
-          chat.shadowRoot.querySelector("span[name='replyText']").innerText = quill.getText().trim();
+          const rawText = quill.getText().trim();
+          chat.shadowRoot.querySelector("span[name='replyText']").innerText = formatForReply(rawText);
         });
-      }
+    }
     cleanup();
   }
 
@@ -369,5 +370,13 @@ function replyFunction(object) {
   }
 }
 
-export { editFunction, replyFunction };
+function formatForReply(string) {
+  if (string.length > 60) {
+    return string.slice(0,60) + "..."
+  } else if (string.length <= 60) {
+    return string
+  }
+}
+
+export { editFunction, replyFunction, formatForReply };
 
