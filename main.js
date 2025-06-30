@@ -345,6 +345,9 @@ function replyFunction(object) {
 
   function reply() {
     const newChat = sendFunction(object, object);
+
+    // Have message replied to keep track of how many other messages reference it
+    // to change text if an edit is done.
     if (!replyMap.has(object)) {
       replyMap.set(object, [newChat]);
     } else {
@@ -370,13 +373,21 @@ function replyFunction(object) {
   }
 }
 
-function formatForReply(string) {
-  if (string.length > 60) {
-    return string.slice(0,60) + "..."
-  } else if (string.length <= 60) {
-    return string
+function deleteFunction(object) {
+  // Maybe add formatting to make it faded and italic
+  if (replyMap.has(object)) {
+    replyMap
+      .get(object)
+      .forEach((chat) => {
+        console.log(chat);
+        const replyText = chat.shadowRoot.querySelector("span[name='replyText']");
+        replyText.innerText = "Message Deleted";
+        replyText.style.fontStyle = "italic";
+        replyText.style.color = "#d3d3d3";
+    });
   }
+  object.remove();
 }
 
-export { editFunction, replyFunction, formatForReply };
+export { editFunction, replyFunction, deleteFunction};
 

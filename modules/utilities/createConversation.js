@@ -1,5 +1,5 @@
 import { formatTime } from "./formatTime.js";
-import { editFunction, replyFunction, formatForReply } from "../../main.js";
+import { editFunction, replyFunction, deleteFunction } from "../../main.js";
 // Refector edit, reply delete functions to abstract from one function or something similar
 
 function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", 
@@ -14,7 +14,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         dropdown.setAttribute("slot", "dropdown")
         dropdown.setAttribute("class", "col dropdown show ms-xl-5 ms-lg-4");
         chatbox.appendChild(dropdown);
-        //console.log("dropdown created");
 
         // Create Dropdown button
         const dropdownButton = document.createElement("button");
@@ -26,14 +25,12 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         dropdownButton.setAttribute("aria-expanded", "false");
         
         dropdown.appendChild(dropdownButton);
-        //console.log("dropdownButton created");
 
         // Create Dropdown menu
         const dropdownMenu = document.createElement("div");
         dropdownMenu.setAttribute("class", "dropdown-menu");
         dropdownMenu.setAttribute("aria-labelledby", "dropdownMenuButton");
         dropdown.appendChild(dropdownMenu);
-        //console.log("dropdownMenu created");
 
         // Create Edit button
         const editButton = document.createElement("a");
@@ -49,18 +46,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         deleteButton.setAttribute("href", "#");
         deleteButton.innerText = "Delete";
         dropdownMenu.appendChild(deleteButton);
-        deleteButton.addEventListener("click", () => {
-            // Maybe add formatting to make it faded and italic
-            if (replyMap.has(object)) {
-                replyMap
-                    .get(object)
-                    .forEach((chat) => {
-                    console.log(chat);
-                    chat.shadowRoot.querySelector("span[name='replyText']").innerText = "Message Deleted";
-                    });
-            }
-            chatbox.remove()
-        });
+        deleteButton.addEventListener("click", () => deleteFunction(chatbox));
 
         // Create Forward button
         const forwardButton = document.createElement("a");
@@ -77,6 +63,8 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         dropdownMenu.appendChild(replyButton);
         replyButton.addEventListener("click", () => replyFunction(chatbox));
 
+        // If the chat is replying to another chat, set up a reply banner with text
+        // referencing the chat replied
         if (replyingTo) {
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
             replyBanner.removeAttribute("hidden")
@@ -111,9 +99,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         var replyButton = document.createElement("button");
         replyButton.setAttribute("name", "replyButtonTest");
         chatbox.appendChild(replyButton);
-        console.log(chatbox.shadowRoot);
-        //console.log(chatbox.shadowRoot.querySelector("button[name='replyButton']"));
-        //console.log(chatbox.children);
     }
     
     // Create text to go into the slot for actual text of the chat
@@ -123,19 +108,16 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
-        console.log(editorHTML);
+        //console.log(editorHTML);
         chatText.innerHTML = editorHTML;
-        //console.log(chatText.innerHTML);
     } else if (encoding == "HTML") {
-        console.log(editorHTML);
-        console.log(unescapeHTML(removeP(editorHTML)));
-        //console.log(text);
+        //console.log(editorHTML);
+        //console.log(unescapeHTML(removeP(editorHTML)));
         chatText.innerHTML = unescapeHTML(removeP(editorHTML));
-        //console.log(chatText.innerHTML);
     }  else if (encoding == "Markdown") {
-        console.log(editorHTML);
-        console.log(removeP(editorHTML, "Markdown"));
-        console.log(marked.parse(removeP(editorHTML, "Markdown")));
+        //console.log(editorHTML);
+        //console.log(removeP(editorHTML, "Markdown"));
+        //console.log(marked.parse(removeP(editorHTML, "Markdown")));
         chatText.innerHTML = marked.parse(removeP(editorHTML, "Markdown"));
     }
     chatbox.appendChild(chatText);
@@ -214,6 +196,14 @@ function unescapeHTML(string) {
     finalString = finalString.replaceAll("&amp", "&");
 
     return finalString;
+}
+
+function formatForReply(string) {
+  if (string.length > 60) {
+    return string.slice(0,60) + "..."
+  } else if (string.length <= 60) {
+    return string
+  }
 }
 
 export { createConversation };
