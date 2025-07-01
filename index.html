@@ -34,7 +34,7 @@
     </div>
 
     <!-- Header of the conversation, includes title and dropdown for conversation options-->
-    <div class="container chat-container rounded border border-1 border-dark mt-2 mb-2 vh-100">
+    <div class="container chat-container rounded border border-1 border-dark vh-100">
         <div class="container pb-3 pt-2 h-10" id="textlog">
             <div class="row">
 
@@ -73,7 +73,7 @@
         </div>
         
         <!-- Hidden page used for when recipient is blocked -->
-        <div class="container h-100" id="blocked-chat-container" hidden="">
+        <div class="container h-75" id="blocked-chat-container" hidden="">
             <div class="d-flex flex-column h-100 justify-content-center align-items-center">
                 <h2 class="text-black-50">
                     You have blocked this user
@@ -85,7 +85,7 @@
         </div>
 
         <!-- Create the blog container -->
-        <div class="container chatlog-editor-container h-100 mh-100" id="chatlog-editor-container">
+        <div class="container chatlog-editor-container" id="chatlog-editor-container">
 
             <!-- Space where chats exist -->
             <div class="container chatlog" id="chatlog">
@@ -97,14 +97,20 @@
             
             <!-- Create container for user inputs -->
             <div class="container user-inputs pb-2">
+                <div class="editor-click-prompt rounded-pill mt-1 align-items-center">
+                    <div class="ps-3 mt-2 text-muted" >
+                        Click here to chat
+                    </div>
+                </div>
+
                 <!-- Container for quill editor and it's toolbar-->
-                <div class="editor-toolbar">
+                <div class="editor-toolbar mt-1" hidden>
                     <div class="container editor-container" id="editor">
                     </div>
                 </div>
 
                 <!-- Container for the mike, send, cancel buttons etc.-->
-                <div class="mt-1">
+                <div class="mt-1 bottom-toolbar" hidden>
                     <!-- Send, mike, cancel buttons-->
                     <button class="btn btn-outline-primary mike-button" id="mike-button">
                         <i class="fa-solid fa-lg fa-microphone"></i>

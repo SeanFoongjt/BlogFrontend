@@ -18,7 +18,7 @@ myChatTemplate.innerHTML = `
             <slot name="dropdown"></slot>
 
             <!--Actual text goes here-->
-            <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 text-box" name="text-box">
+            <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 my-text-box text-box" name="text-box">
                 <slot name="chatText"></slot>
             </div>
         </div>

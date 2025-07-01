@@ -1,3 +1,9 @@
+/**
+ * Format time to follow the HH:MM a.m./p.m. format. This is done by converting a string 
+ * representing a time into a Date object and then manipulating said Date object.
+ * @param {string} timeString string representing time to be formatted
+ * @returns 
+ */
 function formatTime(timeString) {
     const timeDate = new Date(timeString);
     

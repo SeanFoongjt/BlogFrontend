@@ -82,6 +82,39 @@ function renameTitle() {
 }
 
 /**
+ * CSS logic
+ */
+const editorPrompt = document.querySelector(".editor-click-prompt");
+const editorToolbarContainer = document.querySelector(".editor-toolbar");
+const bottomToolbar = document.querySelector(".bottom-toolbar");
+const userInputs = document.querySelector(".user-inputs");
+const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
+//editorToolbarContainer.addEventListener("click", hideEditor);
+editorPrompt.addEventListener("click", displayEditor);
+
+function displayEditor() {
+  console.log(editorPrompt);
+  editorToolbarContainer.removeAttribute("hidden");
+  bottomToolbar.removeAttribute("hidden");
+  editorPrompt.setAttribute("hidden", "");
+  quill.focus();
+  //cancellableProcesses.push(userInputs);
+  //userInputs.addEventListener("cancel", hideEditor);
+  chatlogEditorContainer.style.height = "60%";
+  chatlogEditorContainer.style.maxHeight = "60%";
+
+  //quill.addEventListener("focus", )
+}
+
+function hideEditor() {
+  editorToolbarContainer.setAttribute("hidden", "")
+  bottomToolbar.setAttribute("hidden", "");
+  editorPrompt.removeAttribute("hidden");
+  chatlogEditorContainer.style.height = "87%";
+  chatlogEditorContainer.style.maxHeight = "87%";
+}
+
+/**
  * Send button logic
  */
 
@@ -270,7 +303,8 @@ function editFunction(object) {
   quill.root.innerHTML = textToEdit.innerHTML;  
 
   // Highlight text currently being edited
-  object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#B4CBF0";
+  var temp = object.shadowRoot.querySelector(".text-box").style.backgroundColor;
+  object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#EBC5CD";
   
   // Scroll to editor
   window.scrollTo(0, document.body.scrollHeight);
@@ -322,7 +356,7 @@ function editFunction(object) {
     object.removeEventListener("cancel", cleanup);
     editButton.addEventListener("click", sendFunction);
     editButton.innerText="Send";
-    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";
+    object.shadowRoot.querySelector(".text-box").style.backgroundColor = temp;
     const index = cancellableProcesses.indexOf(object);
     if (index != -1) {
       cancellableProcesses.splice(index, 1);
@@ -379,7 +413,6 @@ function replyFunction(object) {
     object.removeEventListener("cancel", cleanup);
     replyButton.addEventListener("click", sendFunction);
     replyButton.innerText="Send";
-    object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#c8e1cc";
     const index = cancellableProcesses.indexOf(object);
     if (index != -1) {
       cancellableProcesses.splice(index, 1);
@@ -393,6 +426,8 @@ function replyFunction(object) {
  * @param {MyChat} object object to be deleted
  */
 function deleteFunction(object) {
+  notifyCancellableProcesses();
+
   // Maybe add formatting to make it faded and italic
   if (replyMap.has(object)) {
     replyMap
