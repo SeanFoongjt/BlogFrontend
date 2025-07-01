@@ -9,6 +9,7 @@ import { encodeText } from "./modules/utilities/encodeText.js";
 const cancelEvent = new Event("cancel");
 const cancellableProcesses = [];
 const replyMap = new Map();
+var isEditorShowing = false;
 
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
@@ -82,36 +83,59 @@ function renameTitle() {
 }
 
 /**
- * CSS logic
+ * Editor display and hiding logic
  */
 const editorPrompt = document.querySelector(".editor-click-prompt");
 const editorToolbarContainer = document.querySelector(".editor-toolbar");
 const bottomToolbar = document.querySelector(".bottom-toolbar");
 const userInputs = document.querySelector(".user-inputs");
 const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
-//editorToolbarContainer.addEventListener("click", hideEditor);
 editorPrompt.addEventListener("click", displayEditor);
 
+/**
+ * Show the editor. Activated when the prompt to open editor is clicked.
+ */
 function displayEditor() {
-  console.log(editorPrompt);
+  // Hide prompt, show and focus on editor
   editorToolbarContainer.removeAttribute("hidden");
   bottomToolbar.removeAttribute("hidden");
   editorPrompt.setAttribute("hidden", "");
   quill.focus();
-  //cancellableProcesses.push(userInputs);
-  //userInputs.addEventListener("cancel", hideEditor);
-  chatlogEditorContainer.style.height = "60%";
-  chatlogEditorContainer.style.maxHeight = "60%";
+  isEditorShowing = true;
 
-  //quill.addEventListener("focus", )
+  // Adjust height of chatlog
+  chatlog.style.height = "62%";
+  chatlog.style.maxHeight = "62%";
+  chatlog.scrollTop = chatlog.scrollTop + 142;
+
+  // Add listeners to chatlog and title section to hide editor when they are clicked
+  chatlog.addEventListener("click", hideEditor);
+  document.getElementById("textlog").addEventListener("click", hideEditor);
 }
 
+/**
+ * Hide editor, reverting back to a prompt to open the editor
+ * @returns 
+ */
 function hideEditor() {
+  // Disallow editor to be hidden if there is content in the editor or if a chat is in the midst of being edited or replied to.
+  if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 || cancellableProcesses.length != 0) {
+    return;
+  }
+  
+  // Remove listeners from chatlog and title section
+  chatlog.removeEventListener("click", hideEditor);
+  document.getElementById("textlog").removeEventListener("click", hideEditor);
+
+  // Hide editor, show prompt
   editorToolbarContainer.setAttribute("hidden", "")
   bottomToolbar.setAttribute("hidden", "");
   editorPrompt.removeAttribute("hidden");
-  chatlogEditorContainer.style.height = "87%";
-  chatlogEditorContainer.style.maxHeight = "87%";
+  isEditorShowing = false;
+
+  // Adjust height of chatlog
+  chatlog.style.height = "90%";
+  chatlog.style.maxHeight = "90%";
 }
 
 /**
@@ -298,6 +322,10 @@ recognition.onresult = function(event) {
  */
 function editFunction(object) {
   notifyCancellableProcesses();
+
+  if (!isEditorShowing) {
+    displayEditor();
+  }
   // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
   quill.root.innerHTML = textToEdit.innerHTML;  
@@ -372,6 +400,10 @@ function editFunction(object) {
 function replyFunction(object) {
   // Only one cancellableProcess should be active at a time
   notifyCancellableProcesses();
+
+  if (!isEditorShowing) {
+    displayEditor();
+  }
   
   // Scroll to editor
   window.scrollTo(0, document.body.scrollHeight);
