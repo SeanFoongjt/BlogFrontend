@@ -1,7 +1,19 @@
 import { formatTime } from "./formatTime.js";
 import { editFunction, replyFunction, deleteFunction } from "../../main.js";
+import { encodeText } from "./encodeText.js";
 // Refector edit, reply delete functions to abstract from one function or something similar
 
+/**
+ * Function to create a chat / conversation. Can be used for both sides of the conversation
+ * @param {string} type type of chat, i.e. chat from the writer or from the person being talked to
+ * @param {string} editorHTML contents of editor as is
+ * @param {string} time string representing time conversation was made
+ * @param {string} text raw text of conversation, without any formatting
+ * @param {string} encoding format of text between Plaintext, HTML and Markdown, default is Plaintext.
+ * @param {HTMLElement} replyingTo chat that conversation is replying to, default is false
+ * @param {string} imagePath image path for photo for if conversation is from other person
+ * @returns 
+ */
 function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", 
     replyingTo=false, imagePath ="") {
     if (type == "my-chat") {
@@ -67,15 +79,20 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         // referencing the chat replied
         if (replyingTo) {
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
-            replyBanner.removeAttribute("hidden")
             var text = replyBanner.querySelector("span[name='replyText']");
+
+            // Inner text used here so that text in reply banner has no formatting
             text.innerText = formatForReply(replyingTo.querySelector("div[name='text']").innerText);
+
+            // Setup and addition of icon
             var replyIcon = document.createElement("i");
             replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
             replyIcon.setAttribute("slot", "replyingToIcon");
             chatbox.appendChild(replyIcon);
+
+            // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
-            document.querySelector(".ql-editor").firstChild.focus();
+            //document.querySelector(".ql-editor").firstChild.focus();
         }
                         
     } else if (type == "other-chat") {
@@ -105,21 +122,8 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     var chatText = document.createElement("div");
     chatText.setAttribute("slot", "chatText");
     chatText.setAttribute("name", "text");
-    
-    // Process text based on encoding type selected
-    if (encoding == "Plaintext") {
-        //console.log(editorHTML);
-        chatText.innerHTML = editorHTML;
-    } else if (encoding == "HTML") {
-        //console.log(editorHTML);
-        //console.log(unescapeHTML(removeP(editorHTML)));
-        chatText.innerHTML = unescapeHTML(removeP(editorHTML));
-    }  else if (encoding == "Markdown") {
-        //console.log(editorHTML);
-        //console.log(removeP(editorHTML, "Markdown"));
-        //console.log(marked.parse(removeP(editorHTML, "Markdown")));
-        chatText.innerHTML = marked.parse(removeP(editorHTML, "Markdown"));
-    }
+
+    chatText.innerHTML = encodeText(editorHTML, encoding);
     chatbox.appendChild(chatText);
 
     // Get time, formatted using module
@@ -145,59 +149,11 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     return chatbox;
 }
 
-// Use a sliding window to remove the <p> and </p> inserted by the quill editor
-function removeP(string, encoding="HTML") {
-    let count = 0;
-    let finalString = string;
-
-    for (let i = string.length; i >= 3; i--) {
-        // Sliding windows of length 3 and 4 to detect <p> and </p> respectively
-        const pWindow = string.substring(i - 3, i);
-        const slashPWindow = string.substring(i - 4, i);
-
-        if (slashPWindow === "</p>") {
-            count += 1;
-
-            // If count === 1, this is the outermost </p> of a block inserted by quill
-            if (count === 1 && encoding == "HTML") {
-                finalString = finalString.slice(0, i - 4) + "<br>" + finalString.slice(i);
-
-            } else if (encoding == "Markdown") {
-                finalString = finalString.slice(0, i - 4) + "\n" + finalString.slice(i);
-            }   
-        } else if (pWindow === "<p>") {
-            count -= 1;
-
-            // Similarly if count === 0, this is the outermost <p> of a block
-            if (count === 0  && encoding == "HTML") {
-                finalString = finalString.slice(0, i-3) + finalString.slice(i);
-
-            } else if (encoding == "Markdown") {
-                finalString = finalString.slice(0, i - 3) + finalString.slice(i);
-            }
-        }
-    }
-    if (encoding == "Markdown") {
-        finalString = finalString.replaceAll("<br>", "\n");
-        //finalString = finalString.replaceAll("</iframe>", "</iframe>\n\n");
-
-    }
-
-    return finalString
-}
-
-function unescapeHTML(string) {
-    let finalString = string;
-    finalString = finalString.replaceAll("&lt;", "<");
-    finalString = finalString.replaceAll("&gt;", ">");
-    finalString = finalString.replaceAll("&quot", '"');
-    finalString = finalString.replaceAll("&#39", "'");
-    finalString = finalString.replaceAll("&apos", "'");
-    finalString = finalString.replaceAll("&amp", "&");
-
-    return finalString;
-}
-
+/**
+ * Format the string to be used as text for the reply banner
+ * @param {string} string string to be formatted
+ * @returns 
+ */
 function formatForReply(string) {
   if (string.length > 60) {
     return string.slice(0,60) + "..."

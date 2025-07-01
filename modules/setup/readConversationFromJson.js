@@ -11,7 +11,8 @@ function readJson(path) {
 function createConversationFromJson(conversationJson) {
     const chats = conversationJson["chats"]
     for (const i in chats) {
-        createConversation(chats[i]["type"], chats[i]["text"], chats[i]["time"], chats[i]["encoding"]);
+        createConversation(chats[i]["type"], chats[i]["text"], chats[i]["time"], 
+            chats[i]["text"], chats[i]["encoding"], false, chats[i]["imagePath"]);
     }
 }
 

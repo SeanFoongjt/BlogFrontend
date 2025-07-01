@@ -1,5 +1,6 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { createConversation } from "./modules/utilities/createConversation.js";
+import { encodeText } from "./modules/utilities/encodeText.js";
 
 /**
  * Setup logic
@@ -43,6 +44,9 @@ var conversationTitle = document.getElementById("conversationTitle");
 var conversationTitleInput = document.getElementById("conversationTitleInput");
 conversationTitle.addEventListener("dblclick", renameTitle);
 
+/**
+ * Rename the title of the conversation
+ */
 function renameTitle() {
   // Make the correct input block visible, hide the existing title
   var inputContainer = document.getElementById("conversationTitleInputContainer");
@@ -85,7 +89,12 @@ function renameTitle() {
 const sendButton = document.getElementById('send-button');
 sendButton.addEventListener("click", sendFunction);
 
-// Function for when the send button is clicked
+/**
+ * Send a chat in the conversation
+ * @param {Event} event FIGURE OUT WHAT HAPPENED HERE
+ * @param {boolean} isReply boolean determining whether the chat is a reply to another chat
+ * @returns 
+ */
 function sendFunction(event, isReply=false) {
   // Retrieve encoding type
   var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
@@ -250,12 +259,15 @@ recognition.onresult = function(event) {
 
 // TODO end
 
-// Edit function, takes in a my-chat web component
+/**
+ * Edit a chatbox in the chatlog
+ * @param {MyChat} object chatbox to be edited
+ */
 function editFunction(object) {
   notifyCancellableProcesses();
   // Get the text of the chatbox to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
-  quill.setText(textToEdit.innerText);  
+  quill.root.innerHTML = textToEdit.innerHTML;  
 
   // Highlight text currently being edited
   object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#B4CBF0";
@@ -277,13 +289,15 @@ function editFunction(object) {
   editButton.removeEventListener("click", sendFunction);
   editButton.addEventListener("click", edit);
   object.addEventListener("cancel", cleanup);
-  notifyCancellableProcesses();
   cancellableProcesses.push(object);
   console.log(cancellableProcesses);
 
   // Change text in chatbox to edited text, display '(edited)' after time
   function edit() {
-    textToEdit.innerText = quill.getText().trim();
+    textToEdit.innerHTML = encodeText(
+      quill.root.innerHTML, 
+      document.getElementById("encoding-dropup").getAttribute("value")
+    );
     var subtext = object.querySelector("span[name='time']");
     if (subtext.innerText.slice(-8) != "(edited)") {
       subtext.innerText += " (edited)"
@@ -318,7 +332,8 @@ function editFunction(object) {
 }
 
 /**
- * Reply to the object passed to the function as an argument
+ * Reply to a chat in the chatlog
+ * @param {MyChat} object chat being replied to
  */
 function replyFunction(object) {
   // Only one cancellableProcess should be active at a time
@@ -373,6 +388,10 @@ function replyFunction(object) {
   }
 }
 
+/**
+ * Delete a chat box from the chatlog
+ * @param {MyChat} object object to be deleted
+ */
 function deleteFunction(object) {
   // Maybe add formatting to make it faded and italic
   if (replyMap.has(object)) {
@@ -383,7 +402,7 @@ function deleteFunction(object) {
         const replyText = chat.shadowRoot.querySelector("span[name='replyText']");
         replyText.innerText = "Message Deleted";
         replyText.style.fontStyle = "italic";
-        replyText.style.color = "#d3d3d3";
+        replyText.style.color = "#bebebe";
     });
   }
   object.remove();
