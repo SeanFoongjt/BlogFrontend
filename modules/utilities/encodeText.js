@@ -11,7 +11,9 @@ function encodeText(string, encoding="Plaintext") {
 
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
-        //console.log(editorHTML);
+        console.log("After : " + string);
+        //console.log("After : " + formatPlaintext(string));
+        //return formatPlaintext(string);
         return string;
     } else if (encoding == "HTML") {
         //console.log(editorHTML);
@@ -21,8 +23,18 @@ function encodeText(string, encoding="Plaintext") {
         //console.log(editorHTML);
         //console.log(removeP(editorHTML, "Markdown"));
         console.log("Before marked: " + format(string, "Markdown"));
-        console.log("After :" + marked.parse(format(string, "Markdown")));
-        return marked.parse(format(string, "Markdown"));
+
+        //https://github.com/markedjs/marked/issues/160#issuecomment-18611040
+        //https://github.com/markedjs/marked/blob/master/src/Tokens.ts
+        const tokens = marked.lexer(format(string, "Markdown"))
+        tokens.forEach(function(token) {
+            if (token.type === "code") {
+                token.escaped = true;
+            }
+        });
+
+        console.log("After :" + marked.parser(tokens));
+        return marked.parser(tokens);
     }
 }
 
@@ -127,6 +139,47 @@ function format(string, encoding="HTML") {
         //finalString = finalString.replaceAll("</iframe>", "</iframe>\n\n");
     }
     return finalString
+}
+
+function formatPlaintext(string) {
+    let count = 0;
+    let finalString = string;
+
+    // iterate from end of string to prevent indexing errors when slicing
+    for (let i = string.length - 3; i >= 0; i--) {
+        // Sliding windows of length 3 and 4 to detect <p> and </p> respectively
+        const pWindow = string.substring(i, i + 3);
+        const slashPWindow = string.substring(i, i + 4);
+
+        if (slashPWindow === "</p>") {
+            count += 1;
+
+            // If count === 1, this is the outermost (and hence editor inserted) </p> of 
+            // a block inserted by quill
+            if (count === 1) {
+                finalString = finalString.slice(0, i) + "<br>" + finalString.slice(i + 4);
+            }
+
+        } else if (pWindow === "<p>") {
+            count -= 1;
+
+            // Similarly if count === 0, this is the outermost (hence editor inserted) <p> 
+            // of a block
+            if (count === 0) {
+                finalString = finalString.slice(0, i) + finalString.slice(i + 3);
+            }
+        }
+    }
+
+    return finalString;
+}
+
+function formatHTML(string) {
+    return;
+}
+
+function formatMarkdown(string) {
+    return;
 }
 
 export { encodeText, decodeText };

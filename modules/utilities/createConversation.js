@@ -146,14 +146,14 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 
         // Center reply button relative to text box
         const textbox = chatbox.shadowRoot.querySelector(".text-box");
-        textbox.setAttribute("data-encoding", encoding);
+        chatText.setAttribute("data-encoding", encoding);
         const replyButton = chatbox.shadowRoot.querySelector(".btn");
         replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
 
     } else {
         // Center dropdown button relative to text box 
         const textbox = chatbox.shadowRoot.querySelector(".text-box");
-        textbox.setAttribute("data-encoding", encoding);
+        chatText.setAttribute("data-encoding", encoding);
         const padding = (textbox.offsetHeight - chatbox.querySelector(".btn").offsetHeight) / 2;
         chatbox.querySelector(".dropdown").style.paddingTop = (padding).toString() + "px";
     }

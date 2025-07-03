@@ -342,7 +342,8 @@ function editFunction(object) {
 
   // Get previous encoding
   const textbox = object.shadowRoot.querySelector(".text-box")
-  const prevEncoding = textbox.getAttribute("data-encoding");
+  const chatText = object.querySelector("div[name='text']");
+  const prevEncoding = chatText.getAttribute("data-encoding");
 
   // Display the editor if it is not showing
   if (!isEditorShowing) {
@@ -379,6 +380,7 @@ function editFunction(object) {
 
   // Set appropriate encoding type 
   const currEncoding = document.getElementById("encoding-dropup");
+  document.getElementById("encoding-dropup-label").innerText = prevEncoding;
   currEncoding.setAttribute("value", prevEncoding);
 
   // Push self to cancellableProcesses
@@ -422,7 +424,7 @@ function editFunction(object) {
         });
     }
 
-    textbox.setAttribute("data-encoding", currEncoding.getAttribute("value"));
+    chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
     cleanup();
   }
 

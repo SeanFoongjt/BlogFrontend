@@ -29,7 +29,6 @@ function createConversationFromJson(conversationJson) {
             chats[i]["rawHTML"]
         );
     }
-
     return rawcontentMap
 }
 

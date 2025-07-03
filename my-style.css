@@ -1,3 +1,10 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+/* Styling for the quill editor */
+/* The container holding the editor */
 .editor-container {
     max-height: 100px;
     height: 100px;
@@ -6,15 +13,18 @@
     border-width: 1px;
 }
 
+/* The toolbar of the editor */
 .editor-toolbar {
     background-color: #FFFFFF;
 }
 
+/* When hovering over prompt that brings up editor */
 .editor-click-prompt:hover {
     background-color: darkgray;
     color: white;
 }
 
+/* Otherwise default for the above mentioned prompt */
 .editor-click-prompt {
     max-height: 100%;
     height: 100%;
@@ -24,18 +34,22 @@
     color: #777;
 }
 
+/* Styling for display of chats */
+/* Modifies text box coming from the user */
 .my-text-box {
     background-color: #C5CDEB;
     color: black;
     word-wrap: break-word;
 }
 
+/* Modifies text box sent to the user / received from other participant */
 .other-text-box {
     background-color: #cdebc5;
     color: black;
     word-wrap: break-word;
 }
 
+/* Overall section containg and displaykng the chats */
 .chatlog {
     overflow: auto;
     scrollbar-width: none;
@@ -43,18 +57,32 @@
     max-height: 90%;
 }
 
+/* Editor together with the bottom most buttons for sending and encoding */
 .user-inputs {
     height: 10%;
     max-height: 100%;
 }
 
+/* Overall container, can probably also just be body */
 .chat-container {
     background-color: #F2F3F4;
 }
 
+/* container for both the chat display and the editor */
 .chatlog-editor-container {
     height: 87%;
     max-height: 87%;
+}
+
+/* Plaintext encoded text */
+[data-encoding="Plaintext"] {
+    & p {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    & ol {
+        margin-bottom: 0px;
+    }
 }
 
 /*
