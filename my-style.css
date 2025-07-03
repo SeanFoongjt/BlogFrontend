@@ -57,6 +57,11 @@
     max-height: 87%;
 }
 
+/*
+.ql-editor {
+    white-space: normal!important;
+}
+*/
 
 /*
 Currently of no use
@@ -64,8 +69,4 @@ Currently of no use
 .replying-to {
     height:10%;
     width:96%;
-}
-
-.faded {
-    background-color: #A6A6A6;
 }

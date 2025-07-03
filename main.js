@@ -1,11 +1,10 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { createConversation } from "./modules/utilities/createConversation.js";
-import { encodeText } from "./modules/utilities/encodeText.js";
+import { decodeText, encodeText } from "./modules/utilities/encodeText.js";
 
 /**
  * Setup logic
  */
-
 // Keeps track of currently executing processes that can be cancelled
 const cancelEvent = new Event("cancel");
 const cancellableProcesses = [];
@@ -17,6 +16,8 @@ function notifyCancellableProcesses() {
 // referenced whereas values are the chats referencing / replying to the key
 const replyMap = new Map();
 var isEditorShowing = false;
+
+var rawcontentMap = new Map();
 
 // Initialise editor with custom toolbar
 const editor = document.getElementById('editor');
@@ -37,7 +38,7 @@ const quill = new Quill("#editor", {
 
 // Initialise data from json
 readJson("./json/sample-text-file.json")
-  .then(data => createConversationFromJson(data));
+  .then(data => rawcontentMap = createConversationFromJson(data));
 
 /**
  * Logic for changing the conversation title
@@ -182,6 +183,9 @@ function sendFunction(event, isReply=false) {
     encodingType, 
     isReply
   );
+
+  // Store original html in rawcontentMap
+  rawcontentMap.set(newChat, rawHTML);
 
   // Automatically scroll to bottom
   chatlog.scrollTop = chatlog.scrollHeight;
@@ -336,17 +340,23 @@ function editFunction(object) {
   // Cancel other potentially interfering processes
   notifyCancellableProcesses();
 
+  // Get previous encoding
+  const textbox = object.shadowRoot.querySelector(".text-box")
+  const prevEncoding = textbox.getAttribute("data-encoding");
+
   // Display the editor if it is not showing
   if (!isEditorShowing) {
     displayEditor();
   }
 
-  // Get the text of the chatbox to be edited, put it in the editor
+  // Get the text of the chatbox from rawcontentMap to be edited, put it in the editor
   var textToEdit = object.querySelector("div[name='text']");
-  quill.root.innerHTML = textToEdit.innerHTML;  
+  quill.root.innerHTML = rawcontentMap.get(object);
+  console.log("Quill: " + quill.root.innerHTML);
+  console.log("Actual: " + textToEdit.innerHTML);
 
   // Highlight text currently being edited, record previous background color
-  var prevBackground = object.shadowRoot.querySelector(".text-box").style.backgroundColor;
+  var prevBackground = textbox.style.backgroundColor;
   object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#EBC5CD";
   
   // Scroll to editor
@@ -367,25 +377,31 @@ function editFunction(object) {
   editButton.addEventListener("click", edit);
   object.addEventListener("cancel", cleanup);
 
+  // Set appropriate encoding type 
+  const currEncoding = document.getElementById("encoding-dropup");
+  currEncoding.setAttribute("value", prevEncoding);
+
   // Push self to cancellableProcesses
   cancellableProcesses.push(object);
   console.log(cancellableProcesses);
 
   // Change text in chatbox to edited text, display '(edited)' after time
   function edit() {
-    // Terminate function early if no actual text is in the editor or if the text
-    // remains the same
+    // Terminate function early if no actual text is in the editor
     if (quill.getText().trim() == "" && quill.getContents()["ops"].length == 1) {
-      console.log("terminated early");
+      console.log("terminated early due to no text");
       cleanup();
       return;
-    } 
+    }
+    
     // TODO check if text and encoding are the same
+    console.log(currEncoding.getAttribute("value"));
+    rawcontentMap.set(object, quill.root.innerHTML);
     
     // encode contents of quill editor and put it into the edited chat
     textToEdit.innerHTML = encodeText(
       quill.root.innerHTML, 
-      document.getElementById("encoding-dropup").getAttribute("value")
+      currEncoding.getAttribute("value")
     );
 
     // Add the '(edited)' subtext next to time of sending the chat
@@ -405,6 +421,8 @@ function editFunction(object) {
           chat.shadowRoot.querySelector("span[name='replyText']").innerText = formatForReply(rawText);
         });
     }
+
+    textbox.setAttribute("data-encoding", currEncoding.getAttribute("value"));
     cleanup();
   }
 

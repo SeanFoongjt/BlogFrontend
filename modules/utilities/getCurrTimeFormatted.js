@@ -1,3 +1,7 @@
+/**
+ * Return a formatted string corresponding to the time that the function is called
+ * @returns String with current time correctly formatted
+ */
 function getCurrTimeFormatted() {
     const currDate = new Date(Date.now());
     // Get and parse time

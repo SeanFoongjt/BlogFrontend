@@ -7,24 +7,27 @@
  * @returns 
  */
 function encodeText(string, encoding="Plaintext") {
+    console.log("Before: " + string);
+
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
         //console.log(editorHTML);
         return string;
     } else if (encoding == "HTML") {
         //console.log(editorHTML);
-        //console.log(unescapeHTML(removeP(editorHTML)));
-        return unescapeHTML(removeP(string));
+        console.log("After :" + unescapeHTML(format(string)));
+        return unescapeHTML(format(string));
     }  else if (encoding == "Markdown") {
         //console.log(editorHTML);
         //console.log(removeP(editorHTML, "Markdown"));
-        //console.log(marked.parse(removeP(editorHTML, "Markdown")));
-        return marked.parse(removeP(string, "Markdown"));
+        console.log("Before marked: " + format(string, "Markdown"));
+        console.log("After :" + marked.parse(format(string, "Markdown")));
+        return marked.parse(format(string, "Markdown"));
     }
 }
 
 /**
- * Unescape escaped html characters 
+ * Unescape escaped html characters.
  * @param {String} string string to be unescaped
  * @returns 
  */
@@ -41,21 +44,56 @@ function unescapeHTML(string) {
 }
 
 /**
+ * Decode provided text to appropriate quill editor input. Previously used with edit,
+ * currently unused.
+ * @param {String} string Text to be decoded
+ * @param {String} encoding encoding to decode from, Plaintext, HTML or Markdown
+ * @returns 
+ */
+function decodeText(string, encoding="Plaintext") {
+    if (encoding == "Plaintext") {
+        return string
+    
+    } else if (encoding == "HTML") {
+        let finalString = string;
+        finalString = finalString.replaceAll("&", "&amp");
+        finalString = finalString.replaceAll("'", "&#39");
+        finalString = finalString.replaceAll("'", "&apos");
+        finalString = finalString.replaceAll('"', "&quot");
+        finalString = finalString.replaceAll("<", "&lt;");
+        finalString = finalString.replaceAll(">", "&gt;");
+
+        return finalString
+
+    } else {
+        const turndownService = new TurndownService();
+        let finalString = string;
+
+        finalString = turndownService.turndown(finalString);
+        return finalString;
+    }
+}
+
+/**
  * Remove <p> and </p> inserted by the quill editor using a sliding window
  * @param {String} string string from which the auto inserted <p> and </p>s are removed
  * @param {String} encoding either HTML or Markdown
  * @returns 
  */
 // Use a sliding window to remove the <p> and </p> inserted by the quill editor
-function removeP(string, encoding="HTML") {
+function format(string, encoding="HTML") {
     let count = 0;
     let finalString = string;
 
+    if (format == "HTML") {
+        finalString = finalString.replaceAll("<br>", "");
+    }
+
     // iterate from end of string to prevent indexing errors when slicing
-    for (let i = string.length; i >= 3; i--) {
+    for (let i = string.length - 3; i >= 0; i--) {
         // Sliding windows of length 3 and 4 to detect <p> and </p> respectively
-        const pWindow = string.substring(i - 3, i);
-        const slashPWindow = string.substring(i - 4, i);
+        const pWindow = string.substring(i, i + 3);
+        const slashPWindow = string.substring(i, i + 4);
 
         if (slashPWindow === "</p>") {
             count += 1;
@@ -63,10 +101,10 @@ function removeP(string, encoding="HTML") {
             // If count === 1, this is the outermost (and hence editor inserted) </p> of 
             // a block inserted by quill
             if (count === 1 && encoding == "HTML") {
-                finalString = finalString.slice(0, i - 4) + "<br>" + finalString.slice(i);
+                finalString = finalString.slice(0, i) + " " + finalString.slice(i + 4);
 
             } else if (encoding == "Markdown") {
-                finalString = finalString.slice(0, i - 4) + "\n" + finalString.slice(i);
+                finalString = finalString.slice(0, i) + "\n" + finalString.slice(i + 4);
             }   
 
         } else if (pWindow === "<p>") {
@@ -75,16 +113,20 @@ function removeP(string, encoding="HTML") {
             // Similarly if count === 0, this is the outermost (hence editor inserted) <p> 
             // of a block
             if (count === 0) {
-                finalString = finalString.slice(0, i-3) + finalString.slice(i);
+                finalString = finalString.slice(0, i) + finalString.slice(i + 3);
             }
         }
     }
+
+    while (finalString.trim().substring(finalString.trim().length - 4) === "<br>") {
+        finalString = finalString.trim().substring(0, finalString.trim().length - 4);
+    }
+
     if (encoding == "Markdown") {
         finalString = finalString.replaceAll("<br>", "\n");
         //finalString = finalString.replaceAll("</iframe>", "</iframe>\n\n");
     }
-
     return finalString
 }
 
-export { encodeText };
+export { encodeText, decodeText };

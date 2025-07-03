@@ -3,36 +3,42 @@
         {
             "type" : "other-chat",
             "text" : "Hey how are you doing?",
+            "rawHTML" : "Hey how are you doing?",
             "time" : "19 June, 2025 09:00",
             "imagePath" : "../../img/cornflower.webp"
         },
         {
             "type" : "my-chat",
             "text" : "I'm fine thanks",
+            "rawHTML" : "I'm fine thanks",
             "time" : "19 June, 2025 09:14",
             "encoding" : "Plaintext"
         },
         {
             "type" : "my-chat",
             "text" : "placeholder",
+            "rawHTML" : "placeholder",
             "time" : "19 June, 2025 09:29",
             "encoding" : "Plaintext"
         },
         {
             "type" : "other-chat",
             "text" : "This text is being inserted such that there is overflow in the chatlog",
+            "rawHTML" : "This text is being inserted such that there is overflow in the chatlog",
             "time" : "19 June, 2025 10:01",
             "imagePath" : "../../img/cornflower.webp"
         },
         {
             "type" : "other-chat",
             "text" : "Refer to the above chat for the intents and purposes of this conversation",
+            "rawHTML" : "Refer to the above chat for the intents and purposes of this conversation",
             "time" : "19 June, 2025 10:12",
             "imagePath" : "../../img/cornflower.webp"
         },
         {
             "type" : "my-chat",
             "text" : "sprinkle in chats from my side to make stuff easier",
+            "rawHTML" : "sprinkle in chats from my side to make stuff easier",
             "time" : "19 June, 2025 10:17",
             "encoding" : "Plaintext"
         }
