@@ -84,6 +84,9 @@ body, html {
     & .ql-size-huge {
         font-size: 2.5em;
     }
+    & [data-list="bullet"] {
+        list-style-type: disc !important;
+    }
 }
 
 /* Plaintext encoded text */
@@ -100,11 +103,7 @@ body, html {
     & ul {
         margin-bottom: 0px;
     }
-    & [data-list="bullet"] {
-        list-style-type: disc !important;
-    }
 }
-
 
 
 /** Note that this may remove some accessibility features */

@@ -58,7 +58,10 @@ conversationTitle.addEventListener("dblclick", renameTitle);
 function renameTitle() {
   // Make the correct input block visible, hide the existing title
   var inputContainer = document.getElementById("conversationTitleInputContainer");
-  conversationTitleInput.setAttribute("placeholder", conversationTitle.innerText);
+  conversationTitleInput.value = conversationTitle.innerText;
+  conversationTitleInput.innerText = conversationTitle.innerText;
+  console.log("Input value: " + conversationTitleInput.value);
+  console.log("Inner text: " + conversationTitleInput.innerText);
   conversationTitle.setAttribute("hidden", "");
   inputContainer.removeAttribute("hidden");
   conversationTitleInput.focus();
@@ -76,6 +79,7 @@ function renameTitle() {
         conversationTitle.innerText = conversationTitleInput.value.trim();
       }
       cleanup();
+      console.log(conversationTitle.innerText);
     }
   }
 
