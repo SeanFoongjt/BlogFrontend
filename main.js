@@ -20,6 +20,11 @@ var isEditorShowing = false;
 var rawcontentMap = new Map();
 
 // Initialise editor with custom toolbar
+
+var Block = Quill.import('blots/block');
+Block.tagName = 'p';
+Quill.register(Block, true);
+
 const editor = document.getElementById('editor');
 const quill = new Quill("#editor", {
   theme: "snow",
@@ -162,6 +167,8 @@ function sendFunction(event, isReply=false) {
   var rawtext = quill.getText()
   var contents = quill.getContents();
   console.log(quill.root.innerHTML);
+  console.log(quill.getSemanticHTML());
+  console.log(quill.getContents());
   var rawHTML = quill.root.innerHTML;
   //console.log(marked.parse(rawHTML));
   quill.setText("");

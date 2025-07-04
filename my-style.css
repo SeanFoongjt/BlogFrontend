@@ -74,16 +74,50 @@ body, html {
     max-height: 87%;
 }
 
+[name='text'] {
+    & .ql-size-small {
+        font-size: 0.75em;
+    }
+    & .ql-size-large {
+        font-size: 1.5em;
+    }
+    & .ql-size-huge {
+        font-size: 2.5em;
+    }
+}
+
 /* Plaintext encoded text */
 [data-encoding="Plaintext"] {
+    white-space: pre-wrap !important;
     & p {
         margin-top: 0px;
         margin-bottom: 0px;
+        white-space: pre-wrap !important;
     }
     & ol {
         margin-bottom: 0px;
     }
+    & ul {
+        margin-bottom: 0px;
+    }
+    & [data-list="bullet"] {
+        list-style-type: disc !important;
+    }
 }
+
+
+
+/** Note that this may remove some accessibility features */
+.katex .katex-mathml {
+    position: relative;
+    display: none;
+}
+
+/*
+.pre {
+   white-space: pre-wrap !important;
+}
+*/
 
 /*
 .ql-editor {

@@ -26,7 +26,7 @@ function encodeText(string, encoding="Plaintext") {
 
         //https://github.com/markedjs/marked/issues/160#issuecomment-18611040
         //https://github.com/markedjs/marked/blob/master/src/Tokens.ts
-        const tokens = marked.lexer(format(string, "Markdown"))
+        const tokens = marked.lexer(format(string.replaceAll("&nbsp;", " ") , "Markdown"));
         tokens.forEach(function(token) {
             if (token.type === "code") {
                 token.escaped = true;
@@ -169,6 +169,7 @@ function formatPlaintext(string) {
                 finalString = finalString.slice(0, i) + finalString.slice(i + 3);
             }
         }
+
     }
 
     return finalString;
