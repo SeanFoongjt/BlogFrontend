@@ -6,14 +6,20 @@ body, html {
 /* Styling for the quill editor */
 /* The container holding the editor */
 .editor-container {
-    max-height: 100px;
-    height: 100px;
+    max-height: 50%;
     overflow: auto;
+    min-height: 100px;
     background-color: #FFFFFF;
     border-width: 1px;
 }
 
-/* The toolbar of the editor */
+.ql-editor {
+    min-height: 100px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+/* The container for the editor and the toolbar */
 .editor-toolbar {
     background-color: #FFFFFF;
 }
@@ -49,18 +55,18 @@ body, html {
     word-wrap: break-word;
 }
 
-/* Overall section containg and displaykng the chats */
+/* Overall section containg and displaying the chats */
 .chatlog {
     overflow: auto;
     scrollbar-width: none;
-    height:90%;
     max-height: 90%;
+    min-height: 10%;
 }
 
 /* Editor together with the bottom most buttons for sending and encoding */
 .user-inputs {
     height: 10%;
-    max-height: 100%;
+    max-height: 90%;
 }
 
 /* Overall container, can probably also just be body */
@@ -111,18 +117,6 @@ body, html {
     position: relative;
     display: none;
 }
-
-/*
-.pre {
-   white-space: pre-wrap !important;
-}
-*/
-
-/*
-.ql-editor {
-    white-space: normal!important;
-}
-*/
 
 /*
 Currently of no use

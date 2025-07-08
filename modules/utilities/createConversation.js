@@ -1,4 +1,4 @@
-import { formatTime } from "./formatTime.js";
+import { DateTimeFormatting } from "./DateTimeFormatting.js";
 import { editFunction, replyFunction, deleteFunction } from "../../main.js";
 import { encodeText } from "./encodeText.js";
 // Refector edit, reply delete functions to abstract from one function or something similar
@@ -130,7 +130,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
     const timeSpan = document.createElement("span");
     timeSpan.setAttribute("slot", "time");
     timeSpan.setAttribute("name", "time");
-    timeSpan.innerText = formatTime(time);
+    timeSpan.innerText = DateTimeFormatting.formatTime(time);
 
     console.log(chatbox.shadowRoot);
     chatbox.appendChild(timeSpan);

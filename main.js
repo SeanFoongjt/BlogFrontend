@@ -150,6 +150,35 @@ function hideEditor() {
 }
 
 /**
+ * Logic for dynamic chat size
+ */
+document.getElementById("chatlog").style.height = "90%";
+document.getElementById("editor").style.maxHeight = `${0.6 * window.innerHeight}px`;
+console.log(0.8 * window.innerHeight);
+
+const resizeObserver = new ResizeObserver((entries) => {
+  const resizeChatSize = (newHeight) => {
+    console.log("test: " + `${Math.round(newHeight)}px`);
+    document.getElementById("chatlog").style.height = 
+      `calc(62% + 100px - ${Math.round(newHeight)}px)`;
+    //document.getElementById("chatlog").style.height = "40%";
+  }
+
+  console.log("Chat resized");
+
+  for (const entry of entries) {
+    if (entry.borderBoxSize?.length > 0) {
+      if (isEditorShowing) {
+        console.log("New height: " + entry.borderBoxSize[0].blockSize);
+        resizeChatSize(entry.borderBoxSize[0].blockSize);
+      }
+    }
+  }
+});
+
+resizeObserver.observe(document.getElementById("editor"));
+
+/**
  * Send button logic
  */
 
