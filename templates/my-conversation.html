@@ -1,14 +1,13 @@
-
+<script type="module" src="../main.js"></script>
 <div class="col dropdown show ms-xl-5 ms-lg-4" slot="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-        data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Edit</a>
-            <a class="dropdown-item" href="#">Delete</a>
-            <a class="dropdown-item" href="#">Forward</a>
-            <a class="dropdown-item" href="#">Reply</a>
-        </div>
-    </button>
+        data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"></button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#" name="edit-button">Edit</a>
+        <a class="dropdown-item" href="#" name="delete-button">Delete</a>
+        <a class="dropdown-item" href="#" name="forward-button">Forward</a>
+        <a class="dropdown-item" href="#" name="reply-button">Reply</a>
+    </div>
 </div>
 <div slot="chatText" name="text" data-encoding="{{encoding}}">{{text}}</div>
 <span slot="time" name="time">{{time}}</span>

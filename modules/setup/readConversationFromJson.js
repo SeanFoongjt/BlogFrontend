@@ -16,16 +16,17 @@ function readJson(path) {
 /**
  * Convert a JSON to a chatlog. Assumes appropriate formatting
  * @param {JSON} conversationJson JSON object to be converted into a chatlog
+ * @param {Map} replyMap Map that records which chat is replying to which chat
  * @returns map corresponding to raw content of each chat for editing purposes
  */
-function createConversationFromJson(conversationJson) {
+function createConversationFromJson(conversationJson, replyMap) {
     const chats = conversationJson["chats"]
     const rawcontentMap = new Map();
 
     for (const i in chats) {
         rawcontentMap.set(
             createConversation(chats[i]["type"], chats[i]["text"], chats[i]["time"], 
-                chats[i]["text"], chats[i]["encoding"], false, chats[i]["imagePath"]),
+                chats[i]["encoding"], replyMap, false, chats[i]["imagePath"]),
             chats[i]["rawHTML"]
         );
     }
