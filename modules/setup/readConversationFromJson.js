@@ -1,5 +1,6 @@
 //import fs from "Node:fs";
 import { createConversation } from "../utilities/createConversation.js";
+import { createOtherChat } from "../classes/OtherChat.js";
 
 /**
  * Read a json from a given path and returns a promise encapsulating the json
@@ -23,12 +24,17 @@ function createConversationFromJson(conversationJson, replyMap) {
     const chats = conversationJson["chats"]
     const rawcontentMap = new Map();
 
-    for (const i in chats) {
-        rawcontentMap.set(
-            createConversation(chats[i]["type"], chats[i]["text"], chats[i]["time"], 
-                chats[i]["encoding"], replyMap, false, chats[i]["imagePath"]),
-            chats[i]["rawHTML"]
-        );
+    for (const i of chats) {
+        
+        if (i["type"] == "other-chat") {
+            rawcontentMap.set( 
+                createOtherChat(i["text"], i["time"], i["encoding"], i["imagePath"])
+            );
+        } else if (i["type"] == "my-chat") {
+            rawcontentMap.set(
+                createMyChat(i["text"], i["time"], i["encoding"], false)
+            );
+        }
     }
     return rawcontentMap
 }

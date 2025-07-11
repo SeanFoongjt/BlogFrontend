@@ -1,6 +1,10 @@
 import { decodeText, encodeText } from "./encodeText.js";
-import { notifyCancellableProcesses } from "../../main.js";
+//import { notifyCancellableProcesses } from "../../main.js";
 
+
+function deleteFunction() {
+  return;
+}
 /**
  * Reply to a chat in the chatlog
  * @param {MyChat} object chat being replied to
@@ -70,31 +74,6 @@ function replyFunction(object, replyMap) {
     }
     console.log("cleanup complete");
   }
-}
-
-/**
- * Delete a chat box from the chatlog
- * @param {MyChat} object object to be deleted
- */
-function deleteFunction(object, replyMap) {
-  notifyCancellableProcesses();
-
-  // Check if object to be deleted is referenced in the reply banners of other chats
-  if (replyMap.has(object)) {
-    replyMap
-      .get(object)
-      .forEach((chat) => {
-        console.log(chat);
-        const replyText = chat.shadowRoot.querySelector("span[name='replyText']");
-
-        // If so, replace all these references to a 'Message Deleted' text that is italic and
-        // faded in color
-        replyText.innerText = "Message Deleted";
-        replyText.style.fontStyle = "italic";
-        replyText.style.color = "#bebebe";
-    });
-  }
-  object.remove();
 }
 
 /**
