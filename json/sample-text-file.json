@@ -5,7 +5,7 @@
             "text" : "Hey how are you doing?",
             "rawHTML" : "Hey how are you doing?",
             "time" : "19 June, 2025 09:00",
-            "imagePath" : "../../img/cornflower.webp"
+            "imagePath" : "../img/cornflower.webp"
         },
         {
             "type" : "my-chat",
@@ -30,10 +30,10 @@
         },
         {
             "type" : "other-chat",
-            "text" : "Refer to the above chat for the intents and purposes of this conversation",
-            "rawHTML" : "Refer to the above chat for the intents and purposes of this conversation",
+            "text" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi. Nam imperdiet, nunc non egestas placerat, lorem dui pellentesque libero, sed condimentum dui dolor quis massa. Quisque eget enim lacinia, tincidunt ipsum quis, finibus nibh. Aenean urna eros, efficitur ut pretium ut, pulvinar quis augue. Integer convallis sollicitudin dolor, eu tincidunt lorem egestas sit amet. Fusce porttitor enim at est tristique, id fermentum velit tincidunt. Pellentesque euismod ac lorem eget hendrerit. Donec suscipit dui faucibus, lacinia massa et, semper tortor. Aliquam quis lacus ut erat varius varius quis eget risus.",
+            "rawHTML" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi. Nam imperdiet, nunc non egestas placerat, lorem dui pellentesque libero, sed condimentum dui dolor quis massa. Quisque eget enim lacinia, tincidunt ipsum quis, finibus nibh. Aenean urna eros, efficitur ut pretium ut, pulvinar quis augue. Integer convallis sollicitudin dolor, eu tincidunt lorem egestas sit amet. Fusce porttitor enim at est tristique, id fermentum velit tincidunt. Pellentesque euismod ac lorem eget hendrerit. Donec suscipit dui faucibus, lacinia massa et, semper tortor. Aliquam quis lacus ut erat varius varius quis eget risus.",
             "time" : "19 June, 2025 10:12",
-            "imagePath" : "../../img/cornflower.webp"
+            "imagePath" : "./img/cornflower.webp"
         },
         {
             "type" : "my-chat",

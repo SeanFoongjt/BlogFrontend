@@ -27,6 +27,7 @@ function encodeText(string, encoding="Plaintext") {
         // Currently HTML is enabled in markdown via the use of unescapeHTML.
         // Remove the unescapeHTML call for the markdown encoding to only function for
         // markdown and not HTML
+        // Note the special case for code blocks below
         //https://github.com/markedjs/marked/issues/160#issuecomment-18611040
         //https://github.com/markedjs/marked/blob/master/src/Tokens.ts
         const tokens = marked.lexer(unescapeHTML(format(string.replaceAll("&nbsp;", " ") , "Markdown")));

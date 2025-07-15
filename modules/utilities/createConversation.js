@@ -1,5 +1,5 @@
 import { DateTimeFormatting } from "./DateTimeFormatting.js";
-import { editFunction, replyFunction, deleteFunction } from "../../main.js";
+import { editFunction, replyFunction, deleteFunction } from "./chatOptions.js";
 import { encodeText } from "./encodeText.js";
 // Refector edit, reply delete functions to abstract from one function or something similar
 
@@ -17,6 +17,7 @@ import { encodeText } from "./encodeText.js";
 function createConversation(type, editorHTML, time, text = "", encoding = "Plaintext", 
     replyingTo=false, imagePath ="") {
     if (type == "my-chat") {
+        console.log(encoding);
         var contextObj = {
             text : encodeText(editorHTML, encoding),
             time : DateTimeFormatting.formatTime(time),
@@ -32,12 +33,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         var chatbox = document.createElement("my-chat");
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
-
-        //editButton.addEventListener("click", () => editFunction(chatbox));
-
-        //deleteButton.addEventListener("click", () => deleteFunction(chatbox));
-
-        //replyButton.addEventListener("click", () => replyFunction(chatbox));
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
@@ -82,27 +77,37 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 
     // Can only access shadow root once chatbox appended to chatlog
     if (type == "other-chat") {
+        Promise.all([fillChatbox])
+            .then(item => {
+                replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
+            }
+        );
         
         chatbox
             .shadowRoot
-            .querySelector("button[name='replyButton']")
+            .querySelector("button[name='reply-button']")
             .addEventListener("click", () => replyFunction(chatbox));
         // Center reply button relative to text box
-        const textbox = chatbox.shadowRoot.querySelector(".text-box");
-        const replyButton = chatbox.shadowRoot.querySelector(".btn");
-        replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
+        const textbox = chatbox.shadowRoot.querySelector(".other-text-box");
+        const replyButton = chatbox.shadowRoot.querySelector("[name='reply-button']");
+
+        
 
     } else {
         // Center dropdown button relative to text box 
         Promise.all([fillChatbox])
             .then(item => {
+                chatbox.querySelector("[name='reply-button']")
+                    .addEventListener("click", () => replyFunction(chatbox));
+                chatbox.querySelector("[name='edit-button']")
+                    .addEventListener("click", () => editFunction(chatbox));
+                chatbox.querySelector("[name='delete-button']")
+                    .addEventListener("click", () => deleteFunction(chatbox));
                 const textbox = chatbox.shadowRoot.querySelector(".text-box");
                 const buttonHeight = chatbox.querySelector(".btn").offsetHeight;
                 const padding = (textbox.offsetHeight - buttonHeight) / 2;
                 chatbox.querySelector(".dropdown").style.paddingTop = (padding).toString() + "px";
             });
-        //const padding = (textbox.offsetHeight - chatbox.querySelector(".btn").offsetHeight) / 2;
-        //chatbox.querySelector(".dropdown").style.paddingTop = (padding).toString() + "px";
     }
     //console.log("Check 2");
 

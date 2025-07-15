@@ -10,15 +10,15 @@ myChatTemplate.innerHTML = `
                 <span style="font-size:14px;" name="replyText">Placeholder text</span>
             </div>
         </div>
-        <div class="row justify-content-end">
+        <div class="d-flex justify-content-end">
             <!--Empty space padding-->
-            <div class="col-4"></div>
+            <div class=""></div>
 
             <!--Slot for dropdown button-->
             <slot name="dropdown"></slot>
 
             <!--Actual text goes here-->
-            <div class="col-7 border border-1 rounded border-dark pt-2 pb-2 my-text-box text-box" name="text-box">
+            <div class="border border-1 rounded border-dark py-2 my-text-box text-box flex-shrink-1" name="text-box">
                 <slot name="chatText"></slot>
             </div>
         </div>
