@@ -62,13 +62,14 @@ conversationTitle.addEventListener("dblclick", renameTitle);
  */
 function renameTitle() {
   // Make the correct input block visible, hide the existing title
-  var inputContainer = document.getElementById("conversationTitleInputContainer");
+  var cancel = document.getElementById("conversationTitleInputCancel");
   conversationTitleInput.value = conversationTitle.innerText;
   conversationTitleInput.innerText = conversationTitle.innerText;
   console.log("Input value: " + conversationTitleInput.value);
   console.log("Inner text: " + conversationTitleInput.innerText);
   conversationTitle.setAttribute("hidden", "");
-  inputContainer.removeAttribute("hidden");
+  conversationTitleInput.removeAttribute("hidden");
+  cancel.removeAttribute("hidden");
   conversationTitleInput.focus();
 
   // Add event listener for enter key press, enable cancel button
@@ -90,7 +91,8 @@ function renameTitle() {
 
   // Cleanup helper function makes input hidden and the new or old conversation title visible
   function cleanup() {
-    inputContainer.setAttribute("hidden", "");
+    cancel.setAttribute("hidden", "");
+    conversationTitleInput.setAttribute("hidden", "");
     conversationTitle.removeAttribute("hidden");
     conversationTitleInput.removeEventListener("keypress", validate);
     cancelButton.removeEventListener("click", cleanup);

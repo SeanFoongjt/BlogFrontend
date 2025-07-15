@@ -35,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 </head>
 
-<body style="background-color: #F2F3F4;">
+<body>
     <!-- Modal popup for confirmations -->
     <div class="modal fade" id="confirmation-popup-modal" tabindex="-1" aria-labelled-by="confirmation-popup-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -58,26 +58,26 @@
     <!-- Header of the conversation, includes title and dropdown for conversation options-->
     <div class="container chat-container vh-100">
         <div class="container pb-3 h-10" id="textlog">
-            <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
 
-                <!-- Conversation title and input to edit it-->
-                <div class="col-md-11 col-10">
-                    <h1 id="conversationTitle">Conversation title</h1>
-                    <div class="row mb-2 pb-2" id="conversationTitleInputContainer" hidden="">
-                        <div class="col-10">
-                            <input type="text" class="form-control mt-1" id="conversationTitleInput" autocomplete="off" 
-                                aria-describedby="conversationTitleInput">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-outline-danger mt-1" id="conversationTitleInputCancel">
-                                <i class="fa-solid fa-lg fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
+                <!-- Conversation title a-->
+                <h1 id="conversationTitle">Conversation title</h1>
+
+                <!-- Input to edit title -->
+                <div class="">
+                    <input type="text" class="form-control flex-grow-1 mb-2 mt-2" id="conversationTitleInput" autocomplete="off" hidden
+                        aria-describedby="conversationTitleInput">
+                </div>
+
+                <!-- Cancel button -->
+                <div class="">
+                    <button class="btn btn-outline-danger mt-1" id="conversationTitleInputCancel" hidden="">
+                        <i class="fa-solid fa-lg fa-times"></i>
+                    </button>
                 </div>
 
                 <!-- Dropdown menu for conversation options -->
-                <div class="col-md-1 col-2 dropleft show mt-1">
+                <div class="dropleft show mt-1">
                     <button class="btn btn-secondary ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>

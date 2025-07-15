@@ -37,8 +37,8 @@
         },
         {
             "type" : "my-chat",
-            "text" : "sprinkle in chats from my side to make stuff easier",
-            "rawHTML" : "sprinkle in chats from my side to make stuff easier",
+            "text" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi.",
+            "rawHTML" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi.",
             "time" : "19 June, 2025 10:17",
             "encoding" : "Plaintext"
         }

@@ -11,14 +11,11 @@ myChatTemplate.innerHTML = `
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            <!--Empty space padding-->
-            <div class=""></div>
-
             <!--Slot for dropdown button-->
             <slot name="dropdown"></slot>
 
             <!--Actual text goes here-->
-            <div class="border border-1 rounded border-dark py-2 my-text-box text-box flex-shrink-1" name="text-box">
+            <div class=" border-1 rounded border-dark py-2 px-3 my-text-box text-box flex-shrink-1" name="text-box">
                 <slot name="chatText"></slot>
             </div>
         </div>

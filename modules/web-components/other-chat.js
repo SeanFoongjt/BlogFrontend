@@ -14,7 +14,7 @@ otherChatTemplate.innerHTML = `
 
                     <div>
                         <!--Box where the actual text goes-->
-                        <div class="border border-1 rounded border-dark py-2 px-3 other-text-box text-box flex-shrink-1">
+                        <div class=" border-1 rounded border-dark py-2 px-3 other-text-box text-box flex-shrink-1">
                             <slot name="chatText">
                                 <span>
                                     More reasonable amounts of text
@@ -22,7 +22,7 @@ otherChatTemplate.innerHTML = `
                             </slot>
                         </div>
 
-                        <div class="row justify-content-start ps-3">
+                        <div class="row justify-content-start">
                             <div class="text-start">
                                 <p style="font-size: 12px;"><slot name="time">9.00 a.m.</slot></p>
                             </div>
@@ -31,14 +31,12 @@ otherChatTemplate.innerHTML = `
                     
                     <!--Reply icon-->
                     <div class="">
-                        <button class="btn ms-2 btn-outline-secondary" name="reply-button">
+                        <button class="btn ms-2 btn-outline-secondary me-5" name="reply-button">
                             <slot name="replyIcon">
                         </button>
                     </div>
                 </div>
             </div>
-
-        
         </body>
 `
 

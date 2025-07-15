@@ -3,6 +3,15 @@ body, html {
     margin: 0;
 }
 
+body {
+    background-color: #f5f5f5;
+}
+
+/* Overall container, can probably also just be body */
+.chat-container {
+    background-color: #f5f5f5;
+}
+
 .other-avatar {
     height: 40px;
 }
@@ -47,14 +56,14 @@ body, html {
 /* Styling for display of chats */
 /* Modifies text box coming from the user */
 .my-text-box {
-    background-color: #C5CDEB;
+    background-color: #d7ffe3;
     color: black;
     word-wrap: break-word;
 }
 
 /* Modifies text box sent to the user / received from other participant */
 .other-text-box {
-    background-color: #cdebc5;
+    background-color: white;
     color: black;
     word-wrap: break-word;
 }
@@ -71,11 +80,6 @@ body, html {
 .user-inputs {
     height: 10%;
     max-height: 90%;
-}
-
-/* Overall container, can probably also just be body */
-.chat-container {
-    background-color: #F2F3F4;
 }
 
 /* container for both the chat display and the editor */
