@@ -41,13 +41,18 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             var text = replyBanner.querySelector("span[name='replyText']");
 
             // Inner text used here so that text in reply banner has no formatting
-            text.innerText = formatForReply(replyingTo.querySelector("div[name='text']").innerText);
+            const replyPromise = formatForReply(
+                replyingTo.querySelector("div[name='text']").innerText,
+                chatbox,
+                fillChatbox
+            );
+            //.then((string) => text.innerText = string);
 
             // Setup and addition of icon
             var replyIcon = document.createElement("i");
             replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
             replyIcon.setAttribute("slot", "replyingToIcon");
-            chatbox.appendChild(replyIcon);
+            fillChatbox = replyPromise.then(item => chatbox.appendChild(replyIcon));
 
             // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
@@ -77,6 +82,10 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 
     // Can only access shadow root once chatbox appended to chatlog
     if (type == "other-chat") {
+        // Center reply button relative to text box
+        const textbox = chatbox.shadowRoot.querySelector(".other-text-box");
+        const replyButton = chatbox.shadowRoot.querySelector("[name='reply-button']");
+
         Promise.all([fillChatbox])
             .then(item => {
                 replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
@@ -87,11 +96,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             .shadowRoot
             .querySelector("button[name='reply-button']")
             .addEventListener("click", () => replyFunction(chatbox));
-        // Center reply button relative to text box
-        const textbox = chatbox.shadowRoot.querySelector(".other-text-box");
-        const replyButton = chatbox.shadowRoot.querySelector("[name='reply-button']");
-
-        
 
     } else {
         // Center dropdown button relative to text box 
@@ -105,8 +109,20 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
                     .addEventListener("click", () => deleteFunction(chatbox));
                 const textbox = chatbox.shadowRoot.querySelector(".text-box");
                 const buttonHeight = chatbox.querySelector(".btn").offsetHeight;
+                let replyHeight = 0;
+
+                if (replyingTo) {
+                    replyHeight = chatbox
+                        .shadowRoot
+                        .querySelector("[name='replyBanner']")
+                        .offsetHeight;
+                }
                 const padding = (textbox.offsetHeight - buttonHeight) / 2;
-                chatbox.querySelector(".dropdown").style.paddingTop = (padding).toString() + "px";
+
+                chatbox.querySelector(".dropdown").style.paddingTop = 
+                    (padding + replyHeight).toString() + "px";
+                console.log((padding).toString() + "px");
+                console.log((padding + 10).toString() + "px");
             });
     }
     //console.log("Check 2");
@@ -117,14 +133,28 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 /**
  * Format the string to be used as text for the reply banner
  * @param {string} string string to be formatted
+ * @param {HTMLElement} chatbox chatbox containing the reply banner
+ * @param {Promise} promise promise to wait for before textbox is available
  * @returns 
  */
-function formatForReply(string) {
-    if (string.length > 60) {
-        return string.slice(0,60) + "..."
-    } else if (string.length <= 60) {
-        return string
-    }
+function formatForReply(string, chatbox, promise) {
+    return Promise.all([promise]).then(item => {
+        var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
+        const textbox = chatbox.shadowRoot.querySelector(".text-box");
+
+        /**
+        if (string.length > 60) {
+            return string.slice(0,60) + "..."
+        } else if (string.length <= 60) {
+            return string
+        }
+        */
+
+        let sliced = string.slice(0, Math.round(textbox.clientWidth / 7) - 4)
+        text.innerText = sliced + "..";
+        console.log(text.clientWidth);
+
+    }) 
 }
 
 export { createConversation };

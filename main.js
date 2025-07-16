@@ -1,6 +1,5 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { createConversation } from "./modules/utilities/createConversation.js";
-import { decodeText, encodeText } from "./modules/utilities/encodeText.js";
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 
 /**
@@ -10,15 +9,24 @@ import { sendFunction } from "./modules/utilities/chatOptions.js"
 const cancelEvent = new Event("cancel");
 const cancellableProcesses = [];
 function notifyCancellableProcesses() {
-  cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
+    console.log("Cancel event broadcast!");
+    cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
+}
+
+function pushCancellableProcess(process) {
+    cancellableProcesses.push(process);
+}
+
+function removeFromCancellableProcesses(object) {
+    // Remove from cancellableProcesses record as it is no longer in the midst of execution
+    const index = cancellableProcesses.indexOf(object);
+    if (index != -1) {
+        cancellableProcesses.splice(index, 1);
+    }
 }
 
 // Keep track of whether editor is visible
 var isEditorShowing = false;
-function showEditor() {
-
-  isEditorShowing ? null : displayEditor();
-}
 
 var rawcontentMap = new Map();
 
@@ -30,25 +38,25 @@ Quill.register(Block, true);
 
 const editor = document.getElementById('editor');
 const quill = new Quill("#editor", {
-  theme: "snow",
-  modules : {
-    toolbar:
-    [
-      [{ 'size': ['small', false, 'large', 'huge']}],
-      ['bold', 'italic', 'underline'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'script':'sub'}, {'script': 'super'}],
-      ['link', 'image', 'video', 'formula'],
-      ['clean']
-    ]
-  }
+    theme: "snow",
+    modules : {
+        toolbar:
+        [
+            [{ 'size': ['small', false, 'large', 'huge']}],
+            ['bold', 'italic', 'underline'],
+            [{'list': 'ordered'}, {'list': 'bullet'}],
+            [{'script':'sub'}, {'script': 'super'}],
+            ['link', 'image', 'video', 'formula'],
+            ['clean']
+        ]
+    }
 });
 
 console.log("Quill from main: " + quill);
 
 // Initialise data from json
 readJson("./json/sample-text-file.json")
-  .then(data => rawcontentMap = createConversationFromJson(data));
+    .then(data => rawcontentMap = createConversationFromJson(data));
 
 /**
  * Logic for changing the conversation title
@@ -61,42 +69,42 @@ conversationTitle.addEventListener("dblclick", renameTitle);
  * Rename the title of the conversation
  */
 function renameTitle() {
-  // Make the correct input block visible, hide the existing title
-  var cancel = document.getElementById("conversationTitleInputCancel");
-  conversationTitleInput.value = conversationTitle.innerText;
-  conversationTitleInput.innerText = conversationTitle.innerText;
-  console.log("Input value: " + conversationTitleInput.value);
-  console.log("Inner text: " + conversationTitleInput.innerText);
-  conversationTitle.setAttribute("hidden", "");
-  conversationTitleInput.removeAttribute("hidden");
-  cancel.removeAttribute("hidden");
-  conversationTitleInput.focus();
+    // Make the correct input block visible, hide the existing title
+    var cancel = document.getElementById("conversationTitleInputCancel");
+    conversationTitleInput.value = conversationTitle.innerText;
+    conversationTitleInput.innerText = conversationTitle.innerText;
+    console.log("Input value: " + conversationTitleInput.value);
+    console.log("Inner text: " + conversationTitleInput.innerText);
+    conversationTitle.setAttribute("hidden", "");
+    conversationTitleInput.removeAttribute("hidden");
+    cancel.removeAttribute("hidden");
+    conversationTitleInput.focus();
 
-  // Add event listener for enter key press, enable cancel button
-  conversationTitleInput.addEventListener("keypress", validate);
-  var cancelButton = document.getElementById("conversationTitleInputCancel");
-  cancelButton.addEventListener("click", cleanup);
+    // Add event listener for enter key press, enable cancel button
+    conversationTitleInput.addEventListener("keypress", validate);
+    var cancelButton = document.getElementById("conversationTitleInputCancel");
+    cancelButton.addEventListener("click", cleanup);
 
-  // Function to validate name
-  function validate(event) {
-    if (event.key == "Enter") {
-      if (conversationTitleInput.value.trim() != "") {
-        event.preventDefault();
-        conversationTitle.innerText = conversationTitleInput.value.trim();
+    // Function to validate name
+    function validate(event) {
+      if (event.key == "Enter") {
+          if (conversationTitleInput.value.trim() != "") {
+              event.preventDefault();
+              conversationTitle.innerText = conversationTitleInput.value.trim();
+          }
+          cleanup();
+          console.log(conversationTitle.innerText);
       }
-      cleanup();
-      console.log(conversationTitle.innerText);
     }
-  }
 
-  // Cleanup helper function makes input hidden and the new or old conversation title visible
-  function cleanup() {
-    cancel.setAttribute("hidden", "");
-    conversationTitleInput.setAttribute("hidden", "");
-    conversationTitle.removeAttribute("hidden");
-    conversationTitleInput.removeEventListener("keypress", validate);
-    cancelButton.removeEventListener("click", cleanup);
-  }
+    // Cleanup helper function makes input hidden and the new or old conversation title visible
+    function cleanup() {
+        cancel.setAttribute("hidden", "");
+        conversationTitleInput.setAttribute("hidden", "");
+        conversationTitle.removeAttribute("hidden");
+        conversationTitleInput.removeEventListener("keypress", validate);
+        cancelButton.removeEventListener("click", cleanup);
+    }
 }
 
 /**
@@ -111,24 +119,23 @@ editorPrompt.addEventListener("click", displayEditor);
  * Show the editor. Activated when the prompt to open editor is clicked.
  */
 function displayEditor() {
-  if (isEditorShowing) {
-    return;
-  }
+    if (isEditorShowing) {
+        return;
+    }
 
-  // Hide prompt, show and focus on editor
-  editorToolbarContainer.removeAttribute("hidden");
-  bottomToolbar.removeAttribute("hidden");
-  editorPrompt.setAttribute("hidden", "");
-  quill.focus();
-  const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
-  console.log(chatlog.scrollTopMax);
-  console.log(chatlog.scrollTop + editorToolbarContainerHeight);
-  chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPrompt.offsetHeight;
-  isEditorShowing = true;
+    // Hide prompt, show and focus on editor
+    editorToolbarContainer.removeAttribute("hidden");
+    bottomToolbar.removeAttribute("hidden");
+    editorPrompt.setAttribute("hidden", "");
+    quill.focus();
+    const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
+    console.log(chatlog.scrollTop + editorToolbarContainerHeight);
+    chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPrompt.offsetHeight;
 
-  // Add listeners to chatlog and title section to hide editor when they are clicked
-  chatlog.addEventListener("click", hideEditor);
-  document.getElementById("textlog").addEventListener("click", hideEditor);
+    // Add listeners to chatlog and title section to hide editor when they are clicked
+    chatlog.addEventListener("click", hideEditor);
+    document.getElementById("textlog").addEventListener("click", hideEditor);
+    isEditorShowing = true;
 }
 
 /**
@@ -136,31 +143,33 @@ function displayEditor() {
  * @returns 
  */
 function hideEditor() {
-  if (!isEditorShowing) {
-    return;
-  }
+    if (!isEditorShowing) {
+        return;
+    }
 
-  // Disallow editor to be hidden if there is content in the editor or if a chat is 
-  // in the midst of being edited or replied to.
-  if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 || cancellableProcesses.length != 0) {
-    return;
-  }
+    console.log(cancellableProcesses);
+
+    // Disallow editor to be hidden if there is content in the editor or if a chat is 
+    // in the midst of being edited or replied to.
+    if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 || cancellableProcesses.length != 0) {
+        return;
+    }
   
-  // Remove listeners from chatlog and title section
-  chatlog.removeEventListener("click", hideEditor);
-  document.getElementById("textlog").removeEventListener("click", hideEditor);
+    // Remove listeners from chatlog and title section
+    chatlog.removeEventListener("click", hideEditor);
+    document.getElementById("textlog").removeEventListener("click", hideEditor);
 
-  // Adjust height and scroll position of chatlog
-  const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
-  chatlog.scrollTop = Math.max(chatlog.scrollTop - editorToolbarContainerHeight, 0);
-  chatlog.style.height = "90%";
-  chatlog.style.maxHeight = "90%";
+    // Adjust height and scroll position of chatlog
+    const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
+    chatlog.scrollTop = Math.max(chatlog.scrollTop - editorToolbarContainerHeight, 0);
+    chatlog.style.height = "90%";
+    chatlog.style.maxHeight = "90%";
 
-  // Hide editor, show prompt
-  editorToolbarContainer.setAttribute("hidden", "")
-  bottomToolbar.setAttribute("hidden", "");
-  editorPrompt.removeAttribute("hidden");
-  isEditorShowing = false;
+    // Hide editor, show prompt
+    editorToolbarContainer.setAttribute("hidden", "")
+    bottomToolbar.setAttribute("hidden", "");
+    editorPrompt.removeAttribute("hidden");
+    isEditorShowing = false;
 }
 
 /**
@@ -172,31 +181,31 @@ console.log(0.8 * window.innerHeight);
 var prevHeight = 0;
 
 const resizeObserver = new ResizeObserver((entries) => {
-  console.log("Editor status: " + isEditorShowing);
-  const resizeChatSize = (newHeight) => {
-    console.log("test: " + `${Math.round(newHeight)}px`);
-    const chatlog = document.getElementById("chatlog");
-    chatlog.style.height = 
-      `calc(62% + 100px - ${Math.round(newHeight)}px)`;
-    chatlog.style.maxHeight =
-      `calc(62% + 100px - ${Math.round(newHeight)}px)`;
+    console.log("Editor status: " + isEditorShowing);
+    const resizeChatSize = (newHeight) => {
+        console.log("test: " + `${Math.round(newHeight)}px`);
+        const chatlog = document.getElementById("chatlog");
+        chatlog.style.height = 
+            `calc(62% + 100px - ${Math.round(newHeight)}px)`;
+        chatlog.style.maxHeight =
+            `calc(62% + 100px - ${Math.round(newHeight)}px)`;
 
-    // Adjust height of chatlog
-    chatlog.scrollTop = chatlog.scrollTop + newHeight - prevHeight; 
-    prevHeight = newHeight;
-    //document.getElementById("chatlog").style.height = "40%";
-  }
-
-  console.log("Chat resized");
-
-  for (const entry of entries) {
-    if (entry.borderBoxSize?.length > 0) {
-      if (isEditorShowing) {
-        console.log("New height: " + entry.borderBoxSize[0].blockSize);
-        resizeChatSize(entry.borderBoxSize[0].blockSize);
-      }
+        // Adjust height of chatlog
+        chatlog.scrollTop = chatlog.scrollTop + newHeight - prevHeight; 
+        prevHeight = newHeight;
+        //document.getElementById("chatlog").style.height = "40%";
     }
-  }
+
+    console.log("Chat resized");
+
+    for (const entry of entries) {
+        if (entry.borderBoxSize?.length > 0) {
+            if (isEditorShowing) {
+                console.log("New height: " + entry.borderBoxSize[0].blockSize);
+                resizeChatSize(entry.borderBoxSize[0].blockSize);
+            }
+        }
+    }
 });
 
 resizeObserver.observe(document.getElementById("editor"));
@@ -228,16 +237,16 @@ var confirmButton = confirmationPopupFooter.querySelector("button[name='continue
  * @param {Function} functionToExecute action if the user seeks to continue
  */
 function confirmationPopupFunction(header, body, functionToExecute) {
-  // cloneNode and reassign to remove all event listeners
-  const newButton = confirmButton.cloneNode(true);
-  confirmButton.parentNode.replaceChild(newButton, confirmButton);
-  confirmButton = newButton;
+    // cloneNode and reassign to remove all event listeners
+    const newButton = confirmButton.cloneNode(true);
+    confirmButton.parentNode.replaceChild(newButton, confirmButton);
+    confirmButton = newButton;
 
-  // Link function to button, set body and title text
-  confirmButton.addEventListener("click", functionToExecute);
-  confirmButton.addEventListener("click", notifyCancellableProcesses);
-  confirmationPopupBodyText.innerText = body;
-  confirmationPopupTitle.innerText = header;
+    // Link function to button, set body and title text
+    confirmButton.addEventListener("click", functionToExecute);
+    confirmButton.addEventListener("click", notifyCancellableProcesses);
+    confirmationPopupBodyText.innerText = body;
+    confirmationPopupTitle.innerText = header;
 }
 
 /**
@@ -245,12 +254,12 @@ function confirmationPopupFunction(header, body, functionToExecute) {
  */
 const clearConversationButton = document.getElementById("clear-conversation");
 clearConversationButton.addEventListener(
-  "click", 
-  () => confirmationPopupFunction(
-    "Clear conversation?", 
-    "Are you sure you want to clear the conversation?", 
-    () => document.getElementById('chatlog').replaceChildren()
-  )
+    "click", 
+    () => confirmationPopupFunction(
+        "Clear conversation?", 
+        "Are you sure you want to clear the conversation?", 
+        () => document.getElementById('chatlog').replaceChildren()
+    )
 );
 
 /**
@@ -262,47 +271,47 @@ clearConversationButton.addEventListener(
  * Function to block conversation / user
  */
 function blockFunction() {
-  // Make chatlog and editor hidden, display "blocked user" screen
-  const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
-  chatlogEditorContainer.setAttribute("hidden", "");
-  const blockedChat = document.getElementById("blocked-chat-container");
-  blockedChat.removeAttribute("hidden");
+    // Make chatlog and editor hidden, display "blocked user" screen
+    const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
+    chatlogEditorContainer.setAttribute("hidden", "");
+    const blockedChat = document.getElementById("blocked-chat-container");
+    blockedChat.removeAttribute("hidden");
 
-  // Provide option to unblock conversation when appropriate button is clicked
-  const unblockButton = document.getElementById("unblock-button");
-  unblockButton.addEventListener("click", unblockFunction)
+    // Provide option to unblock conversation when appropriate button is clicked
+    const unblockButton = document.getElementById("unblock-button");
+    unblockButton.addEventListener("click", unblockFunction)
 }
 
 /**
  * function to unblock conversation
  */
 function unblockFunction() {
-  // Make chatlog and editor visible, hide "blocked user" screen
-  const blockedChat = document.getElementById("blocked-chat-container");
-  blockedChat.setAttribute("hidden", "");
-  const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
-  chatlogEditorContainer.removeAttribute("hidden");
+    // Make chatlog and editor visible, hide "blocked user" screen
+    const blockedChat = document.getElementById("blocked-chat-container");
+    blockedChat.setAttribute("hidden", "");
+    const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
+    chatlogEditorContainer.removeAttribute("hidden");
 }
 
 // Add appropriate listener to the blockButton
 const blockButton = document.getElementById("block-conversation");
 blockButton.addEventListener(
-  "click", 
-  () => confirmationPopupFunction(
-    "Block user?",
-    "Are you sure you want to block this user?",
-    blockFunction
-  )
+    "click", 
+    () => confirmationPopupFunction(
+        "Block user?",
+        "Are you sure you want to block this user?",
+        blockFunction
+    )
 );
 
 // TODO start
 // Web Speech API as supported by major browsers
 const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 const SpeechGrammarList =
-  window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    window.SpeechGrammarList || window.webkitSpeechGrammarList;
 const SpeechRecognitionEvent =
-  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+    window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
 // Logic for mike button
 const mikeButton = document.getElementById('mike-button');
@@ -325,28 +334,25 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
 function mikeStart() {
-  recognition.start();
-  console.log("Begin speech recognition");
+    recognition.start();
+    console.log("Begin speech recognition");
 }
 
 function mikeEnd() {
-  recognition.stop()
-  console.log("End speech recognition")
+    recognition.stop()
+    console.log("End speech recognition")
 }
 
 recognition.onresult = function(event) {
-  const speechText = "";
-  for (i = 0; i < event.length; i++) {
-    speechText += event.results[i][0].transcript + " ";
-  }
+    const speechText = "";
+    for (i = 0; i < event.length; i++) {
+        speechText += event.results[i][0].transcript + " ";
+    }
 
-  quill.updateContents(new Delta()
-    .insert(speechText)
-  );
-  console.log(speechText);
+    quill.updateContents(new Delta()
+        .insert(speechText)
+    );
+    console.log(speechText);
 }
 
-export { showEditor, quill, rawcontentMap }
-
-
-
+export { displayEditor, quill, rawcontentMap, pushCancellableProcess, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses}

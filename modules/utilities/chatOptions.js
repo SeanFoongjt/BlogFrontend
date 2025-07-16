@@ -1,16 +1,8 @@
-import { showEditor, quill, rawcontentMap } from "../../main.js";
+import { displayEditor, pushCancellableProcess, quill, rawcontentMap, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses} from "../../main.js";
 import { encodeText } from "./encodeText.js";
 import { createConversation } from "./createConversation.js";
 
-/**
- * Setup logic
- */
-// Keeps track of currently executing processes that can be cancelled
-const cancelEvent = new Event("cancel");
-const cancellableProcesses = [];
-function notifyCancellableProcesses() {
-  cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
-}
+
 
 console.log(document.querySelector("div.ql-editor.ql-blank"));
 const quill2 = document.getElementsByClassName("ql-editor");
@@ -29,13 +21,16 @@ function editFunction(object) {
     // Cancel other potentially interfering processes
     notifyCancellableProcesses();
 
+    // Push self to cancellableProcesses
+    pushCancellableProcess(object);
+
     // Get previous encoding
     const textbox = object.shadowRoot.querySelector(".text-box")
     const chatText = object.querySelector("div[name='text']");
     const prevEncoding = chatText.getAttribute("data-encoding");
 
     // Display the editor if it is not showing
-    showEditor();
+    displayEditor();
 
     // Get the text of the chatbox from rawcontentMap to be edited, put it in the editor
     var textToEdit = object.querySelector("div[name='text']");
@@ -46,10 +41,6 @@ function editFunction(object) {
     // Highlight text currently being edited, record previous background color
     var prevBackground = textbox.style.backgroundColor;
     object.shadowRoot.querySelector(".text-box").style.backgroundColor = "#EBC5CD";
-    
-    // Scroll to editor
-    window.scrollTo(0, document.body.scrollHeight);
-    quill.focus();
     
     // Make the cancel button visible
     var cancelButton = document.getElementById("cancel-button");
@@ -69,10 +60,6 @@ function editFunction(object) {
     const currEncoding = document.getElementById("encoding-dropup");
     document.getElementById("encoding-dropup-label").innerText = prevEncoding;
     currEncoding.setAttribute("value", prevEncoding);
-
-    // Push self to cancellableProcesses
-    cancellableProcesses.push(object);
-    console.log(cancellableProcesses);
 
     // Change text in chatbox to edited text, display '(edited)' after time
     function edit() {
@@ -130,11 +117,7 @@ function editFunction(object) {
         // Revert chat's background color
         object.shadowRoot.querySelector(".text-box").style.backgroundColor = prevBackground;
 
-        // Remove from cancellableProcesses record as it is no longer in the midst of execution
-        const index = cancellableProcesses.indexOf(object);
-        if (index != -1) {
-        cancellableProcesses.splice(index, 1);
-        }
+        removeFromCancellableProcesses(object);
         console.log("cleanup complete");
     }
 }
@@ -147,68 +130,64 @@ function editFunction(object) {
  * @param {MyChat} object chat being replied to
  */
 function replyFunction(object) {
-  // Only one cancellableProcess should be active at a time
-  notifyCancellableProcesses();
+    console.log("Enter replyFunction");
+    // Only one cancellableProcess should be active at a time
+    notifyCancellableProcesses();
 
-  // Show editor if it is not currently displayed
-  showEditor();
-  
-  // Scroll to editor
-  window.scrollTo(0, document.body.scrollHeight);
-  quill.focus();
-  
-  // Make the cancel button visible
-  var cancelButton = document.getElementById("cancel-button");
-  cancelButton.removeAttribute("hidden");
+    pushCancellableProcess(object);
 
-  // Skip to cleanup if no reply is done
-  cancelButton.addEventListener("click", cleanup);
+    // Show editor if it is not currently displayed
+    displayEditor();
+    
+    // Make the cancel button visible
+    var cancelButton = document.getElementById("cancel-button");
+    cancelButton.removeAttribute("hidden");
 
-  // Change the send button to reply 
-  var replyButton = document.getElementById("send-button");
-  replyButton.innerText = "Reply";
-  replyButton.removeEventListener("click", sendFunction);
-  replyButton.addEventListener("click", reply);
-  object.addEventListener("cancel", cleanup);
-  cancellableProcesses.push(object);
+    // Skip to cleanup if no reply is done
+    cancelButton.addEventListener("click", cleanup);
+    console.log("Step 1");
 
-  function reply() {
-    // Terminate function early if no actual text is sent
-    if (quill.getText().trim() == "" && quill.getContents()["ops"].length == 1) {
-      console.log("terminated early");
-      cleanup();
-      return;
+    // Change the send button to reply 
+    var replyButton = document.getElementById("send-button");
+    replyButton.innerText = "Reply";
+    replyButton.removeEventListener("click", sendFunction);
+    replyButton.addEventListener("click", reply);
+    object.addEventListener("cancel", cleanup);
+
+
+    function reply() {
+        // Terminate function early if no actual text is sent
+        if (quill.getText().trim() == "" && quill.getContents()["ops"].length == 1) {
+            console.log("terminated early");
+            cleanup();
+            return;
+        }
+
+        // No event to be sent, but there is object to be replied to
+        const newChat = sendFunction(null, object);
+
+        // Have message replied to keep track of how many other messages reference it
+        // to change text if an edit is done.
+        if (!replyMap.has(object)) {
+            replyMap.set(object, [newChat]);
+        } else {
+            replyMap.get(object).push(newChat);
+        }
+        cleanup();
     }
 
-    // No event to be sent, but there is object to be replied to
-    const newChat = sendFunction(null, object);
+    // Turn reply button back to send button, clear editor, make cancel button hidden again
+    function cleanup() {
+        cancelButton.setAttribute("hidden", "");
+        quill.setText("");
+        replyButton.removeEventListener("click", reply);
+        object.removeEventListener("cancel", cleanup);
+        replyButton.addEventListener("click", sendFunction);
+        replyButton.innerText="Send";
 
-    // Have message replied to keep track of how many other messages reference it
-    // to change text if an edit is done.
-    if (!replyMap.has(object)) {
-      replyMap.set(object, [newChat]);
-    } else {
-      replyMap.get(object).push(newChat);
+        removeFromCancellableProcesses(object);
+        console.log("cleanup complete");
     }
-    cleanup();
-  }
-
-  // Turn reply button back to send button, clear editor, make cancel button hidden again
-  function cleanup() {
-    cancelButton.setAttribute("hidden", "");
-    quill.setText("");
-    replyButton.removeEventListener("click", reply);
-    object.removeEventListener("cancel", cleanup);
-    replyButton.addEventListener("click", sendFunction);
-    replyButton.innerText="Send";
-
-    // Remove from cancellableProcesses record as it is no longer in the midst of execution
-    const index = cancellableProcesses.indexOf(object);
-    if (index != -1) {
-      cancellableProcesses.splice(index, 1);
-    }
-    console.log("cleanup complete");
-  }
 }
 
 
@@ -237,7 +216,7 @@ function deleteFunction(object) {
         });
     }
     object.remove();
-    }
+}
 
 
 
@@ -289,4 +268,4 @@ function sendFunction(event, isReply=false) {
     return newChat;
 }
 
-export { editFunction, replyFunction, deleteFunction, sendFunction }
+export { editFunction, replyFunction, deleteFunction, sendFunction, cancelEvent }
