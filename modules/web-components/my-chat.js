@@ -16,7 +16,7 @@ myChatTemplate.innerHTML = `
                     <span style="font-size:14px;" name="replyText">Placeholder text</span>
                 </div>
             </div>
-            <div class=" border-1 rounded border-dark py-2 px-3 my-text-box text-box flex-shrink-1" name="text-box">
+            <div class="border-1 rounded border-dark py-2 px-3 my-text-box text-box flex-shrink-1" name="text-box">
                 <slot name="chatText"></slot>
             </div>
         </div>

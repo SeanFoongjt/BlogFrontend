@@ -262,8 +262,9 @@ function sendFunction(event, isReply=false) {
     // Store original html in rawcontentMap
     rawcontentMap.set(newChat, rawHTML);
 
+    // Some bug, probably has to do with async shenanigans
     // Automatically scroll to bottom
-    chatlog.scrollTop = chatlog.scrollHeight;
+    chatlog.scrollTo(0, chatlog.scrollHeight);
 
     return newChat;
 }

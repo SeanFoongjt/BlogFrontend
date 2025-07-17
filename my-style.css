@@ -7,9 +7,27 @@ body {
     background-color: #f5f5f5;
 }
 
-/* Overall container, can probably also just be body */
+.application {
+    box-sizing: border-box;
+}
+
+.chat-selection {
+    overflow: auto;
+}
+
+/* Overall container for the actual chatting, excludes the side bar*/
 .chat-container {
+    overflow: auto;
     background-color: #f5f5f5;
+
+}
+
+.blank-space {
+    height: 5px;
+}
+
+#textlog {
+    background-color: white;
 }
 
 .other-avatar {
@@ -34,6 +52,7 @@ body {
 
 /* The container for the editor and the toolbar */
 .editor-toolbar {
+    border-radius: 25px;
     background-color: #FFFFFF;
 }
 
@@ -109,6 +128,7 @@ body {
     & p {
         margin-top: 0px;
         margin-bottom: 0px;
+        word-break: break-all;
         white-space: pre-wrap !important;
     }
     & ol {
@@ -131,12 +151,4 @@ Other chat
 */
 other-chat {
     flex-direction: row-reverse;
-}
-
-/*
-Currently of no use
-*/
-.replying-to {
-    height:10%;
-    width:96%;
 }

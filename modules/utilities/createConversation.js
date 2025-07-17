@@ -86,7 +86,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
         const textbox = chatbox.shadowRoot.querySelector(".other-text-box");
         const replyButton = chatbox.shadowRoot.querySelector("[name='reply-button']");
 
-        Promise.all([fillChatbox])
+        var finalPromise = Promise.all([fillChatbox])
             .then(item => {
                 replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
             }
@@ -99,7 +99,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 
     } else {
         // Center dropdown button relative to text box 
-        Promise.all([fillChatbox])
+        var finalPromise = Promise.all([fillChatbox])
             .then(item => {
                 chatbox.querySelector("[name='reply-button']")
                     .addEventListener("click", () => replyFunction(chatbox));

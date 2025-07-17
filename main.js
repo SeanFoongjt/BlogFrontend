@@ -88,12 +88,12 @@ function renameTitle() {
     // Function to validate name
     function validate(event) {
       if (event.key == "Enter") {
-          if (conversationTitleInput.value.trim() != "") {
-              event.preventDefault();
-              conversationTitle.innerText = conversationTitleInput.value.trim();
-          }
-          cleanup();
-          console.log(conversationTitle.innerText);
+            if (conversationTitleInput.value.trim() != "") {
+                event.preventDefault();
+                conversationTitle.innerText = conversationTitleInput.value.trim();
+            }
+            cleanup();
+            console.log(conversationTitle.innerText);
       }
     }
 
@@ -303,6 +303,47 @@ blockButton.addEventListener(
         blockFunction
     )
 );
+
+
+
+/**
+ * Function to rename title
+ */
+var inputPopup = document.getElementById("input-popup-modal");
+var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
+var inputPopupInput = inputPopup.querySelector("#modal-input")
+
+document.getElementById("rename-title").addEventListener("click", renameTitleFunction);
+
+function renameTitleFunction() {
+    inputPopupConfirm.addEventListener("click", confirm);
+    inputPopupInput.value = conversationTitle.innerText;
+    inputPopupInput.innerText = conversationTitle.innerText;
+
+    function confirm() {
+        const newTitle = inputPopupInput.value.trim();
+        if (newTitle != "") {
+            conversationTitle.innerText = newTitle;
+        }
+    }
+}
+
+/**
+function refreshInputPopup() {
+    // Add appropriate listener to the renameTitleButton
+    // cloneNode and reassign to remove all event listeners
+    const newButton = inputPopupConfirm.cloneNode(true);
+    inputPopupConfirm.parentNode.replaceChild(newButton, confirmButton);
+    inputPopupConfirm = newButton;
+
+    // Link function to button, set body and title text
+    confirmButton.addEventListener("click", renameTitleFunction);
+    confirmButton.addEventListener("click", notifyCancellableProcesses);
+    confirmationPopupBodyText.innerText = body;
+    confirmationPopupTitle.innerText = header;
+
+}
+*/
 
 // TODO start
 // Web Speech API as supported by major browsers

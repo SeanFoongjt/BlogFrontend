@@ -35,7 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 </head>
 
-<body>
+<body class="d-flex flex-column">
     <!-- Modal popup for confirmations -->
     <div class="modal fade" id="confirmation-popup-modal" tabindex="-1" aria-labelled-by="confirmation-popup-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -55,10 +55,46 @@
         </div>
     </div>
 
+    <!-- Modal popup for inputs -->
+    <div class="modal fade" id="input-popup-modal" tabindex="-1" aria-labelled-by="input-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="input-popup-modal-label">Rename conversation title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="modal-input">
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" name="cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" name="confirm" data-bs-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="row vh-100 application">
+    <div class="d-flex flex-column col-md-3 col-0 sidebar align-items-">
+        <div class="rounded-pill border border-1">
+            Search
+        </div>
+        <div class="row row-cols-1 chat-selection">
+            <card class="col">
+                Test
+            </card>
+            <card class="col">
+                Test
+            </card>
+        </div>
+    </div>
     <!-- Header of the conversation, includes title and dropdown for conversation options-->
-    <div class="container chat-container vh-100">
-        <div class="container pb-3 h-10" id="textlog">
-            <div class="d-flex justify-content-between align-items-center">
+    <div class="container-fluid chat-container vh-100 col">
+        <div class="container pb-2 h-10 border-dark border-bottom" id="textlog">
+            <div class="d-flex justify-content-between align-items-center ">
 
                 <!-- Conversation title a-->
                 <h1 id="conversationTitle">Conversation title</h1>
@@ -88,9 +124,10 @@
                             data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Clear Conversation</a>
                         <a class="dropdown-item" href="#" id="close-conversation" 
                             data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Close Conversation</a>
+                        <a class="dropdown-item" href="#" id="rename-title"
+                            data-bs-toggle="modal" data-bs-target="#input-popup-modal">Rename title</a>
                     </div>
                 </div>
-
             </div>
         </div>
         
@@ -111,6 +148,7 @@
 
             <!-- Space where chats exist -->
             <div class="container chatlog" id="chatlog">
+                <div class="blank-space"></div>
             </div>
 
             <div class="container replying-to bg-danger border border-1 border-bottom-0 border-dark" id="replyingTo" hidden>
@@ -118,7 +156,7 @@
             </div>
             
             <!-- Create container for user inputs -->
-            <div class="container user-inputs pb-2">
+            <div class="container user-inputs pb-1">
                 <div class="editor-click-prompt rounded-pill mt-1 align-items-center">
                     <div class="ps-3 mt-2" >
                         Click here to chat
@@ -158,6 +196,7 @@
             </div>
         </div>
         </body>
+    </div>
     </div>
 
     <!-- Include the Quill library -->
