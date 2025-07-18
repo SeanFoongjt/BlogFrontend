@@ -13,7 +13,9 @@ myChatTemplate.innerHTML = `
             <div class="d-flex" name="">
                 <div class="" name="replyBanner" hidden>
                     <slot name="replyingToIcon"></slot>
-                    <span style="font-size:14px;" name="replyText">Placeholder text</span>
+                    <span class="text-muted" style="font-size:14px;" name="replyText">
+                        Placeholder text
+                    </span>
                 </div>
             </div>
             <div class="border-1 rounded border-dark py-2 px-3 my-text-box text-box flex-shrink-1" name="text-box">

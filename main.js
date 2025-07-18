@@ -58,6 +58,9 @@ console.log("Quill from main: " + quill);
 readJson("./json/sample-text-file.json")
     .then(data => rawcontentMap = createConversationFromJson(data));
 
+
+
+
 /**
  * Logic for changing the conversation title
  */
@@ -106,6 +109,40 @@ function renameTitle() {
         cancelButton.removeEventListener("click", cleanup);
     }
 }
+
+/**
+ * Function to rename title, used for conversation options
+ */
+var inputPopup = document.getElementById("input-popup-modal");
+var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
+var inputPopupInput = inputPopup.querySelector("#modal-input")
+
+document.getElementById("rename-title").addEventListener("click", renameTitleFunction);
+
+function renameTitleFunction() {
+    inputPopupConfirm.addEventListener("click", confirm);
+    inputPopupInput.value = conversationTitle.innerText;
+    inputPopupInput.innerText = conversationTitle.innerText;
+
+    function confirm() {
+        const newTitle = inputPopupInput.value.trim();
+        if (newTitle != "") {
+            conversationTitle.innerText = newTitle;
+        }
+    }
+}
+
+// Make conversation options button width same as height
+const dropdownMenuButton = document.getElementById("dropdown-menu-button");
+dropdownMenuButton.style.width = `${dropdownMenuButton.offsetHeight}px`;
+
+addEventListener("resize", () => {
+    dropdownMenuButton.style.width = `${dropdownMenuButton.offsetHeight}px`;
+});
+
+
+
+
 
 /**
  * Editor display and hiding logic
@@ -210,6 +247,10 @@ const resizeObserver = new ResizeObserver((entries) => {
 
 resizeObserver.observe(document.getElementById("editor"));
 
+
+
+
+
 /**
  * Send button logic
  */
@@ -217,6 +258,11 @@ resizeObserver.observe(document.getElementById("editor"));
 // Logic for send button
 const sendButton = document.getElementById('send-button');
 sendButton.addEventListener("click", sendFunction);
+
+
+
+
+
 
 /**
  * Confirmation popup logic, consisting of constant and variable declarations and an
@@ -306,27 +352,7 @@ blockButton.addEventListener(
 
 
 
-/**
- * Function to rename title
- */
-var inputPopup = document.getElementById("input-popup-modal");
-var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
-var inputPopupInput = inputPopup.querySelector("#modal-input")
 
-document.getElementById("rename-title").addEventListener("click", renameTitleFunction);
-
-function renameTitleFunction() {
-    inputPopupConfirm.addEventListener("click", confirm);
-    inputPopupInput.value = conversationTitle.innerText;
-    inputPopupInput.innerText = conversationTitle.innerText;
-
-    function confirm() {
-        const newTitle = inputPopupInput.value.trim();
-        if (newTitle != "") {
-            conversationTitle.innerText = newTitle;
-        }
-    }
-}
 
 /**
 function refreshInputPopup() {

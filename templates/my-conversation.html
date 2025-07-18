@@ -1,5 +1,6 @@
 <div class="dropdown show me-2 ms-5" slot="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+    <button class="btn btn-secondary rounded dropdown-toggle" 
+    type="button" id="dropdownMenuButton"
         data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"></button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#" name="edit-button">Edit</a>
@@ -7,7 +8,7 @@
             <a class="dropdown-item" href="#" name="forward-button">Forward</a>
             <a class="dropdown-item" href="#" name="reply-button">Reply</a>
         </div>
-    
 </div>
 <div slot="chatText" name="text" data-encoding="{{encoding}}">{{{text}}}</div>
-<span slot="time" name="time">{{time}}</span>
+<i slot="replyingToIcon" class="fa-solid fa-sm fa-arrows-turn-right text-muted"></i>
+<span slot="time" class="text-muted" name="time">{{time}}</span>

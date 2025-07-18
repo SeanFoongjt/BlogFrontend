@@ -41,7 +41,7 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             var text = replyBanner.querySelector("span[name='replyText']");
 
             // Inner text used here so that text in reply banner has no formatting
-            const replyPromise = formatForReply(
+            fillChatbox = formatForReply(
                 replyingTo.querySelector("div[name='text']").innerText,
                 chatbox,
                 fillChatbox
@@ -49,10 +49,12 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
             //.then((string) => text.innerText = string);
 
             // Setup and addition of icon
+            /** 
             var replyIcon = document.createElement("i");
             replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
             replyIcon.setAttribute("slot", "replyingToIcon");
             fillChatbox = replyPromise.then(item => chatbox.appendChild(replyIcon));
+            */
 
             // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
@@ -131,7 +133,8 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 }
 
 /**
- * Format the string to be used as text for the reply banner
+ * Format the string to be used as text for the reply banner.
+ * NOTE: CAN LIKELY REPLACE WITH TEXT-OVERFLOW: ELLIPSIS
  * @param {string} string string to be formatted
  * @param {HTMLElement} chatbox chatbox containing the reply banner
  * @param {Promise} promise promise to wait for before textbox is available
