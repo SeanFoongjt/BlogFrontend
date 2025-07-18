@@ -11,27 +11,90 @@ body {
     box-sizing: border-box;
 }
 
+/* Sidebar */
+.sidebar {
+    padding-right: 0px;
+}
+
+#chat-searchbar {
+    width: 90%;
+}
+
 .chat-selection {
+    width: 100%;
     overflow: auto;
+}
+
+/* Title section */
+#title-section {
+    background-color: white;
+}
+
+.title-avatar {
+    height: 50px;
+}
+
+#conversation-title {
+    margin-bottom: 0px;
+}
+
+#last-seen-time {
+    font-size: 0.88rem;
 }
 
 /* Overall container for the actual chatting, excludes the side bar*/
 .chat-container {
     overflow: auto;
     background-color: #f5f5f5;
-
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .blank-space {
     height: 5px;
 }
 
-#textlog {
+/* container for both the chat display and the editor */
+.chatlog-editor-container {
+    height: 90%;
+    max-height: 90%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Overall section containg and displaying the chats */
+.chatlog {
+    overflow: auto;
+    scrollbar-width: none;
+    max-height: 90%;
+    min-height: 10%;
+}
+
+/* Styling for display of chats */
+/* Modifies text box coming from the user */
+.my-text-box {
+    background-color: #d7ffe3;
+    color: black;
+    word-wrap: break-word;
+}
+
+/* Modifies text box sent to the user / received from other participant */
+.other-text-box {
     background-color: white;
+    color: black;
+    word-wrap: break-word;
 }
 
 .other-avatar {
     height: 40px;
+}
+
+/* Editor together with the bottom most buttons for sending and encoding */
+.user-inputs {
+    height: 10%;
+    max-height: 90%;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Styling for the quill editor */
@@ -70,41 +133,6 @@ body {
     border-radius: 1px;
     border-color: #bebebe;
     color: #777;
-}
-
-/* Styling for display of chats */
-/* Modifies text box coming from the user */
-.my-text-box {
-    background-color: #d7ffe3;
-    color: black;
-    word-wrap: break-word;
-}
-
-/* Modifies text box sent to the user / received from other participant */
-.other-text-box {
-    background-color: white;
-    color: black;
-    word-wrap: break-word;
-}
-
-/* Overall section containg and displaying the chats */
-.chatlog {
-    overflow: auto;
-    scrollbar-width: none;
-    max-height: 90%;
-    min-height: 10%;
-}
-
-/* Editor together with the bottom most buttons for sending and encoding */
-.user-inputs {
-    height: 10%;
-    max-height: 90%;
-}
-
-/* container for both the chat display and the editor */
-.chatlog-editor-container {
-    height: 87%;
-    max-height: 87%;
 }
 
 [name='text'] {

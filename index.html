@@ -77,27 +77,40 @@
     </div>
     
 
-    <div class="row vh-100 application">
-    <div class="d-flex flex-column col-md-3 col-0 sidebar align-items-">
-        <div class="rounded-pill border border-1">
+    <div class="row vh-100 w-100 application">
+    <div class="d-flex flex-column col-md-3 col-0 sidebar align-items-center bg-white">
+        <div class="mx-2 my-2 ps-3 py-2 rounded-pill border border-1 text-muted text-opacity-50" id="chat-searchbar">
+            <i class="fa-search fa-solid pe-2"></i>
             Search
         </div>
-        <div class="row row-cols-1 chat-selection">
-            <card class="col">
+        <div class="chat-selection list-group">
+            <div class="list-group-item media">
                 Test
-            </card>
-            <card class="col">
+            </div>
+            <div class="list-group-item media">
                 Test
-            </card>
+            </div>
+            <dv class="list-group-item media">
+                Test
+            </dv>
         </div>
     </div>
     <!-- Header of the conversation, includes title and dropdown for conversation options-->
     <div class="container-fluid chat-container vh-100 col">
-        <div class="container pb-2 h-10 border-dark border-bottom" id="textlog">
+        <div class="container pb-1 h-10 border-dark border-bottom" id="title-section">
             <div class="d-flex justify-content-between align-items-center ">
 
-                <!-- Conversation title a-->
-                <h1 id="conversationTitle">Conversation title</h1>
+                <!-- Conversation image and title text -->
+                <div class="d-flex justify-content-start align-items-center">
+                    <!-- Converation image -->
+                    <img slot="image" class="rounded-circle title-avatar shadow-1-strong pt-1" src="./img/cornflower.webp">
+
+                    <!-- Conversation title and time last seen -->
+                    <div class="ps-2">
+                        <h5 class="" id="conversation-title">Conversation title</h5>
+                        <span class="text-muted" id="last-seen-time"> Last seen 12 minutes ago</span>
+                    </div>
+                </div>
 
                 <!-- Input to edit title -->
                 <div class="">
@@ -114,7 +127,7 @@
 
                 <!-- Dropdown menu for conversation options -->
                 <div class="dropleft show mt-1">
-                    <button class="btn btn-secondary ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-outline-secondary rounded-circle ms-xl-4 ms-lg-3" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -144,7 +157,7 @@
         </div>
 
         <!-- Create the blog container -->
-        <div class="container chatlog-editor-container" id="chatlog-editor-container">
+        <div class="d-flex flex-column chatlog-editor-container" id="chatlog-editor-container">
 
             <!-- Space where chats exist -->
             <div class="container chatlog" id="chatlog">
@@ -156,21 +169,21 @@
             </div>
             
             <!-- Create container for user inputs -->
-            <div class="container user-inputs pb-1">
-                <div class="editor-click-prompt rounded-pill mt-1 align-items-center">
+            <div class="container user-inputs  pb-1">
+                <div class="editor-click-prompt rounded-pill mt-1 mx-2 align-items-center">
                     <div class="ps-3 mt-2" >
                         Click here to chat
                     </div>
                 </div>
 
                 <!-- Container for quill editor and it's toolbar-->
-                <div class="editor-toolbar mt-1" hidden>
+                <div class="editor-toolbar mt-1 mx-2 " hidden>
                     <div class="container editor-container" id="editor">
                     </div>
                 </div>
 
                 <!-- Container for the mike, send, cancel buttons etc.-->
-                <div class="mt-1 bottom-toolbar" hidden>
+                <div class="mt-1 bottom-toolbar mx-2" hidden>
                     <!-- Send, mike, cancel buttons-->
                     <button class="btn btn-outline-primary mike-button" id="mike-button">
                         <i class="fa-solid fa-lg fa-microphone"></i>

@@ -61,7 +61,7 @@ readJson("./json/sample-text-file.json")
 /**
  * Logic for changing the conversation title
  */
-var conversationTitle = document.getElementById("conversationTitle");
+var conversationTitle = document.getElementById("conversation-title");
 var conversationTitleInput = document.getElementById("conversationTitleInput");
 conversationTitle.addEventListener("dblclick", renameTitle);
 
@@ -134,7 +134,7 @@ function displayEditor() {
 
     // Add listeners to chatlog and title section to hide editor when they are clicked
     chatlog.addEventListener("click", hideEditor);
-    document.getElementById("textlog").addEventListener("click", hideEditor);
+    document.getElementById("title-section").addEventListener("click", hideEditor);
     isEditorShowing = true;
 }
 
@@ -157,7 +157,7 @@ function hideEditor() {
   
     // Remove listeners from chatlog and title section
     chatlog.removeEventListener("click", hideEditor);
-    document.getElementById("textlog").removeEventListener("click", hideEditor);
+    document.getElementById("title-section").removeEventListener("click", hideEditor);
 
     // Adjust height and scroll position of chatlog
     const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
