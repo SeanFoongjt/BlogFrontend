@@ -18,6 +18,27 @@ body {
 
 #chat-searchbar {
     width: 90%;
+    & input {
+        overflow: auto;
+        outline: 0px;
+        border:none;
+    }
+    & button {
+        border: none;
+        background-color: white;
+    }
+}
+
+#chat-searchbar:focus-within {
+    outline: 2px solid !important;
+}
+
+sidebar-conversations {
+    overflow:auto;
+}
+
+.list-container {
+    overflow: auto;
 }
 
 .chat-selection {
@@ -25,13 +46,27 @@ body {
     overflow: auto;
 
     & .list-group-item {
-        box-sizing: border-box;
+        box-sizing: border-box !important;
         width: 100%;
         height: 15%;
-        padding-left: 5%;
+        padding-left: 3%;
         border-radius: 15px;
     }
+
+    & .latest-message-time {
+        font-size: 0.75rem;
+    }
+
+    & .sidebar-text {
+        width: 70%;
+    }
+
+    & .sidebar-image {
+        width: 50px;
+        height: 50px;
+    }
 }
+
 
 /* Title section */
 #title-section {
@@ -62,6 +97,10 @@ body {
 
 #dropdown-menu-button:hover, #dropdown-menu-button.show {
     background-color: #ececec;
+}
+
+#dropdown-menu-button:active {
+    background-color: darkgray;
 }
 
 /* Overall container for the actual chatting, excludes the side bar*/
@@ -150,6 +189,10 @@ body {
 .editor-click-prompt:hover {
     background-color: darkgray;
     color: white;
+}
+
+.editor-click-prompt:active {
+    background-color: dimgray;
 }
 
 /* Otherwise default for the above mentioned prompt */

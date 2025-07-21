@@ -1,0 +1,28 @@
+{
+    "conversations" : [
+        {
+            "unread" : "4",
+            "latestTime" : "11:00",
+            "latestMessage" : "You: yup sounds about right",
+            "conversationTitle" : "As fast as you can",
+            "imageAlt" : "Cornflower",
+            "imagePath" : "../img/cornflower.webp"
+        },
+        {
+            "unread" : "1",
+            "latestTime" : "14:00",
+            "latestMessage" : "The unit has broken containment",
+            "conversationTitle" : "Warning system",
+            "imageAlt" : "Elster",
+            "imagePath" : "../img/elster.jpg"
+        },
+        {
+            "unread" : "0",
+            "latestTime" : "Yesterday",
+            "latestMessage" : "Your application has potentially been yes longer and longer and longer",
+            "conversationTitle" : "Bagel dominion",
+            "imageAlt" : "Elster",
+            "imagePath" : "../img/elster.jpg"
+        }
+    ]
+}

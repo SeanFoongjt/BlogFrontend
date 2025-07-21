@@ -79,55 +79,88 @@
 
     <div class="row vh-100 vw-100 application">
     <!-- Side bar of the application consisting of selection of other chats and searchbar-->
-    <div class="d-md-flex flex-column col-md-3 d-none sidebar align-items-center bg-white h-100">
+    <div class="d-md-flex flex-column col-md-4 d-none sidebar align-items-center bg-white h-100 border-end border-1">
 
         <!-- Search bar for other conversations -->
-        <div class="d-flex mx-2 my-2 ps-3 py-2 rounded-pill border border-1 align-items-center
+        <div class="d-flex my-2 ps-3 py-2 rounded-pill border border-1 align-items-center
         text-muted text-opacity-50" id="chat-searchbar">
             <i class="fa-search fa-solid pe-2"></i>
-            <div contenteditable="true">Search</div>
+            <input class="w-80 flex-grow-1 me-2" contenteditable="true" 
+            placeholder="Search" id="conversation-search-text" autocomplete="off">
+            <button class="me-3" id="conversation-search-reset" hidden>
+                <i class="fa-times fa-solid fa-lg"></i>
+            </button>
         </div>
 
         <!-- List of other conversations -->
+        <!-- Note that this outer div class is to create spacing between list-items and the 
+         boundaries of the sidebar -->
+        <!--
+        <sidebar-conversations></sidebar-conversations>
+
+        <div class="w-100 h-100 px-2 list-container">
         <div class="chat-selection list-group h-100">
 
             <button class="list-group-item list-group-item-action d-flex flex-row 
-            mw-100 w-100 align-items-center mx-2">
+            mw-100 w-100 align-items-center">
 
                 <div class="flex-shrink-0 rounded-circle h-100 d-flex align-items-center">
-                    <img class="w-100 h-75 rounded-circle" src="img/cornflower.webp" alt="Cornflower">
+                    <img class="w-100 h-75 rounded-circle" src="img/elster.jpg" alt="Cornflower">
                 </div>
 
-                <div class="d-flex flex-column justify-content-center ms-2 flex-grow-1 h-100 w-75">
+                <div class="d-flex flex-column justify-content-center ms-3 flex-grow-1 h-100 w-75">
                     <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
                         <strong>Conversation Title</strong>
                     </div>
-                    <div class="text-muted" style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
-                        You: Lorem ipsum dolor sit amet Lorem... Lorem ipsum dolor sit amet...
+                    <div class="text-muted d-flex" >
+                        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                            You: Lorem ipsum dolor sit amet Lorem... Lorem ipsum dolor sit amet...
+                        </div>
                     </div>
                 </div>
 
+                <div class="d-flex flex-column text-muted">
+                    <div class="latest-message-time">10:17</div>
+                    <div class="mt-1 badge rounded-pill bg-primary">4</div>
+                </div>
             </button>
-
+            
             <button class="list-group-item list-group-item-action d-flex flex-row 
             mw-100 w-100 align-items-center">
+
                 <div class="flex-shrink-0 rounded-circle h-100 d-flex align-items-center">
-                    <img class="h-75 rounded-circle" src="img/elster.jpg" alt="Penrose triangle">
+                    <img class="w-100 h-75 rounded-circle" src="img/elster.jpg" alt="Cornflower">
                 </div>
-                <div class="ms-2 flex-grow-1">
-                    Test
+
+                <div class="d-flex flex-column justify-content-center ms-3 flex-grow-1 h-100 w-75">
+                    <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                        <strong>Conversation Title</strong>
+                    </div>
+                    <div class="text-muted d-flex" >
+                        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                            You: Lorem ipsum dolor sit amet Lorem... Lorem ipsum dolor sit amet...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column text-muted">
+                    <div class="latest-message-time">10:17</div>
+                    <div class="mt-1 badge rounded-pill bg-primary">4</div>
                 </div>
             </button>
+
             <button class="list-group-item list-group-item-action d-flex flex-row 
             mw-100 w-100 align-items-center">
                 <div class="flex-shrink-0 rounded-circle h-100 d-flex align-items-center">
                     <img class="h-75 rounded-circle" src="img/long wallpaper.jpg" alt="Penrose triangle">
                 </div>
                 <div class="ms-2 flex-grow-1">
-                    Test
+                    Test <span class="badge rounded-pill bg-primary">4</span>
                 </div>
             </button>
         </div>
+        </div>
+    -->
     </div>
 
 

@@ -1,6 +1,6 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
-import { createConversation } from "./modules/utilities/createConversation.js";
 import { sendFunction } from "./modules/utilities/chatOptions.js"
+import { createSidebarConversationsFromJson } from "./modules/setup/createSidebarFromJson.js";
 
 /**
  * Setup logic
@@ -57,6 +57,33 @@ console.log("Quill from main: " + quill);
 // Initialise data from json
 readJson("./json/sample-text-file.json")
     .then(data => rawcontentMap = createConversationFromJson(data));
+readJson("./json/conversations.json")
+    .then(data => createSidebarConversationsFromJson(data));
+
+
+/**
+ * Conversation searchbar logic
+ */
+// Have the cancel button reset the searchbar
+const conversationSearchResetButton = document.getElementById("conversation-search-reset");
+const conversationSearchText = document.getElementById("conversation-search-text");
+conversationSearchResetButton.addEventListener("click", () => {
+    conversationSearchText.value = "";
+    conversationSearchText.focus();
+    conversationSearchResetButton.setAttribute("hidden", "true");
+});
+
+// Ensure cancel button is revealed when there is text in the conversation searchbar
+conversationSearchText.addEventListener("input", (event) => {
+    if (event.data != null) {
+        conversationSearchResetButton.removeAttribute("hidden");
+    } else if (conversationSearchText.value == "") {
+        conversationSearchResetButton.setAttribute("hidden", "");
+    }
+})
+
+
+
 
 
 
