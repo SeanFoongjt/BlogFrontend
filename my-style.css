@@ -168,6 +168,7 @@ sidebar-conversations {
 .ql-editor {
     min-height: 65px;
     overflow: auto;
+    width:100%;
 }
 
 .ql-container {
