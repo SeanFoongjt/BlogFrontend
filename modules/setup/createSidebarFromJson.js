@@ -1,4 +1,7 @@
 function createSidebarConversationsFromJson(json) {
+    Handlebars.registerHelper('isPositive', function (value) {
+        return value > 0;
+    });
     var elementTemplate = fetch("../../templates/sidebar-conversations.html")
         .then(res => res.text())
         .then(text => Handlebars.compile(text));

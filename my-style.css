@@ -1,19 +1,23 @@
 body, html {
     padding: 0;
     margin: 0;
+    
 }
 
 body {
     background-color: #f5f5f5;
+    box-sizing: border-box;
 }
 
 .application {
     box-sizing: border-box;
+    width: 100dvw;
+    min-width: 100dvw;
 }
 
 /* Sidebar */
 .sidebar {
-    padding-right: 0px;
+    padding: 0px;
 }
 
 #chat-searchbar {
@@ -43,12 +47,11 @@ sidebar-conversations {
 
 .chat-selection {
     width: 100%;
-    overflow: auto;
 
     & .list-group-item {
         box-sizing: border-box !important;
         width: 100%;
-        height: 15%;
+        height: 80px;
         padding-left: 3%;
         border-radius: 15px;
     }
@@ -57,19 +60,23 @@ sidebar-conversations {
         font-size: 0.75rem;
     }
 
-    & .sidebar-text {
-        width: 70%;
+    & .sidebar-image {
+        aspect-ratio: 1;
+        height: 60px;
     }
 
-    & .sidebar-image {
-        width: 50px;
-        height: 50px;
+    & .sidebar-text {
+        min-width: 0px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }
 
 
 /* Title section */
 #title-section {
+    min-height: 60px;
     background-color: white;
     height: 12%;
 }
@@ -117,8 +124,7 @@ sidebar-conversations {
 
 /* container for both the chat display and the editor */
 .chatlog-editor-container {
-    height: 88%;
-    max-height: 88%;
+    max-height: min(88%, calc(100% - 60px));
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -126,7 +132,7 @@ sidebar-conversations {
 /* Overall section containg and displaying the chats */
 .chatlog {
     overflow: auto;
-    scrollbar-width: none;
+    scrollbar-width: thin;
     max-height: 90%;
     min-height: 10%;
 }
@@ -159,20 +165,17 @@ sidebar-conversations {
 
 /* Styling for the quill editor */
 /* The container holding the editor */
-.editor-container {
-    max-height: 50%;
+.ql-editor {
+    min-height: 65px;
     overflow: auto;
-    min-height: 70px;
+}
+
+.ql-container {
+    overflow: auto;
     background-color: #FFFFFF;
     border-width: 1px;
     padding-left: 0px;
     padding-right: 0px;
-}
-
-.ql-editor {
-    min-height: 50px;
-    max-height: 100%;
-    overflow: auto;
 }
 
 .ql-tooltip {
@@ -198,7 +201,8 @@ sidebar-conversations {
 /* Otherwise default for the above mentioned prompt */
 .editor-click-prompt {
     max-height: 100%;
-    height: 100%;
+    height: 45px;
+    min-height: 45px;
     border-style: solid;
     border-radius: 1px;
     border-color: #bebebe;

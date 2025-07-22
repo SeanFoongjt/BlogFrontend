@@ -1,22 +1,46 @@
 
 
 <button class="list-group-item list-group-item-action d-flex flex-row 
-mw-100 w-100 align-items-center justify-content-between">
-    <div class="sidebar-image rounded-circle h-100 d-flex align-items-center">
+mw-100 w-100 align-items-center justify-content-start chat-selection">
+    <div class="sidebar-image rounded-circle d-flex align-items-center">
         <img class="w-100 h-100 rounded-circle" src="{{imagePath}}" alt="{{imageAlt}}">
     </div>
 
-    <div class="d-flex sidebar-text flex-column flex-grow-1 justify-content-center ms-3 h-100">
-        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+    <div class="d-flex flex-column flex-grow-1" style="min-width: 0px;">
+        <div class="d-flex sidebar-text flex-row justify-content-between align-items-end flex-grow-1 ms-3 h-100">
+            <div class="sidebar-text">
+                <strong>{{conversationTitle}}</strong>
+            </div>
+            <div class="text-muted latest-message-time">{{latestTime}}</div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-between align-items-center sidebar-notifications ms-3" style="min-width:0px;">
+            <div class="text-muted sidebar-text">
+                {{latestMessage}}
+            </div>
+            {{#if (isPositive unread)}}
+                <div class="mt-1 badge rounded-pill bg-primary">{{unread}}</div>
+            {{/if}}
+        </div>
+    </div>
+
+    <!--
+    <div class="d-flex sidebar-text flex-column justify-content-center flex-grow-1 ms-3 h-100">
+        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap; min-width: none;">
             <strong>{{conversationTitle}}</strong>
         </div>
-        <div class="text-muted" style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+        <div class="text-muted" style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap; min-width: none;">
             {{latestMessage}}
         </div>
     </div>
 
-    <div class="d-flex flex-column align-items-end sidebar-notifications px-2">
-        <div class="latest-message-time">{{latestTime}}</div>
-        <div class="mt-1 badge rounded-pill bg-primary">{{unread}}</div>
+    <div class="d-flex flex-column align-items-end sidebar-notifications px-2 pt-1">
+        <div class="text-muted latest-message-time">{{latestTime}}</div>
+        {{#if (isPositive unread)}}
+            <div class="mt-1 badge rounded-pill bg-primary">{{unread}}</div>
+        {{else}}
+            <div class="mt-1 badge rounded-pill bg-primary" style="visibility:hidden;">{{unread}}</div>
+        {{/if}}
     </div>
+-->
 </button>

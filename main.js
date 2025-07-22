@@ -190,11 +190,15 @@ function displayEditor() {
     // Hide prompt, show and focus on editor
     editorToolbarContainer.removeAttribute("hidden");
     bottomToolbar.removeAttribute("hidden");
+    const editorPromptHeight = editorPrompt.offsetHeight;
     editorPrompt.setAttribute("hidden", "");
     quill.focus();
     const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
-    console.log(chatlog.scrollTop + editorToolbarContainerHeight);
-    chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPrompt.offsetHeight;
+    console.log("editor height: " + editorToolbarContainerHeight);
+    chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
+    chatlog.style.height = `calc(100% - ${editorToolbarContainerHeight}px)`;
+    document.querySelector(".ql-container").style.height = 
+        `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
 
     // Add listeners to chatlog and title section to hide editor when they are clicked
     chatlog.addEventListener("click", hideEditor);

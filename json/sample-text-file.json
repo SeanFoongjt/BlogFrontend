@@ -41,6 +41,13 @@
             "rawHTML" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi.",
             "time" : "19 June, 2025 10:17",
             "encoding" : "Plaintext"
+        },
+        {
+            "type" : "my-chat",
+            "text" : "yup sounds about right",
+            "rawHTML" : "yup sounds about right",
+            "time" : "22 July, 2025 11:00",
+            "encoding" : "Plaintext"
         }
     ]
 }
