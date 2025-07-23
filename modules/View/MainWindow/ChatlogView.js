@@ -1,0 +1,5 @@
+function ChatlogView() {
+
+}
+
+export { ChatlogView }
