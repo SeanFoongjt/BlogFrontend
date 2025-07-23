@@ -6,5 +6,30 @@
     "marked": "^15.0.12",
     "node": "^24.2.0",
     "quill": "^2.0.3"
-  }
+  },
+  "name": "blogfrontend",
+  "version": "1.0.0",
+  "private": "true",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "webpack": "^5.100.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SeanFoongjt/BlogFrontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SeanFoongjt/BlogFrontend/issues"
+  },
+  "homepage": "https://github.com/SeanFoongjt/BlogFrontend#readme",
+  "description": ""
 }

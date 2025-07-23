@@ -1,6 +1,7 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { createSidebarConversationsFromJson } from "./modules/setup/createSidebarFromJson.js";
+import { ModelManager } from "./modules/Model/ModelManager.js";
 
 /**
  * Setup logic
@@ -59,6 +60,12 @@ readJson("./json/sample-text-file.json")
     .then(data => rawcontentMap = createConversationFromJson(data));
 readJson("./json/conversations.json")
     .then(data => createSidebarConversationsFromJson(data));
+
+const model = ModelManager();
+model.initialiseFromJson("./json/storage.json");
+
+
+
 
 
 /**

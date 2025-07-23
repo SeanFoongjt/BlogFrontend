@@ -1,0 +1,85 @@
+{
+    "conversations" : [{
+        "image" : "../img/cornflower.webp",
+        "title" : "Cornflower",
+        "messages" : [
+            {
+                "type" : "other-chat",
+                "text" : "Hey how are you doing?",
+                "rawHTML" : "Hey how are you doing?",
+                "time" : "19 June, 2025 09:00",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "my-chat",
+                "text" : "I'm fine thanks",
+                "rawHTML" : "I'm fine thanks",
+                "time" : "19 June, 2025 09:14",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "my-chat",
+                "text" : "placeholder",
+                "rawHTML" : "placeholder",
+                "time" : "19 June, 2025 09:29",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "other-chat",
+                "text" : "This text is being inserted such that there is overflow in the chatlog",
+                "rawHTML" : "This text is being inserted such that there is overflow in the chatlog",
+                "time" : "19 June, 2025 10:01",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "other-chat",
+                "text" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi. Nam imperdiet, nunc non egestas placerat, lorem dui pellentesque libero, sed condimentum dui dolor quis massa. Quisque eget enim lacinia, tincidunt ipsum quis, finibus nibh. Aenean urna eros, efficitur ut pretium ut, pulvinar quis augue. Integer convallis sollicitudin dolor, eu tincidunt lorem egestas sit amet. Fusce porttitor enim at est tristique, id fermentum velit tincidunt. Pellentesque euismod ac lorem eget hendrerit. Donec suscipit dui faucibus, lacinia massa et, semper tortor. Aliquam quis lacus ut erat varius varius quis eget risus.",
+                "rawHTML" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi. Nam imperdiet, nunc non egestas placerat, lorem dui pellentesque libero, sed condimentum dui dolor quis massa. Quisque eget enim lacinia, tincidunt ipsum quis, finibus nibh. Aenean urna eros, efficitur ut pretium ut, pulvinar quis augue. Integer convallis sollicitudin dolor, eu tincidunt lorem egestas sit amet. Fusce porttitor enim at est tristique, id fermentum velit tincidunt. Pellentesque euismod ac lorem eget hendrerit. Donec suscipit dui faucibus, lacinia massa et, semper tortor. Aliquam quis lacus ut erat varius varius quis eget risus.",
+                "time" : "19 June, 2025 10:12",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "my-chat",
+                "text" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi.",
+                "rawHTML" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis elementum urna quis facilisis. Fusce sed orci id libero rutrum tristique at at erat. Fusce varius dapibus ex sagittis convallis. Sed in lorem mi.",
+                "time" : "19 June, 2025 10:17",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "my-chat",
+                "text" : "yup sounds about right",
+                "rawHTML" : "yup sounds about right",
+                "time" : "22 July, 2025 11:00",
+                "encoding" : "Plaintext"
+            }
+        ]
+    },
+    {
+        "image" : "../img/elster.jpg",
+        "title" : "Elster",
+        "messages" : [
+            {
+                "type" : "my-chat",
+                "text" : "yup sounds about right",
+                "rawHTML" : "yup sounds about right",
+                "time" : "23 July, 2025 13:14",
+                "encoding" : "Plaintext"
+            },
+            {
+                "type" : "other-chat",
+                "text" : "Actually cant believe he already graduated",
+                "rawHTML" : "Actually cant believe he already graduated",
+                "time" : "23 July, 2025 14:17",
+                "encoding" : "Plaintext"
+            }, 
+            {
+                "type" : "other-chat",
+                "text" : "Ay yo Uncle Soon on Thursday?",
+                "rawHTML" : "Ay yo Uncle Soon on Thursday?",
+                "time" : "23 July, 2025 14:23",
+                "encoding" : "Plaintext"
+            }
+        ]
+    }
+    ]
+}

@@ -1,18 +1,56 @@
-import * as fs from 'node:fs/promises';
+//import * as fs from 'C:/Users/SBFJTSEA/AppData/Local/Microsoft/TypeScript/5.8/node_modules/@types/node/fs';
+import { ConversationModel } from './ConversationModel.js';
 
 function ModelManager() {
-    const fileHandle = fs.open("../../json/storage.json");
+    const filePromise = fetch("../../json/storage.json");
+    const listOfConversations = [];
 
+    // I dont think this is possible (usage of fs in the web environment)
+    /** 
     function saveToJson(path) {
-        fileHandle.then(handle => handle.write())
-
+        const objectToWrite = {
+            "conversations" : [],
+        }
+        filePromise.then(handle => {
+            for (const conversation of listOfConversations) {
+                objectToWrite["conversations"].push(conversation);
+            }
+            handle.writeFile(objectToWrite.stringify());
+        })
     }
+    */
 
     function initialiseFromJson(path) {
-        const storedJson = fileHandle
-            .then(handle => handle.read())
-            .then(data => data.json());
+        const storedJson = filePromise
+            .then(res => res.json())
+            .then(json => processJson(json));
 
-        
+        function processJson(json) {
+
+            // For each conversation found in the json, create a conversation model and push
+            // to list of conversations
+            for (const conversationJson of json["conversations"]) {
+                const conversationModel = ConversationModel()
+                conversationModel.initialiseFromJson(conversationJson);
+                listOfConversations.push(conversationModel);
+            }
+        }   
+
+        console.log(listOfConversations);
+    }
+
+    function getSidebarList() {
+        const returnList = [];
+        for (const conversation of listOfConversations) {
+            returnList.push(conversation.sidebarInformation);
+        }
+
+        return returnList;
+    }
+
+    return {
+        initialiseFromJson
     }
 }
+
+export { ModelManager };
