@@ -1,10 +1,11 @@
 import { ChatlogView } from "./ChatlogView.js";
+import { EditorView } from "./EditorView.js";
 import { TitleSectionView } from "./TitleSectionView.js";
 
 function MainWindowView() {
     const chatlog = ChatlogView();
     const titleSection = TitleSectionView();
-    const editorView = editorView();
+    const editorView = EditorView();
 
     function render(conversation) {
         chatlog.render(conversation)

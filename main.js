@@ -2,7 +2,8 @@ import { readJson, createConversationFromJson } from "./modules/setup/readConver
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { createSidebarConversationsFromJson } from "./modules/setup/createSidebarFromJson.js";
 import { ModelManager } from "./modules/Model/ModelManager.js";
-
+import { ViewManager } from "./modules/View/ViewManager.js";
+ 
 /**
  * Setup logic
  */
@@ -58,12 +59,15 @@ console.log("Quill from main: " + quill);
 // Initialise data from json
 readJson("./json/sample-text-file.json")
     .then(data => rawcontentMap = createConversationFromJson(data));
+
+/** 
 readJson("./json/conversations.json")
     .then(data => createSidebarConversationsFromJson(data));
-
+*/
 const model = ModelManager();
-model.initialiseFromJson("./json/storage.json");
-
+const view = ViewManager();
+model.initialiseFromJson("./json/storage.json")
+    .then(() => view.initialise(model.getSidebarList()));
 
 
 

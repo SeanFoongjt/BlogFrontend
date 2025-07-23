@@ -5,7 +5,39 @@ function ModelManager() {
     const filePromise = fetch("../../json/storage.json");
     const listOfConversations = [];
 
-    // I dont think this is possible (usage of fs in the web environment)
+    async function initialiseFromJson(path) {
+        const storedJson = filePromise
+            .then(res => res.json())
+            .then(json => processJson(json));
+
+        function processJson(json) {
+
+            // For each conversation found in the json, create a conversation model and push
+            // to list of conversations
+            for (const conversationJson of json["conversations"]) {
+                const conversationModel = ConversationModel()
+                conversationModel.initialiseFromJson(conversationJson);
+                listOfConversations.push(conversationModel);
+            }
+        }  
+        
+        return Promise.all([storedJson]);
+    }
+
+    function getSidebarList() {
+        const returnList = [];
+        for (const conversation of listOfConversations) {
+            returnList.push(conversation.sidebarInformation());
+        }
+        return returnList;
+    }
+
+    return {
+        initialiseFromJson,
+        getSidebarList
+    }
+
+        // I dont think this is possible (usage of fs in the web environment)
     /** 
     function saveToJson(path) {
         const objectToWrite = {
@@ -20,37 +52,6 @@ function ModelManager() {
     }
     */
 
-    function initialiseFromJson(path) {
-        const storedJson = filePromise
-            .then(res => res.json())
-            .then(json => processJson(json));
-
-        function processJson(json) {
-
-            // For each conversation found in the json, create a conversation model and push
-            // to list of conversations
-            for (const conversationJson of json["conversations"]) {
-                const conversationModel = ConversationModel()
-                conversationModel.initialiseFromJson(conversationJson);
-                listOfConversations.push(conversationModel);
-            }
-        }   
-
-        console.log(listOfConversations);
-    }
-
-    function getSidebarList() {
-        const returnList = [];
-        for (const conversation of listOfConversations) {
-            returnList.push(conversation.sidebarInformation);
-        }
-
-        return returnList;
-    }
-
-    return {
-        initialiseFromJson
-    }
 }
 
 export { ModelManager };

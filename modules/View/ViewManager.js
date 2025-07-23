@@ -7,9 +7,12 @@ function ViewManager() {
 
     function initialise(conversationList, mainConversation) {
         sidebar.render(conversationList);
-        mainWindow.render(mainConversation);
+        //mainWindow.render(mainConversation);
     }
 
-    sidebar.render()
-    mainWindow.render();
+    return {
+        initialise
+    }
 }
+
+export { ViewManager }

@@ -1,6 +1,6 @@
 {
     "conversations" : [{
-        "image" : "../img/cornflower.webp",
+        "imagePath" : "../img/cornflower.webp",
         "title" : "Cornflower",
         "messages" : [
             {
@@ -55,7 +55,7 @@
         ]
     },
     {
-        "image" : "../img/elster.jpg",
+        "imagePath" : "../img/elster.jpg",
         "title" : "Elster",
         "messages" : [
             {

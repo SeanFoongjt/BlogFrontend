@@ -1,27 +1,31 @@
 import { MessageFactory } from "./MessageModel.js";
 import { encodeText } from "../utilities/encodeText.js";
 
-function ConversationModel(image="", title="") {
+function ConversationModel(imagePath="", title="") {
     const listOfMessages = [];
+    const messageFactory = MessageFactory();
 
     function initialiseFromJson(json) {
-        image = json["imagePath"];
+        imagePath = json["imagePath"];
         title = json["title"];
 
         console.log(json);
         for (const message of json["messages"]) {
-            const messageModel = MessageFactory();
-            messageModel.initialiseFromJson(message);
+            
+            const messageModel = messageFactory.initialiseFromJson(message);
             listOfMessages.push(messageModel);
         }
+
+        console.log(listOfMessages);
     }
 
     function sidebarInformation() {
         const lastMessage = listOfMessages[listOfMessages.length - 1]
-        const latestMessageText = encodeText(lastMessage[rawHTML]);
-        const latestMessageTime = lastMessage[time];
+        console.log(lastMessage);
+        const latestMessageText = encodeText(lastMessage.rawHTML);
+        const latestMessageTime = lastMessage.time.substring(lastMessage.time.length - 5);
         return {
-            image,
+            imagePath,
             title,
             latestMessageText,
             latestMessageTime
@@ -33,7 +37,7 @@ function ConversationModel(image="", title="") {
     }
 
     return {
-        image,
+        imagePath,
         title,
         listOfMessages,
         initialiseFromJson,

@@ -3,7 +3,7 @@ function SidebarView() {
         Handlebars.registerHelper('isPositive', function (value) {
             return value > 0;
         });
-        
+
         var elementTemplate = fetch("../../../templates/sidebar-conversations.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text));
@@ -16,14 +16,17 @@ function SidebarView() {
         const sidebar = document.querySelector(".sidebar");
 
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
-            console.log(json);
-            for (const conversation of json["conversations"]) {
+            for (const conversation of listOfConversations) {
                 conversationsHTML = conversationsHTML.concat(array[0](conversation));
             }
             conversationsHTML = conversationsHTML.concat("</div>");
             container.innerHTML = conversationsHTML;
             sidebar.appendChild(container);
         });
+    }
+
+    return {
+        render
     }
 }
 
