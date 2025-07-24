@@ -127,10 +127,6 @@ sidebar-conversations {
     padding-right: 0px;
 }
 
-.blank-space {
-    height: 5px;
-}
-
 /* container for both the chat display and the editor */
 .chatlog-editor-container {
     max-height: min(88%, calc(100% - 60px));
@@ -144,6 +140,10 @@ sidebar-conversations {
     scrollbar-width: thin;
     max-height: 90%;
     min-height: 10%;
+}
+
+.blank-space {
+    height: 100%;
 }
 
 /* Styling for display of chats */

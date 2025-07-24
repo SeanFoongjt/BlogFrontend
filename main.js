@@ -56,17 +56,19 @@ const quill = new Quill("#editor", {
 console.log("Quill from main: " + quill);
 
 // Initialise data from json
+/**
 readJson("./json/sample-text-file.json")
     .then(data => rawcontentMap = createConversationFromJson(data));
+*/
 
 /** 
 readJson("./json/conversations.json")
     .then(data => createSidebarConversationsFromJson(data));
 */
 const model = ModelManager();
-const view = ViewManager();
+const view = ViewManager(quill);
 model.initialiseFromJson("./json/storage.json")
-    .then(() => view.initialise(model.getSidebarList()));
+    .then(() => view.initialise(model.getSidebarList(), model.getMainConversation()));
 
 
 

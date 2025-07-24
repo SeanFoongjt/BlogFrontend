@@ -1,7 +1,9 @@
 function SidebarView() {
+    
     const currOrder = [];
 
     function render(listOfConversations) {
+
         Handlebars.registerHelper('isPositive', function (value) {
             return value > 0;
         });

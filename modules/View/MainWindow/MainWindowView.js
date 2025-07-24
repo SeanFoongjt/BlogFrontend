@@ -8,9 +8,14 @@ function MainWindowView(quill, imagePath="") {
     const editorView = EditorView(quill);
 
     function render(conversation) {
-        chatlog.render(conversation.messages)
-        titleSection.render(conversation.title, conversation.imagePath);
+        console.log(conversation);
+        chatlog.renderConversation(conversation.listOfMessages)
+        titleSection.changeConversation(conversation.title, conversation.imagePath);
         editorView.clear();
+    }
+
+    return {
+        render
     }
 }
 

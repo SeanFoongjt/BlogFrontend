@@ -1,22 +1,10 @@
+import { deleteFunction, editFunction, replyFunction } from "../../utilities/chatOptions.js";
+
+
 function ChatlogView(imagePath) {
     function setImage(newImagePath) {
         imagePath = newImagePath;
     }  
-
-    function renderConversation(conversation) {
-        for (message of conversation) {
-            if (message.type === "my-chat") {
-                renderSentMessage(message.rawHTML, 
-                    message.time, message.encoding, message.replyingTo
-                );
-
-            } else if (message.type === "other-chat") {
-                renderReceivedMessage(message.editorHTML, 
-                    message.time, message.encoding, imagePath
-                )
-            }
-        }
-    }
 
     function renderSentMessage(editorHTML, time, encoding="Plaintext", replyingTo="false") {
         var contextObj = {
@@ -99,6 +87,23 @@ function ChatlogView(imagePath) {
         return chatbox;
 
     }
+
+    function renderConversation(conversation) {
+        for (const message of conversation) {
+            if (message.type === "my-chat") {
+                renderSentMessage(message.rawHTML, 
+                    message.time, message.encoding, message.replyingTo
+                );
+
+            } else if (message.type === "other-chat") {
+                renderReceivedMessage(message.rawHTML, 
+                    message.time, message.encoding, imagePath
+                )
+            }
+        }
+    }
+
+
 
     return {
         setImage,

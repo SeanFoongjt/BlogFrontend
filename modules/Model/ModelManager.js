@@ -32,9 +32,14 @@ function ModelManager() {
         return returnList;
     }
 
+    function getMainConversation() {
+        return listOfConversations[0];
+    }
+
     return {
         initialiseFromJson,
-        getSidebarList
+        getSidebarList,
+        getMainConversation
     }
 
         // I dont think this is possible (usage of fs in the web environment)
