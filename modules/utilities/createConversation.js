@@ -1,7 +1,6 @@
 import { DateTimeFormatting } from "./DateTimeFormatting.js";
 import { editFunction, replyFunction, deleteFunction } from "./chatOptions.js";
 import { encodeText } from "./encodeText.js";
-// Refector edit, reply delete functions to abstract from one function or something similar
 
 /**
  * Function to create a chat / conversation. Can be used for both sides of the conversation
@@ -46,19 +45,9 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
                 chatbox,
                 fillChatbox
             );
-            //.then((string) => text.innerText = string);
-
-            // Setup and addition of icon
-            /** 
-            var replyIcon = document.createElement("i");
-            replyIcon.setAttribute("class", "fa-solid fa-sm fa-arrows-turn-right");
-            replyIcon.setAttribute("slot", "replyingToIcon");
-            fillChatbox = replyPromise.then(item => chatbox.appendChild(replyIcon));
-            */
 
             // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
-            //document.querySelector(".ql-editor").firstChild.focus();
         }
                         
     } else if (type == "other-chat") {
@@ -84,16 +73,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
 
     // Can only access shadow root once chatbox appended to chatlog
     if (type == "other-chat") {
-        // Center reply button relative to text box
-        const textbox = chatbox.shadowRoot.querySelector(".other-text-box");
-        const replyButton = chatbox.shadowRoot.querySelector("[name='reply-button']");
-
-        var finalPromise = Promise.all([fillChatbox])
-            .then(item => {
-                replyButton.style.marginTop = (textbox.offsetHeight - replyButton.offsetHeight) / 2 + "px";
-            }
-        );
-        
         chatbox
             .shadowRoot
             .querySelector("button[name='reply-button']")
@@ -109,22 +88,6 @@ function createConversation(type, editorHTML, time, text = "", encoding = "Plain
                     .addEventListener("click", () => editFunction(chatbox));
                 chatbox.querySelector("[name='delete-button']")
                     .addEventListener("click", () => deleteFunction(chatbox));
-                const textbox = chatbox.shadowRoot.querySelector(".text-box");
-                const buttonHeight = chatbox.querySelector(".btn").offsetHeight;
-                let replyHeight = 0;
-
-                if (replyingTo) {
-                    replyHeight = chatbox
-                        .shadowRoot
-                        .querySelector("[name='replyBanner']")
-                        .offsetHeight;
-                }
-                const padding = (textbox.offsetHeight - buttonHeight) / 2;
-
-                chatbox.querySelector(".dropdown").style.paddingTop = 
-                    (padding + replyHeight).toString() + "px";
-                console.log((padding).toString() + "px");
-                console.log((padding + 10).toString() + "px");
             });
     }
     //console.log("Check 2");
@@ -144,14 +107,6 @@ function formatForReply(string, chatbox, promise) {
     return Promise.all([promise]).then(item => {
         var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
         const textbox = chatbox.shadowRoot.querySelector(".text-box");
-
-        /**
-        if (string.length > 60) {
-            return string.slice(0,60) + "..."
-        } else if (string.length <= 60) {
-            return string
-        }
-        */
 
         let sliced = string.slice(0, Math.round(textbox.clientWidth / 7) - 4)
         text.innerText = sliced + "..";

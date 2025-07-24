@@ -35,6 +35,15 @@ body {
 
 #chat-searchbar:focus-within {
     outline: 2px solid !important;
+    outline-color: #A67FCC !important;
+
+    & .fa-search {
+        color: #A67FCC;
+    }
+
+    & .fa-times {
+        color: #A67FCC;
+    }
 }
 
 sidebar-conversations {
@@ -140,7 +149,7 @@ sidebar-conversations {
 /* Styling for display of chats */
 /* Modifies text box coming from the user */
 .my-text-box {
-    background-color: #d7ffe3;
+    background-color: #f8dfff;
     color: black;
     word-wrap: break-word;
 }

@@ -12,14 +12,23 @@ otherChatTemplate.innerHTML = `
                     <slot name="image"></slot>
                 </div>
 
-                <div>
-                    <!--Box where the actual text goes-->
-                    <div class=" border-1 rounded border-dark py-2 px-3 other-text-box text-box flex-shrink-1">
-                        <slot name="chatText">
-                            <span>
-                                More reasonable amounts of text
-                            </span>
-                        </slot>
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-row align-items-center">
+                        <!--Box where the actual text goes-->
+                        <div class=" border-1 rounded border-dark py-2 px-3 other-text-box text-box flex-shrink-1">
+                            <slot name="chatText">
+                                <span>
+                                    More reasonable amounts of text
+                                </span>
+                            </slot>
+                        </div>
+
+                        <!--Reply icon-->
+                        <div class="">
+                            <button class="btn ms-2 btn-outline-secondary me-5" name="reply-button">
+                                <slot name="replyIcon">
+                            </button>
+                        </div>
                     </div>
 
                     <div class="row justify-content-start">
@@ -29,12 +38,7 @@ otherChatTemplate.innerHTML = `
                     </div>
                 </div>
                 
-                <!--Reply icon-->
-                <div class="">
-                    <button class="btn ms-2 btn-outline-secondary me-5" name="reply-button">
-                        <slot name="replyIcon">
-                    </button>
-                </div>
+                
             </div>
         </div>
     </body>

@@ -1,6 +1,5 @@
 import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { sendFunction } from "./modules/utilities/chatOptions.js"
-import { createSidebarConversationsFromJson } from "./modules/setup/createSidebarFromJson.js";
 import { ModelManager } from "./modules/Model/ModelManager.js";
 import { ViewManager } from "./modules/View/ViewManager.js";
  

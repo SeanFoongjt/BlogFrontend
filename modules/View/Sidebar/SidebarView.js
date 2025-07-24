@@ -1,4 +1,6 @@
 function SidebarView() {
+    const currOrder = [];
+
     function render(listOfConversations) {
         Handlebars.registerHelper('isPositive', function (value) {
             return value > 0;
@@ -17,6 +19,7 @@ function SidebarView() {
 
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
             for (const conversation of listOfConversations) {
+                currOrder.push(conversation);
                 conversationsHTML = conversationsHTML.concat(array[0](conversation));
             }
             conversationsHTML = conversationsHTML.concat("</div>");
@@ -25,8 +28,17 @@ function SidebarView() {
         });
     }
 
+    function update() {
+
+    }
+
+    function changeActive(index) {
+
+    }
+
     return {
-        render
+        render,
+        changeActive
     }
 }
 
