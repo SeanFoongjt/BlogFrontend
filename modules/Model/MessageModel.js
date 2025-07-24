@@ -28,20 +28,24 @@ function MessageFactory() {
 }
 
 function ReceivedMessage(rawHTML, time, encoding) {
-    return {
+    const self = {
         rawHTML,
         time,
         encoding
     }
+
+    return self
 }
 
 function SentMessage(rawHTML, time, encoding, replyingTo) {
-    return {
+    const self = {
         rawHTML,
         time,
         encoding,
         replyingTo
     }
+    
+    return self
 }
 
 export { MessageFactory };

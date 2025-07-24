@@ -40,6 +40,7 @@ function ModelManager() {
     }
 
     function getMainConversation() {
+        console.log(listOfConversations[0]);
         return listOfConversations[0];
     }
 

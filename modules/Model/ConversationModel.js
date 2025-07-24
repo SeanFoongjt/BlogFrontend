@@ -10,12 +10,13 @@ function ConversationModel(imagePath="", title="") {
         title,
         initialiseFromJson,
         sidebarInformation,
-        addMessage
+        addMessage,
+        getListOfMessages
     }
 
     function initialiseFromJson(json) {
-        imagePath = json["imagePath"];
-        title = json["title"];
+        self.imagePath = json["imagePath"];
+        self.title = json["title"];
 
         console.log(json);
         for (const message of json["messages"]) {
@@ -29,9 +30,10 @@ function ConversationModel(imagePath="", title="") {
         const lastMessage = listOfMessages[listOfMessages.length - 1]
         const latestMessageText = encodeText(lastMessage.rawHTML);
         const latestMessageTime = lastMessage.time.substring(lastMessage.time.length - 5);
+
         return {
-            imagePath,
-            title,
+            imagePath: self.imagePath,
+            title: self.title,
             latestMessageText,
             latestMessageTime
         }
@@ -39,6 +41,10 @@ function ConversationModel(imagePath="", title="") {
 
     function addMessage(message) {
         listOfMessages.push(message);
+    }
+
+    function getListOfMessages() {
+        return listOfMessages;
     }
 
     return self

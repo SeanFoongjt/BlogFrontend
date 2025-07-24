@@ -8,7 +8,7 @@ function ChatlogView(imagePath) {
         renderSentMessage,
         renderReceivedMessage
     }
-    
+
     function setImage(newImagePath) {
         imagePath = newImagePath;
     }  
@@ -96,6 +96,7 @@ function ChatlogView(imagePath) {
     }
 
     function renderConversation(conversation) {
+        console.log(conversation);
         for (const message of conversation) {
             if (message.type === "my-chat") {
                 renderSentMessage(message.rawHTML, 
