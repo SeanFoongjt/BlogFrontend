@@ -5,6 +5,14 @@ function ConversationModel(imagePath="", title="") {
     const listOfMessages = [];
     const messageFactory = MessageFactory();
 
+    const self = {
+        imagePath,
+        title,
+        initialiseFromJson,
+        sidebarInformation,
+        addMessage
+    }
+
     function initialiseFromJson(json) {
         imagePath = json["imagePath"];
         title = json["title"];
@@ -15,13 +23,10 @@ function ConversationModel(imagePath="", title="") {
             const messageModel = messageFactory.initialiseFromJson(message);
             listOfMessages.push(messageModel);
         }
-
-        console.log(listOfMessages);
     }
 
     function sidebarInformation() {
         const lastMessage = listOfMessages[listOfMessages.length - 1]
-        console.log(lastMessage);
         const latestMessageText = encodeText(lastMessage.rawHTML);
         const latestMessageTime = lastMessage.time.substring(lastMessage.time.length - 5);
         return {
@@ -36,13 +41,7 @@ function ConversationModel(imagePath="", title="") {
         listOfMessages.push(message);
     }
 
-    return {
-        imagePath,
-        title,
-        listOfMessages,
-        initialiseFromJson,
-        sidebarInformation
-    }
+    return self
 }
 
 export { ConversationModel }

@@ -4,6 +4,13 @@ function EditorView(quill) {
     const editorToolbarContainer = document.querySelector(".editor-toolbar");
     const bottomToolbar = document.querySelector(".bottom-toolbar");
 
+    const self = {
+        setEditor,
+        hide,
+        show,
+        clear
+    }
+
     /** Decide whether to keep here or move to controller
     editorPrompt.addEventListener("click", displayEditor);
     */
@@ -71,12 +78,7 @@ function EditorView(quill) {
         isShowing = true;
     }
 
-    return {
-        setEditor,
-        hide,
-        show,
-        clear
-    }
+    return self
 }
 
 export { EditorView }

@@ -7,6 +7,10 @@ function MainWindowView(quill, imagePath="") {
     const titleSection = TitleSectionView(imagePath);
     const editorView = EditorView(quill);
 
+    const self = {
+        render
+    }
+
     function render(conversation) {
         console.log(conversation);
         chatlog.renderConversation(conversation.listOfMessages)
@@ -14,9 +18,7 @@ function MainWindowView(quill, imagePath="") {
         editorView.clear();
     }
 
-    return {
-        render
-    }
+    return self
 }
 
 export {MainWindowView};

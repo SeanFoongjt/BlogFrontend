@@ -4,6 +4,11 @@ function TitleSectionView(imagePath="", title="") {
     var conversationTitleInput = document.getElementById("conversationTitleInput");
     //conversationTitle.addEventListener("dblclick", renameTitle);
 
+    const self = {
+        render,
+        changeConversation
+    }
+
     function render() {
         conversationTitle.value = title;
         titlePicture.setAttribute("src", imagePath);
@@ -15,10 +20,7 @@ function TitleSectionView(imagePath="", title="") {
         render();
     }
 
-    return {
-        render,
-        changeConversation
-    }
+    return self
 }
 
 export { TitleSectionView }

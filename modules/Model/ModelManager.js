@@ -5,6 +5,12 @@ function ModelManager() {
     const filePromise = fetch("../../json/storage.json");
     const listOfConversations = [];
 
+    const self = {
+        initialiseFromJson,
+        getSidebarList,
+        getMainConversation
+    }
+
     async function initialiseFromJson(path) {
         const storedJson = filePromise
             .then(res => res.json())
@@ -17,6 +23,7 @@ function ModelManager() {
             for (const conversationJson of json["conversations"]) {
                 const conversationModel = ConversationModel()
                 conversationModel.initialiseFromJson(conversationJson);
+                console.log(conversationModel);
                 listOfConversations.push(conversationModel);
             }
         }  
@@ -36,11 +43,7 @@ function ModelManager() {
         return listOfConversations[0];
     }
 
-    return {
-        initialiseFromJson,
-        getSidebarList,
-        getMainConversation
-    }
+    return self
 
         // I dont think this is possible (usage of fs in the web environment)
     /** 

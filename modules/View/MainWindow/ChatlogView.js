@@ -2,6 +2,13 @@ import { deleteFunction, editFunction, replyFunction } from "../../utilities/cha
 
 
 function ChatlogView(imagePath) {
+    const self = {
+        setImage,
+        renderConversation,
+        renderSentMessage,
+        renderReceivedMessage
+    }
+    
     function setImage(newImagePath) {
         imagePath = newImagePath;
     }  
@@ -105,12 +112,7 @@ function ChatlogView(imagePath) {
 
 
 
-    return {
-        setImage,
-        renderConversation,
-        renderSentMessage,
-        renderReceivedMessage
-    }
+    return self
 }
 
 export { ChatlogView }

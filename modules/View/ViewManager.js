@@ -5,6 +5,10 @@ function ViewManager(quill) {
     const sidebar = SidebarView();
     const mainWindow = MainWindowView(quill);
 
+    const self = {
+        initialise
+    }
+
     function initialise(conversationList, mainConversation) {
         sidebar.render(conversationList);
         mainWindow.render(mainConversation);
@@ -12,9 +16,7 @@ function ViewManager(quill) {
         console.log(mainConversation);
     }
 
-    return {
-        initialise
-    }
+    return self
 }
 
 export { ViewManager }

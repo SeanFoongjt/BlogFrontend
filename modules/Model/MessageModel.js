@@ -4,6 +4,10 @@
  * Message factory
  */
 function MessageFactory() {
+    const self = {
+        initialiseFromJson
+    }
+
     function initialiseFromJson(json) {
         const type = json["type"];
         const rawHTML = json["rawHTML"];
@@ -20,9 +24,7 @@ function MessageFactory() {
         return newMessage;
     }
 
-    return {
-        initialiseFromJson
-    }
+    return self
 }
 
 function ReceivedMessage(rawHTML, time, encoding) {

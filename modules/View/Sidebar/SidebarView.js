@@ -1,6 +1,10 @@
 function SidebarView() {
-    
     const currOrder = [];
+
+    const self = {
+        render,
+        changeActive
+    }
 
     function render(listOfConversations) {
 
@@ -38,10 +42,7 @@ function SidebarView() {
 
     }
 
-    return {
-        render,
-        changeActive
-    }
+    return self
 }
 
 export { SidebarView };
