@@ -10,7 +10,7 @@ function TitleSectionView(imagePath="", title="") {
     }
 
     function render() {
-        conversationTitle.value = title;
+        conversationTitle.innerText = title.trim()
         titlePicture.setAttribute("src", imagePath);
     }  
 

@@ -13,10 +13,12 @@ function MessageFactory() {
         const rawHTML = json["rawHTML"];
         const time = json["time"];
         const encoding = json["encoding"];
+        const replyingTo = !(json["replyingTo"] == "false")
+        const id = json["id"];
         let newMessage;
 
         if (type === "my-chat") {
-            newMessage = SentMessage(rawHTML, time, encoding, json["replyingTo"]);
+            newMessage = SentMessage(rawHTML, time, encoding, replyingTo);
         } else if (type === "other-chat") {
             newMessage = ReceivedMessage(rawHTML, time, encoding);
         }
@@ -31,7 +33,8 @@ function ReceivedMessage(rawHTML, time, encoding) {
     const self = {
         rawHTML,
         time,
-        encoding
+        encoding,
+        type: "other-chat"
     }
 
     return self
@@ -42,9 +45,10 @@ function SentMessage(rawHTML, time, encoding, replyingTo) {
         rawHTML,
         time,
         encoding,
-        replyingTo
+        replyingTo,
+        type: "my-chat"
     }
-    
+
     return self
 }
 

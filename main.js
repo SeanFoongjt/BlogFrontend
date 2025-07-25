@@ -2,6 +2,7 @@ import { readJson, createConversationFromJson } from "./modules/setup/readConver
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { ModelManager } from "./modules/Model/ModelManager.js";
 import { ViewManager } from "./modules/View/ViewManager.js";
+import { MasterController } from "./modules/Controller/MasterController.js";
  
 /**
  * Setup logic
@@ -69,6 +70,7 @@ const model = ModelManager();
 const view = ViewManager(quill);
 model.initialiseFromJson("./json/storage.json")
     .then(() => view.initialise(model.getSidebarList(), model.getMainConversation()));
+const controller = MasterController();
 
 
 
@@ -97,79 +99,6 @@ conversationSearchText.addEventListener("input", (event) => {
 
 
 
-
-
-
-/**
- * Logic for changing the conversation title
- */
-var conversationTitle = document.getElementById("conversation-title");
-var conversationTitleInput = document.getElementById("conversationTitleInput");
-conversationTitle.addEventListener("dblclick", renameTitle);
-
-/**
- * Rename the title of the conversation
- */
-function renameTitle() {
-    // Make the correct input block visible, hide the existing title
-    var cancel = document.getElementById("conversationTitleInputCancel");
-    conversationTitleInput.value = conversationTitle.innerText;
-    conversationTitleInput.innerText = conversationTitle.innerText;
-    console.log("Input value: " + conversationTitleInput.value);
-    console.log("Inner text: " + conversationTitleInput.innerText);
-    conversationTitle.setAttribute("hidden", "");
-    conversationTitleInput.removeAttribute("hidden");
-    cancel.removeAttribute("hidden");
-    conversationTitleInput.focus();
-
-    // Add event listener for enter key press, enable cancel button
-    conversationTitleInput.addEventListener("keypress", validate);
-    var cancelButton = document.getElementById("conversationTitleInputCancel");
-    cancelButton.addEventListener("click", cleanup);
-
-    // Function to validate name
-    function validate(event) {
-      if (event.key == "Enter") {
-            if (conversationTitleInput.value.trim() != "") {
-                event.preventDefault();
-                conversationTitle.innerText = conversationTitleInput.value.trim();
-            }
-            cleanup();
-            console.log(conversationTitle.innerText);
-      }
-    }
-
-    // Cleanup helper function makes input hidden and the new or old conversation title visible
-    function cleanup() {
-        cancel.setAttribute("hidden", "");
-        conversationTitleInput.setAttribute("hidden", "");
-        conversationTitle.removeAttribute("hidden");
-        conversationTitleInput.removeEventListener("keypress", validate);
-        cancelButton.removeEventListener("click", cleanup);
-    }
-}
-
-/**
- * Function to rename title, used for conversation options
- */
-var inputPopup = document.getElementById("input-popup-modal");
-var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
-var inputPopupInput = inputPopup.querySelector("#modal-input")
-
-document.getElementById("rename-title").addEventListener("click", renameTitleFunction);
-
-function renameTitleFunction() {
-    inputPopupConfirm.addEventListener("click", confirm);
-    inputPopupInput.value = conversationTitle.innerText;
-    inputPopupInput.innerText = conversationTitle.innerText;
-
-    function confirm() {
-        const newTitle = inputPopupInput.value.trim();
-        if (newTitle != "") {
-            conversationTitle.innerText = newTitle;
-        }
-    }
-}
 
 // Make conversation options button width same as height
 const dropdownMenuButton = document.getElementById("dropdown-menu-button");

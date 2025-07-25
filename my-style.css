@@ -143,7 +143,7 @@ sidebar-conversations {
 }
 
 .blank-space {
-    height: 100%;
+    height: 5px;
 }
 
 /* Styling for display of chats */

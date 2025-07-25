@@ -1,4 +1,6 @@
 import { deleteFunction, editFunction, replyFunction } from "../../utilities/chatOptions.js";
+import { encodeText } from "../../utilities/encodeText.js";
+import { DateTimeFormatting } from "../../utilities/DateTimeFormatting.js";
 
 
 function ChatlogView(imagePath) {
@@ -32,16 +34,20 @@ function ChatlogView(imagePath) {
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
+        console.log(replyingTo);
+        console.log(! replyingTo);
         if (replyingTo) {
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
             var text = replyBanner.querySelector("span[name='replyText']");
 
+            /**
             // Inner text used here so that text in reply banner has no formatting
             fillChatbox = formatForReply(
                 replyingTo.querySelector("div[name='text']").innerText,
                 chatbox,
                 fillChatbox
             );
+            */
 
             // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
@@ -96,8 +102,8 @@ function ChatlogView(imagePath) {
     }
 
     function renderConversation(conversation) {
-        console.log(conversation);
         for (const message of conversation) {
+            console.log(message);
             if (message.type === "my-chat") {
                 renderSentMessage(message.rawHTML, 
                     message.time, message.encoding, message.replyingTo
@@ -109,6 +115,26 @@ function ChatlogView(imagePath) {
                 )
             }
         }
+    }
+
+    /**
+     * Format the string to be used as text for the reply banner.
+     * NOTE: CAN LIKELY REPLACE WITH TEXT-OVERFLOW: ELLIPSIS
+     * @param {string} string string to be formatted
+     * @param {HTMLElement} chatbox chatbox containing the reply banner
+     * @param {Promise} promise promise to wait for before textbox is available
+     * @returns 
+     */
+    function formatForReply(string, chatbox, promise) {
+        return Promise.all([promise]).then(item => {
+            var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
+            const textbox = chatbox.shadowRoot.querySelector(".text-box");
+
+            let sliced = string.slice(0, Math.round(textbox.clientWidth / 7) - 4)
+            text.innerText = sliced + "..";
+            console.log(text.clientWidth);
+
+        }) 
     }
 
 

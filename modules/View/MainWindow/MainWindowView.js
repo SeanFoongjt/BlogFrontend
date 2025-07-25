@@ -13,6 +13,7 @@ function MainWindowView(quill, imagePath="") {
 
     function render(conversation) {
         console.log(conversation);
+        chatlog.setImage(conversation.imagePath);
         chatlog.renderConversation(conversation.getListOfMessages())
         titleSection.changeConversation(conversation.imagePath, conversation.title);
         editorView.clear();

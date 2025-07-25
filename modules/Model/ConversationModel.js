@@ -4,6 +4,7 @@ import { encodeText } from "../utilities/encodeText.js";
 function ConversationModel(imagePath="", title="") {
     const listOfMessages = [];
     const messageFactory = MessageFactory();
+    const repltMap = new Map();
 
     const self = {
         imagePath,
