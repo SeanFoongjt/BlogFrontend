@@ -1,0 +1,5 @@
+function ModalController() {
+
+}
+
+export { ModalController }

@@ -34,8 +34,6 @@ function ChatlogView(imagePath) {
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
-        console.log(replyingTo);
-        console.log(! replyingTo);
         if (replyingTo) {
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
             var text = replyBanner.querySelector("span[name='replyText']");
@@ -66,7 +64,9 @@ function ChatlogView(imagePath) {
                     .addEventListener("click", () => editFunction(chatbox));
                 chatbox.querySelector("[name='delete-button']")
                     .addEventListener("click", () => deleteFunction(chatbox));
+                chatlog.scrollTop = chatlog.scrollHeight;
             });
+
 
         return chatbox;
     }
@@ -96,6 +96,7 @@ function ChatlogView(imagePath) {
             .shadowRoot
             .querySelector("button[name='reply-button']")
             .addEventListener("click", () => replyFunction(chatbox));
+            chatlog.scrollTop = chatlog.scrollHeight;
 
         return chatbox;
 

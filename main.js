@@ -1,4 +1,3 @@
-import { readJson, createConversationFromJson } from "./modules/setup/readConversationFromJson.js";
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { ModelManager } from "./modules/Model/ModelManager.js";
 import { ViewManager } from "./modules/View/ViewManager.js";
@@ -27,199 +26,19 @@ function removeFromCancellableProcesses(object) {
     }
 }
 
-// Keep track of whether editor is visible
-var isEditorShowing = false;
 
 var rawcontentMap = new Map();
 
-// Initialise editor with custom toolbar
 
-var Block = Quill.import('blots/block');
-Block.tagName = 'p';
-Quill.register(Block, true);
 
-const editor = document.getElementById('editor');
-const quill = new Quill("#editor", {
-    theme: "snow",
-    modules : {
-        toolbar:
-        [
-            [{ 'size': ['small', false, 'large', 'huge']}],
-            ['bold', 'italic', 'underline'],
-            [{'list': 'ordered'}, {'list': 'bullet'}],
-            [{'script':'sub'}, {'script': 'super'}],
-            ['link', 'image', 'video', 'formula'],
-            ['clean']
-        ]
-    }
-});
-
-console.log("Quill from main: " + quill);
-
-// Initialise data from json
-/**
-readJson("./json/sample-text-file.json")
-    .then(data => rawcontentMap = createConversationFromJson(data));
-*/
-
-/** 
-readJson("./json/conversations.json")
-    .then(data => createSidebarConversationsFromJson(data));
-*/
 const model = ModelManager();
-const view = ViewManager(quill);
+const view = ViewManager();
 model.initialiseFromJson("./json/storage.json")
     .then(() => view.initialise(model.getSidebarList(), model.getMainConversation()));
 const controller = MasterController();
-
-
-
-
-/**
- * Conversation searchbar logic
- */
-// Have the cancel button reset the searchbar
-const conversationSearchResetButton = document.getElementById("conversation-search-reset");
-const conversationSearchText = document.getElementById("conversation-search-text");
-conversationSearchResetButton.addEventListener("click", () => {
-    conversationSearchText.value = "";
-    conversationSearchText.focus();
-    conversationSearchResetButton.setAttribute("hidden", "true");
-});
-
-// Ensure cancel button is revealed when there is text in the conversation searchbar
-conversationSearchText.addEventListener("input", (event) => {
-    if (event.data != null) {
-        conversationSearchResetButton.removeAttribute("hidden");
-    } else if (conversationSearchText.value == "") {
-        conversationSearchResetButton.setAttribute("hidden", "");
-    }
-})
-
-
-
-
-
-// Make conversation options button width same as height
-const dropdownMenuButton = document.getElementById("dropdown-menu-button");
-dropdownMenuButton.style.width = `${dropdownMenuButton.offsetHeight}px`;
-
-addEventListener("resize", () => {
-    dropdownMenuButton.style.width = `${dropdownMenuButton.offsetHeight}px`;
-});
-
-
-
-
-
-/**
- * Editor display and hiding logic
- */
-const editorPrompt = document.querySelector(".editor-click-prompt");
-const editorToolbarContainer = document.querySelector(".editor-toolbar");
-const bottomToolbar = document.querySelector(".bottom-toolbar");
-editorPrompt.addEventListener("click", displayEditor);
-
-/**
- * Show the editor. Activated when the prompt to open editor is clicked.
- */
-function displayEditor() {
-    if (isEditorShowing) {
-        return;
-    }
-
-    // Hide prompt, show and focus on editor
-    editorToolbarContainer.removeAttribute("hidden");
-    bottomToolbar.removeAttribute("hidden");
-    const editorPromptHeight = editorPrompt.offsetHeight;
-    editorPrompt.setAttribute("hidden", "");
-    quill.focus();
-    const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
-    console.log("editor height: " + editorToolbarContainerHeight);
-    chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
-    chatlog.style.height = `calc(100% - ${editorToolbarContainerHeight}px)`;
-    document.querySelector(".ql-container").style.height = 
-        `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
-
-    // Add listeners to chatlog and title section to hide editor when they are clicked
-    chatlog.addEventListener("click", hideEditor);
-    document.getElementById("title-section").addEventListener("click", hideEditor);
-    isEditorShowing = true;
-}
-
-/**
- * Hide editor, reverting back to a prompt to open the editor
- * @returns 
- */
-function hideEditor() {
-    if (!isEditorShowing) {
-        return;
-    }
-
-    console.log(cancellableProcesses);
-
-    // Disallow editor to be hidden if there is content in the editor or if a chat is 
-    // in the midst of being edited or replied to.
-    if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 || cancellableProcesses.length != 0) {
-        return;
-    }
-  
-    // Remove listeners from chatlog and title section
-    chatlog.removeEventListener("click", hideEditor);
-    document.getElementById("title-section").removeEventListener("click", hideEditor);
-
-    // Adjust height and scroll position of chatlog
-    const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
-    chatlog.scrollTop = Math.max(chatlog.scrollTop - editorToolbarContainerHeight, 0);
-    chatlog.style.height = "90%";
-    chatlog.style.maxHeight = "90%";
-
-    // Hide editor, show prompt
-    editorToolbarContainer.setAttribute("hidden", "")
-    bottomToolbar.setAttribute("hidden", "");
-    editorPrompt.removeAttribute("hidden");
-    isEditorShowing = false;
-}
-
-/**
- * Logic for dynamic chat size
- */
-document.getElementById("chatlog").style.height = "90%";
-document.getElementById("editor").style.maxHeight = `${0.6 * window.innerHeight}px`;
-console.log(0.8 * window.innerHeight);
-var prevHeight = 0;
-
-const resizeObserver = new ResizeObserver((entries) => {
-    console.log("Editor status: " + isEditorShowing);
-    const resizeChatSize = (newHeight) => {
-        console.log("test: " + `${Math.round(newHeight)}px`);
-        const chatlog = document.getElementById("chatlog");
-        chatlog.style.height = 
-            `calc(62% + 100px - ${Math.round(newHeight)}px)`;
-        chatlog.style.maxHeight =
-            `calc(62% + 100px - ${Math.round(newHeight)}px)`;
-
-        // Adjust height of chatlog
-        chatlog.scrollTop = chatlog.scrollTop + newHeight - prevHeight; 
-        prevHeight = newHeight;
-        //document.getElementById("chatlog").style.height = "40%";
-    }
-
-    console.log("Chat resized");
-
-    for (const entry of entries) {
-        if (entry.borderBoxSize?.length > 0) {
-            if (isEditorShowing) {
-                console.log("New height: " + entry.borderBoxSize[0].blockSize);
-                resizeChatSize(entry.borderBoxSize[0].blockSize);
-            }
-        }
-    }
-});
-
-resizeObserver.observe(document.getElementById("editor"));
-
-
+const editorView = view.getMainWindow().getEditor();
+view.setController(controller);
+const quill = view.getEditor();
 
 
 
@@ -231,96 +50,6 @@ resizeObserver.observe(document.getElementById("editor"));
 const sendButton = document.getElementById('send-button');
 sendButton.addEventListener("click", sendFunction);
 
-
-
-
-
-
-/**
- * Confirmation popup logic, consisting of constant and variable declarations and an
- * abstract function to create confirmation popups.
- */
-
-// Constant and variable declarations for confirmation popup
-const confirmationPopup = document.getElementById("confirmation-popup-modal");
-const confirmationPopupBodyText = confirmationPopup.querySelector(".modal-body-text");
-const confirmationPopupTitle = confirmationPopup.querySelector(".modal-title");
-const confirmationPopupFooter = confirmationPopup.querySelector(".modal-footer");
-var confirmButton = confirmationPopupFooter.querySelector("button[name='continue']");
-
-/**
- * Function to throw up a confirmation popup on the screen before proceeding with the action
- * @param {String} header header of the popup
- * @param {String} body body of the popup
- * @param {Function} functionToExecute action if the user seeks to continue
- */
-function confirmationPopupFunction(header, body, functionToExecute) {
-    // cloneNode and reassign to remove all event listeners
-    const newButton = confirmButton.cloneNode(true);
-    confirmButton.parentNode.replaceChild(newButton, confirmButton);
-    confirmButton = newButton;
-
-    // Link function to button, set body and title text
-    confirmButton.addEventListener("click", functionToExecute);
-    confirmButton.addEventListener("click", notifyCancellableProcesses);
-    confirmationPopupBodyText.innerText = body;
-    confirmationPopupTitle.innerText = header;
-}
-
-/**
- * Add appropriate listener to clear conversation button.
- */
-const clearConversationButton = document.getElementById("clear-conversation");
-clearConversationButton.addEventListener(
-    "click", 
-    () => confirmationPopupFunction(
-        "Clear conversation?", 
-        "Are you sure you want to clear the conversation?", 
-        () => document.getElementById('chatlog').replaceChildren()
-    )
-);
-
-/**
- * Logic to block and unblock a conversation as well as adding of the function
- * to the block conversation button.
- */
-
-/**
- * Function to block conversation / user
- */
-function blockFunction() {
-    // Make chatlog and editor hidden, display "blocked user" screen
-    const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
-    chatlogEditorContainer.setAttribute("hidden", "");
-    const blockedChat = document.getElementById("blocked-chat-container");
-    blockedChat.removeAttribute("hidden");
-
-    // Provide option to unblock conversation when appropriate button is clicked
-    const unblockButton = document.getElementById("unblock-button");
-    unblockButton.addEventListener("click", unblockFunction)
-}
-
-/**
- * function to unblock conversation
- */
-function unblockFunction() {
-    // Make chatlog and editor visible, hide "blocked user" screen
-    const blockedChat = document.getElementById("blocked-chat-container");
-    blockedChat.setAttribute("hidden", "");
-    const chatlogEditorContainer = document.getElementById("chatlog-editor-container");
-    chatlogEditorContainer.removeAttribute("hidden");
-}
-
-// Add appropriate listener to the blockButton
-const blockButton = document.getElementById("block-conversation");
-blockButton.addEventListener(
-    "click", 
-    () => confirmationPopupFunction(
-        "Block user?",
-        "Are you sure you want to block this user?",
-        blockFunction
-    )
-);
 
 
 
@@ -394,4 +123,4 @@ recognition.onresult = function(event) {
     console.log(speechText);
 }
 
-export { displayEditor, quill, rawcontentMap, pushCancellableProcess, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses}
+export { editorView, model, quill, rawcontentMap, pushCancellableProcess, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses}

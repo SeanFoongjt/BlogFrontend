@@ -6,6 +6,8 @@ function SidebarView() {
         changeActive
     }
 
+
+
     function render(listOfConversations) {
 
         Handlebars.registerHelper('isPositive', function (value) {
@@ -33,6 +35,33 @@ function SidebarView() {
             sidebar.appendChild(container);
         });
     }
+
+
+
+
+    /**
+     * Conversation searchbar logic
+     */
+    // Have the cancel button reset the searchbar
+    const conversationSearchResetButton = document.getElementById("conversation-search-reset");
+    const conversationSearchText = document.getElementById("conversation-search-text");
+    conversationSearchResetButton.addEventListener("click", () => {
+        conversationSearchText.value = "";
+        conversationSearchText.focus();
+        conversationSearchResetButton.setAttribute("hidden", "true");
+    });
+
+    // Ensure cancel button is revealed when there is text in the conversation searchbar
+    conversationSearchText.addEventListener("input", (event) => {
+        if (event.data != null) {
+            conversationSearchResetButton.removeAttribute("hidden");
+        } else if (conversationSearchText.value == "") {
+            conversationSearchResetButton.setAttribute("hidden", "");
+        }
+    })
+
+
+    
 
     function update() {
 

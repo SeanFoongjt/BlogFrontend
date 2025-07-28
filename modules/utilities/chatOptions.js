@@ -1,4 +1,4 @@
-import { displayEditor, pushCancellableProcess, quill, rawcontentMap, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses} from "../../main.js";
+import { editorView, pushCancellableProcess, quill, rawcontentMap, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses} from "../../main.js";
 import { encodeText } from "./encodeText.js";
 import { createConversation } from "./createConversation.js";
 
@@ -30,7 +30,7 @@ function editFunction(object) {
     const prevEncoding = chatText.getAttribute("data-encoding");
 
     // Display the editor if it is not showing
-    displayEditor();
+    editorView.show();
 
     // Get the text of the chatbox from rawcontentMap to be edited, put it in the editor
     var textToEdit = object.querySelector("div[name='text']");
@@ -137,7 +137,7 @@ function replyFunction(object) {
     pushCancellableProcess(object);
 
     // Show editor if it is not currently displayed
-    displayEditor();
+    editorView.show();
     
     // Make the cancel button visible
     var cancelButton = document.getElementById("cancel-button");

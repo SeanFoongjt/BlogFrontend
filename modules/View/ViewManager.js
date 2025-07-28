@@ -1,19 +1,33 @@
 import { MainWindowView } from "./MainWindow/MainWindowView.js";
 import { SidebarView } from "./Sidebar/SidebarView.js";
 
-function ViewManager(quill) {
+function ViewManager() {
     const sidebar = SidebarView();
-    const mainWindow = MainWindowView(quill);
+    const mainWindow = MainWindowView();
+    var controller;
 
     const self = {
-        initialise
+        initialise,
+        getMainWindow,
+        setController,
+        getEditor
+    }
+
+    function setController(newController) {
+        controller = newController;
     }
 
     function initialise(conversationList, mainConversation) {
         sidebar.render(conversationList);
         mainWindow.render(mainConversation);
-        console.log(conversationList);
-        console.log(mainConversation);
+    }
+
+    function getMainWindow() {
+        return mainWindow;
+    }
+
+    function getEditor() {
+        return mainWindow.getEditor();
     }
 
     return self
