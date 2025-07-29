@@ -3,6 +3,7 @@ function EditorView() {
     const editorPrompt = document.querySelector(".editor-click-prompt");
     const editorToolbarContainer = document.querySelector(".editor-toolbar");
     const bottomToolbar = document.querySelector(".bottom-toolbar");
+    let editorController;
     editorPrompt.addEventListener("click", show);
 
     // Initialise editor with custom toolbar
@@ -33,7 +34,12 @@ function EditorView() {
         getEditor,
         hide,
         show,
-        clear
+        clear,
+        setController
+    }
+
+    function setController(controller) {
+        editorController = controller;
     }
 
     function setEditor(editor) {

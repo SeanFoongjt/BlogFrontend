@@ -6,16 +6,17 @@ function MainWindowView(imagePath="") {
     const chatlog = ChatlogView(imagePath);
     const titleSection = TitleSectionView(imagePath);
     const editorView = EditorView();
+    let mainWindowController;
     const quill = editorView.getEditor();
 
     const self = {
         render,
-        getEditor
+        getEditor,
+        getViews,
+        setController
     }
 
     const forTitleSection = {
-        block,
-        unblock
     }
 
     function render(conversation) {
@@ -25,10 +26,14 @@ function MainWindowView(imagePath="") {
         editorView.clear();
     }
 
+    function getViews() {
+        return [titleSection, chatlog, editorView];
+    }
 
 
-
-
+    function setController(controller, ) {
+        mainWindowController = controller;
+    }
 
     /**
      * Logic for dynamic chat size
@@ -70,52 +75,9 @@ function MainWindowView(imagePath="") {
 
 
 
-
-
     function getEditor() {
         return editorView;
     }
-
-    function block() {
-        const chatlogElement = document.querySelector(".chatlog");
-        chatlogElement.setAttribute("hidden", "");
-
-        if (!editorView.isShowing) {
-            const editorClickPrompt = document.querySelector(".editor-click-prompt");
-            editorClickPrompt.setAttribute("hidden", "");
-            
-            
-        } else {
-            const editorToolbar = document.querySelector(".editor-toolbar");
-            const bottomToolbar = document.querySelector(".bottom-toolbar");
-            bottomToolbar.setAttribute("hidden","");
-            editorToolbar.setAttribute("hidden", "");
-        }
-
-        const blockedChat = document.getElementById("blocked-chat-container");
-        blockedChat.removeAttribute("hidden");
-    }
-
-    function unblock() {
-        const blockedChat = document.getElementById("blocked-chat-container");
-        blockedChat.setAttribute("hidden", "");
-
-        if (!editorView.isShowing) {
-            const userInput = document.querySelector(".editor-click-prompt");
-            userInput.removeAttribute("hidden");
-        } else {
-            const editorToolbar = document.querySelector(".editor-toolbar");
-            const bottomToolbar = document.querySelector(".bottom-toolbar");
-            bottomToolbar.removeAttribute("hidden");
-            editorToolbar.removeAttribute("hidden");
-        }
-
-        const chatlogElement = document.querySelector(".chatlog");
-        chatlogElement.removeAttribute("hidden");
-
-    }
-
-    titleSection.passFunctions(forTitleSection)
 
     return self
 }

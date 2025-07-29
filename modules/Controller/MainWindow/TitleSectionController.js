@@ -3,6 +3,19 @@ function TitleSectionController() {
     var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
     var inputPopupInput = inputPopup.querySelector("#modal-input")
     document.getElementById("rename-title").addEventListener("click", renameTitleFunction);
+    let titleSectionView;
+
+    const self = {
+        setView
+    }
+
+
+
+    function setView(view) {
+        titleSectionView = view;
+        view.setController(self);
+    }
+
 
     function renameTitleFunction() {
         inputPopupConfirm.addEventListener("click", confirm);
@@ -66,6 +79,106 @@ function TitleSectionController() {
         }
     }
 
+
+
+
+
+
+
+    function block() {
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.setAttribute("hidden", "");
+
+        if (!editorView.isShowing) {
+            const editorClickPrompt = document.querySelector(".editor-click-prompt");
+            editorClickPrompt.setAttribute("hidden", "");
+            
+            
+        } else {
+            const editorToolbar = document.querySelector(".editor-toolbar");
+            const bottomToolbar = document.querySelector(".bottom-toolbar");
+            bottomToolbar.setAttribute("hidden","");
+            editorToolbar.setAttribute("hidden", "");
+        }
+
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.removeAttribute("hidden");
+    }
+
+    function unblock() {
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.setAttribute("hidden", "");
+
+        if (!editorView.isShowing) {
+            const userInput = document.querySelector(".editor-click-prompt");
+            userInput.removeAttribute("hidden");
+        } else {
+            const editorToolbar = document.querySelector(".editor-toolbar");
+            const bottomToolbar = document.querySelector(".bottom-toolbar");
+            bottomToolbar.removeAttribute("hidden");
+            editorToolbar.removeAttribute("hidden");
+        }
+
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.removeAttribute("hidden");
+
+    }
+
+
+
+
+
+    /** 
+     * Add appropriate listener to clear conversation button.
+     */
+    const clearConversationButton = document.getElementById("clear-conversation");
+    clearConversationButton.addEventListener(
+        "click", 
+        () => confirmationPopupFunction(
+            "Clear conversation?", 
+            "Are you sure you want to clear the conversation?", 
+            () => document.getElementById('chatlog').replaceChildren()
+        )
+    );
+
+
+
+
+
+    /**
+     * Logic to block and unblock a conversation as well as adding of the function
+     * to the block conversation button.
+     */
+    // Add appropriate listener to the blockButton
+    const blockButton = document.getElementById("block-conversation");
+    blockButton.addEventListener(
+        "click", 
+        () => confirmationPopupFunction(
+            "Block user?",
+            "Are you sure you want to block this user?",
+            blockFunction
+        )
+    );
+
+    /**
+     * Function to block conversation / user
+     */
+    function blockFunction() {
+        functions.block();
+
+        // Provide option to unblock conversation when appropriate button is clicked
+        const unblockButton = document.getElementById("unblock-button");
+        unblockButton.addEventListener("click", unblockFunction)
+    }
+
+    /**
+     * function to unblock conversation
+     */
+    function unblockFunction() {
+        functions.unblock()
+    }
+
+    return self
 }
 
 export { TitleSectionController }

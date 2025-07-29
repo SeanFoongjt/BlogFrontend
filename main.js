@@ -1,11 +1,11 @@
 import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { ModelManager } from "./modules/Model/ModelManager.js";
-import { ViewManager } from "./modules/View/ViewManager.js";
 import { MasterController } from "./modules/Controller/MasterController.js";
  
 /**
  * Setup logic
  */
+
 // Keeps track of currently executing processes that can be cancelled
 const cancelEvent = new Event("cancel");
 const cancellableProcesses = [];
@@ -32,13 +32,13 @@ var rawcontentMap = new Map();
 
 
 const model = ModelManager();
-const view = ViewManager();
-model.initialiseFromJson("./json/storage.json")
-    .then(() => view.initialise(model.getSidebarList(), model.getMainConversation()));
+const modelInitialise = model.initialiseFromJson("./json/storage.json");
 const controller = MasterController();
-const editorView = view.getMainWindow().getEditor();
-view.setController(controller);
-const quill = view.getEditor();
+modelInitialise
+    .then(() => controller.initialise(model.getSidebarList(), model.getMainConversation()));
+
+const quill = controller.getEditor();
+const editorView = controller.getEditorView();
 
 
 

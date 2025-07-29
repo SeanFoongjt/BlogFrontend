@@ -4,11 +4,18 @@ import { DateTimeFormatting } from "../../utilities/DateTimeFormatting.js";
 
 
 function ChatlogView(imagePath) {
+    let chatlogController;
+
     const self = {
         setImage,
         renderConversation,
         renderSentMessage,
-        renderReceivedMessage
+        renderReceivedMessage,
+        setController
+    }
+
+    function setController(controller) {
+        chatlogController = controller;
     }
 
     function setImage(newImagePath) {

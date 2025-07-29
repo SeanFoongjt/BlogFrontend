@@ -3,12 +3,6 @@ import { encodeText } from "./encodeText.js";
 import { createConversation } from "./createConversation.js";
 
 
-
-console.log(document.querySelector("div.ql-editor.ql-blank"));
-const quill2 = document.getElementsByClassName("ql-editor");
-console.log(quill2);
-console.log(quill2.item(1));
-
 // Keeps track of which objects are referenced in other chats reply banners. Key is the chat
 // referenced whereas values are the chats referencing / replying to the key
 const replyMap = new Map();

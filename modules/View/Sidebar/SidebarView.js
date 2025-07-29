@@ -1,15 +1,19 @@
 function SidebarView() {
     const currOrder = [];
+    let sidebarController;
 
     const self = {
         render,
-        changeActive
+        changeActive,
+        setController
     }
 
-
+    function setController(controller) {
+        sidebarController = controller;
+    }
+    
 
     function render(listOfConversations) {
-
         Handlebars.registerHelper('isPositive', function (value) {
             return value > 0;
         });
@@ -61,7 +65,7 @@ function SidebarView() {
     })
 
 
-    
+
 
     function update() {
 
