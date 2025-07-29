@@ -1,4 +1,3 @@
-import { deleteFunction, editFunction, replyFunction } from "../../utilities/chatOptions.js";
 import { encodeText } from "../../utilities/encodeText.js";
 import { DateTimeFormatting } from "../../utilities/DateTimeFormatting.js";
 
@@ -16,6 +15,7 @@ function ChatlogView(imagePath) {
 
     function setController(controller) {
         chatlogController = controller;
+        console.log("chatlog controller is present")
     }
 
     function setImage(newImagePath) {
@@ -66,11 +66,11 @@ function ChatlogView(imagePath) {
         var finalPromise = Promise.all([fillChatbox])
             .then(item => {
                 chatbox.querySelector("[name='reply-button']")
-                    .addEventListener("click", () => replyFunction(chatbox));
+                    .addEventListener("click", () => chatlogController.replyFunction(chatbox));
                 chatbox.querySelector("[name='edit-button']")
-                    .addEventListener("click", () => editFunction(chatbox));
+                    .addEventListener("click", () => chatlogController.editFunction(chatbox));
                 chatbox.querySelector("[name='delete-button']")
-                    .addEventListener("click", () => deleteFunction(chatbox));
+                    .addEventListener("click", () => chatlogController.deleteFunction(chatbox));
                 chatlog.scrollTop = chatlog.scrollHeight;
             });
 
@@ -102,7 +102,7 @@ function ChatlogView(imagePath) {
         chatbox
             .shadowRoot
             .querySelector("button[name='reply-button']")
-            .addEventListener("click", () => replyFunction(chatbox));
+            .addEventListener("click", () => chatlogController.replyFunction(chatbox));
             chatlog.scrollTop = chatlog.scrollHeight;
 
         return chatbox;
@@ -110,19 +110,23 @@ function ChatlogView(imagePath) {
     }
 
     function renderConversation(conversation) {
+        const listOfChatboxes = [];
+
         for (const message of conversation) {
-            console.log(message);
+            // console.log(message);
             if (message.type === "my-chat") {
-                renderSentMessage(message.rawHTML, 
-                    message.time, message.encoding, message.replyingTo
-                );
+                listOfChatboxes.push(renderSentMessage(
+                    message.rawHTML, message.time, message.encoding, message.replyingTo
+                ));
 
             } else if (message.type === "other-chat") {
-                renderReceivedMessage(message.rawHTML, 
-                    message.time, message.encoding, imagePath
-                )
+                listOfChatboxes.push(renderReceivedMessage(
+                    message.rawHTML, message.time, message.encoding, imagePath
+                ));
             }
         }
+
+        return listOfChatboxes;
     }
 
     /**

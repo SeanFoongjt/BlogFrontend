@@ -1,5 +1,3 @@
-import { model } from "../../../main.js";
-
 function TitleSectionView(imagePath="", title="") {
     var conversationTitle = document.getElementById("conversation-title");
     var titlePicture = document.getElementById("title-avatar");
@@ -44,6 +42,21 @@ function TitleSectionView(imagePath="", title="") {
     addEventListener("resize", () => {
         dropdownMenuButton.style.width = `${dropdownMenuButton.offsetHeight}px`;
     });
+
+
+
+    /** 
+     * Add appropriate listener to clear conversation button.
+     */
+    const clearConversationButton = document.getElementById("clear-conversation");
+    clearConversationButton.addEventListener(
+        "click", 
+        () => confirmationPopupFunction(
+            "Clear conversation?", 
+            "Are you sure you want to clear the conversation?", 
+            () => document.getElementById('chatlog').replaceChildren()
+        )
+    );
 
     return self
 }

@@ -1,4 +1,4 @@
-import { editorView, pushCancellableProcess, quill, rawcontentMap, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses} from "../../main.js";
+import { editorView, quill } from "../../main.js";
 import { encodeText } from "./encodeText.js";
 import { createConversation } from "./createConversation.js";
 
@@ -263,4 +263,4 @@ function sendFunction(event, isReply=false) {
     return newChat;
 }
 
-export { editFunction, replyFunction, deleteFunction, sendFunction, cancelEvent }
+export { editFunction, replyFunction, deleteFunction, sendFunction }

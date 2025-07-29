@@ -13,18 +13,12 @@ function ViewManager() {
         getMainWindow,
         setController,
         getEditor,
-        getViews
+        getViews,
     }
 
     function setController(newController) {
         controller = newController;
     }
-
-    /**
-    function setControllers(selfController, mainWindowController, sidebarController, modalController) {
-        controller = selfCo
-    }
-    */
 
     function initialise(conversationList, mainConversation) {
         sidebar.render(conversationList);

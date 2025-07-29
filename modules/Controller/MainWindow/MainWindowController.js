@@ -1,18 +1,29 @@
 import { ChatlogController } from "./ChatlogController.js";
 import { EditorController } from "./EditorController.js";
 import { TitleSectionController } from "./TitleSectionController.js";
-
-function MainWindowController() {
-    const titleSectionController = TitleSectionController();
-    const chatlogController = ChatlogController();
-    const editorController = EditorController();
-    const cancelEvent = new Event("cancel");
-    let mainWindowView;
+import { encodeText } from "../../utilities/encodeText.js";
 
 
+function MainWindowController(parent) {
     const self = {
-        setView
+        initialise,
+        setView,
+        sendFunction,
+        editFunction,
+        replyFunction,
+        deleteFunction,
+        notifyCancellableProcesses : parent.notifyCancellableProcesses,
+        pushCancellableProcess : parent.pushCancellableProcess,
+        removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
+        cancellableProcessesLength : parent.cancellableProcessesLength
     }
+
+
+    const titleSectionController = TitleSectionController(self);
+    const chatlogController = ChatlogController(self);
+    const editorController = EditorController(self);
+    const quill = editorController.getEditor();
+    let mainWindowView;
 
 
     function setView(view) {
@@ -20,15 +31,28 @@ function MainWindowController() {
         const views = mainWindowView.getViews();
         titleSectionController.setView(views[0]);
         view.setController(self);
-        // chatlogController.setView(views[1]);
-        // editorController.setView(views[2]);
+        chatlogController.setView(views[1]);
+        editorController.setView(views[2]);
     }
 
 
 
+    // Keeps track of what was in the editor when the message was sent for purposes of edit
+    // May need reworking consider safety issues
+    const rawcontentMap = new Map();
+
     // Keeps track of which objects are referenced in other chats reply banners. Key is the chat
     // referenced whereas values are the chats referencing / replying to the key
     const replyMap = new Map();
+
+
+
+    function initialise(mainConversation) {
+        const chatboxes = mainWindowView.render(mainConversation);
+        for (const i in chatboxes) {
+            rawcontentMap.set(chatboxes[i], mainConversation.getListOfMessages()[i].rawHTML)
+        }
+    }
 
     
 
@@ -38,10 +62,10 @@ function MainWindowController() {
      */
     function editFunction(object) {
         // Cancel other potentially interfering processes
-        notifyCancellableProcesses();
+        parent.notifyCancellableProcesses();
 
         // Push self to cancellableProcesses
-        pushCancellableProcess(object);
+        parent.pushCancellableProcess(object);
 
         // Get previous encoding
         const textbox = object.shadowRoot.querySelector(".text-box")
@@ -49,7 +73,7 @@ function MainWindowController() {
         const prevEncoding = chatText.getAttribute("data-encoding");
 
         // Display the editor if it is not showing
-        editorView.show();
+        editorController.show();
 
         // Get the text of the chatbox from rawcontentMap to be edited, put it in the editor
         var textToEdit = object.querySelector("div[name='text']");
@@ -108,16 +132,16 @@ function MainWindowController() {
             // Check if the object is referenced in the reply banner of other chats. If yes,
             // change text in these reply banners as appropriate
             if (replyMap.has(object)) {
-            replyMap
-                .get(object)
-                .forEach((chat) => {
-                    console.log(chat);
-                    const rawText = quill.getText().trim();
-                    chat
-                        .shadowRoot
-                        .querySelector("span[name='replyText']")
-                        .innerText = formatForReply(rawText);
-                });
+                replyMap
+                    .get(object)
+                    .forEach((chat) => {
+                        console.log(chat);
+                        const rawText = quill.getText().trim();
+                        chat
+                            .shadowRoot
+                            .querySelector("span[name='replyText']")
+                            .innerText = formatForReply(rawText);
+                    });
             }
 
             chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
@@ -136,7 +160,7 @@ function MainWindowController() {
             // Revert chat's background color
             object.shadowRoot.querySelector(".text-box").style.backgroundColor = prevBackground;
 
-            removeFromCancellableProcesses(object);
+            parent.removeFromCancellableProcesses(object);
             console.log("cleanup complete");
         }
     }
@@ -247,6 +271,7 @@ function MainWindowController() {
      * @returns 
      */
     function sendFunction(event, isReply=false) {
+        console.log("test");
         // Retrieve encoding type
         var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
 
@@ -257,10 +282,8 @@ function MainWindowController() {
         console.log(quill.getSemanticHTML());
         console.log(quill.getContents());
         var rawHTML = quill.root.innerHTML;
-        //console.log(marked.parse(rawHTML));
         quill.setText("");
         rawtext = rawtext.trim();
-        //console.log(rawtext);
 
         // Terminate function early if no actual text is sent
         if (rawtext == "" && contents["ops"].length == 1) {

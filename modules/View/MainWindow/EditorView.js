@@ -5,28 +5,7 @@ function EditorView() {
     const bottomToolbar = document.querySelector(".bottom-toolbar");
     let editorController;
     editorPrompt.addEventListener("click", show);
-
-    // Initialise editor with custom toolbar
-
-    var Block = Quill.import('blots/block');
-    Block.tagName = 'p';
-    Quill.register(Block, true);
-
-    const editor = document.getElementById('editor');
-    const quill = new Quill("#editor", {
-        theme: "snow",
-        modules : {
-            toolbar:
-            [
-                [{ 'size': ['small', false, 'large', 'huge']}],
-                ['bold', 'italic', 'underline'],
-                [{'list': 'ordered'}, {'list': 'bullet'}],
-                [{'script':'sub'}, {'script': 'super'}],
-                ['link', 'image', 'video', 'formula'],
-                ['clean']
-            ]
-        }
-    });
+    let quill;
 
 
     const self = {
@@ -40,6 +19,7 @@ function EditorView() {
 
     function setController(controller) {
         editorController = controller;
+        quill = controller.getEditor();
     }
 
     function setEditor(editor) {
@@ -54,6 +34,7 @@ function EditorView() {
         quill.setContents([{ insert: '\n' }]);
     }
 
+
     function hide() {
         console.log(isShowing);
         if (!isShowing) {
@@ -61,21 +42,12 @@ function EditorView() {
         }
         
         const chatlog = document.getElementById("chatlog");
-        
 
-        // Disallow editor to be hidden if there is content in the editor or if a chat is 
-        // in the midst of being edited or replied to.
-        /**
-        //if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 || cancellableProcesses.length != 0) {
-        if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1) {
-            return;
-        }
-            */
         
         // Remove listeners from chatlog and title section
         chatlog.removeEventListener("click", hide);
-        document.getElementById("title-section").removeEventListener("click", hide);
-        document.getElementById("sidebar").removeEventListener("click", hide);
+        document.getElementById("title-section").removeEventListener("click", editorController.hide);
+        document.getElementById("sidebar").removeEventListener("click", editorController.hide);
         
     
         // Adjust height and scroll position of chatlog
@@ -95,9 +67,9 @@ function EditorView() {
 
     function show() {
         if (isShowing) {
+            console.log(" editor is showing")
             return
         }
-
 
         // Hide prompt, show and focus on editor
         const chatlog = document.getElementById("chatlog");
@@ -114,9 +86,9 @@ function EditorView() {
             `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
     
         // Add listeners to chatlog and title section to hide editor when they are clicked
-        chatlog.addEventListener("click", hide);
-        document.getElementById("title-section").addEventListener("click", hide);
-        document.getElementById("sidebar").addEventListener("click", hide);
+        chatlog.addEventListener("click", editorController.hide);
+        document.getElementById("title-section").addEventListener("click", editorController.hide);
+        document.getElementById("sidebar").addEventListener("click", editorController.hide);
         isShowing = true;
         self.isShowing = true;
         

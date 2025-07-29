@@ -16,14 +16,19 @@ function MainWindowView(imagePath="") {
         setController
     }
 
+
+
     const forTitleSection = {
     }
 
     function render(conversation) {
         chatlog.setImage(conversation.imagePath);
-        chatlog.renderConversation(conversation.getListOfMessages())
+        const listOfChatboxes = chatlog.renderConversation(conversation.getListOfMessages())
         titleSection.changeConversation(conversation.imagePath, conversation.title);
         editorView.clear();
+
+        return listOfChatboxes;
+
     }
 
     function getViews() {
@@ -33,6 +38,15 @@ function MainWindowView(imagePath="") {
 
     function setController(controller, ) {
         mainWindowController = controller;
+
+
+        /**
+         * Send button logic
+         */
+
+        // Logic for send button
+        const sendButton = document.getElementById('send-button');
+        sendButton.addEventListener("click", controller.sendFunction);
     }
 
     /**

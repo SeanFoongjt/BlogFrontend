@@ -1,4 +1,4 @@
-function TitleSectionController() {
+function TitleSectionController(parent) {
     var inputPopup = document.getElementById("input-popup-modal");
     var inputPopupConfirm = inputPopup.querySelector("[name='confirm']")
     var inputPopupInput = inputPopup.querySelector("#modal-input")
@@ -78,10 +78,6 @@ function TitleSectionController() {
             cancelButton.removeEventListener("click", cleanup);
         }
     }
-
-
-
-
 
 
 

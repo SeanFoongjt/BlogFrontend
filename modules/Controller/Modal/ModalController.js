@@ -1,4 +1,4 @@
-function ModalController() {
+function ModalController(parent) {
     let modalView;
 
 

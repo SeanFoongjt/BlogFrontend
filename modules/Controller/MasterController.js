@@ -1,3 +1,4 @@
+import { ModelManager } from "../Model/ModelManager.js";
 import { ViewManager } from "../View/ViewManager.js";
 import { MainWindowController } from "./MainWindow/MainWindowController.js"
 import { ModalController } from "./Modal/ModalController.js";
@@ -5,30 +6,39 @@ import { SideBarController } from "./Sidebar/SideBarController.js";
 
 
 function MasterController() {
-    const mainWindowController = MainWindowController();
-    const sidebarController = SideBarController();
-    const modalController = ModalController();
+    const model = ModelManager();
     const view = ViewManager();
+    const self = {
+        notifyCancellableProcesses,
+        pushCancellableProcess,
+        removeFromCancellableProcesses,
+        cancellableProcessesLength,
+        getEditor,
+        initialise,
+        getEditorView
+    }
+    const mainWindowController = MainWindowController(self);
+    const sidebarController = SideBarController(self);
+    const modalController = ModalController(self);
 
     // Bind views to controllers
     sidebarController.setView(view.getViews()[0]);
     mainWindowController.setView(view.getViews()[1]);
     modalController.setView(view.getViews()[2]);
     let editorView = undefined;
+    view.setController(self);
+
+
+    const modelInitialise = model.initialiseFromJson("./json/storage.json");
+
+    
+
+    modelInitialise
+        .then(() => self.initialise(model.getSidebarList(), model.getMainConversation()));
+
+    
     
     const cancellableProcesses = [];
-
-
-    const self = {
-        notifyCancellableProcesses,
-        pushCancellableProcess,
-        removeFromCancellableProcesses,
-        getEditor,
-        initialise,
-        getEditorView
-    }
-
-    view.setController(self);
 
 
 
@@ -38,7 +48,9 @@ function MasterController() {
     }
 
     function initialise(conversationList, mainConversation) {
-        view.initialise(conversationList, mainConversation);
+        mainWindowController.initialise(mainConversation);
+        sidebarController.initialise(conversationList);
+        //view.initialise(conversationList, mainConversation);
     }
 
 
@@ -53,6 +65,10 @@ function MasterController() {
         if (index != -1) {
             cancellableProcesses.splice(index, 1);
         }
+    }
+
+    function cancellableProcessesLength() {
+        return cancellableProcesses.length;
     }
 
 

@@ -1,56 +1,12 @@
-import { sendFunction } from "./modules/utilities/chatOptions.js"
 import { ModelManager } from "./modules/Model/ModelManager.js";
 import { MasterController } from "./modules/Controller/MasterController.js";
  
 /**
- * Setup logic
+ * Launch app
  */
-
-// Keeps track of currently executing processes that can be cancelled
-const cancelEvent = new Event("cancel");
-const cancellableProcesses = [];
-function notifyCancellableProcesses() {
-    console.log("Cancel event broadcast!");
-    cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
-}
-
-function pushCancellableProcess(process) {
-    cancellableProcesses.push(process);
-}
-
-function removeFromCancellableProcesses(object) {
-    // Remove from cancellableProcesses record as it is no longer in the midst of execution
-    const index = cancellableProcesses.indexOf(object);
-    if (index != -1) {
-        cancellableProcesses.splice(index, 1);
-    }
-}
-
-
-var rawcontentMap = new Map();
-
-
-
-const model = ModelManager();
-const modelInitialise = model.initialiseFromJson("./json/storage.json");
 const controller = MasterController();
-modelInitialise
-    .then(() => controller.initialise(model.getSidebarList(), model.getMainConversation()));
-
 const quill = controller.getEditor();
 const editorView = controller.getEditorView();
-
-
-
-/**
- * Send button logic
- */
-
-// Logic for send button
-const sendButton = document.getElementById('send-button');
-sendButton.addEventListener("click", sendFunction);
-
-
 
 
 
@@ -123,4 +79,4 @@ recognition.onresult = function(event) {
     console.log(speechText);
 }
 
-export { editorView, model, quill, rawcontentMap, pushCancellableProcess, removeFromCancellableProcesses, cancelEvent, notifyCancellableProcesses}
+export { editorView, quill }
