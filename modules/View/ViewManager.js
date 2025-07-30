@@ -37,6 +37,8 @@ function ViewManager() {
         return [sidebar, mainWindow, modal];
     }
 
+    
+
     return self
 }
 

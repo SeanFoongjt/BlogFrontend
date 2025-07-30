@@ -15,7 +15,8 @@ function MainWindowController(parent) {
         notifyCancellableProcesses : parent.notifyCancellableProcesses,
         pushCancellableProcess : parent.pushCancellableProcess,
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
-        cancellableProcessesLength : parent.cancellableProcessesLength
+        cancellableProcessesLength : parent.cancellableProcessesLength,
+        block
     }
 
 
@@ -24,6 +25,7 @@ function MainWindowController(parent) {
     const editorController = EditorController(self);
     const quill = editorController.getEditor();
     let mainWindowView;
+    let conversation;
 
 
     function setView(view) {
@@ -48,6 +50,7 @@ function MainWindowController(parent) {
 
 
     function initialise(mainConversation) {
+        conversation = mainConversation;
         const chatboxes = mainWindowView.render(mainConversation);
         for (const i in chatboxes) {
             rawcontentMap.set(chatboxes[i], mainConversation.getListOfMessages()[i].rawHTML)
@@ -310,6 +313,52 @@ function MainWindowController(parent) {
 
         return newChat;
     }
+
+
+
+
+    function block() {
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.setAttribute("hidden", "");
+
+
+        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
+        const prevHeight = chatlogAndEditor.style.height;
+        chatlogAndEditor.style.height = 0;
+
+        editorController.hide()
+        const editorClickPrompt = document.querySelector(".editor-click-prompt");
+        editorClickPrompt.setAttribute("hidden", "");
+        
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.removeAttribute("hidden");
+
+
+
+        // Provide option to unblock conversation when appropriate button is clicked
+        const unblockButton = document.getElementById("unblock-button");
+        unblockButton.addEventListener("click", () => unblock(prevHeight))
+    }
+
+
+
+    function unblock(prevHeight) {
+        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
+        chatlogAndEditor.style.height = prevHeight;
+
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.setAttribute("hidden", "");
+
+        const userInput = document.querySelector(".editor-click-prompt");
+        userInput.removeAttribute("hidden");
+
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.removeAttribute("hidden");
+
+    }
+
+
+
 
     return self;
 
