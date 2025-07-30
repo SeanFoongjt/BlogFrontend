@@ -15,7 +15,8 @@ function MasterController() {
         cancellableProcessesLength,
         getEditor,
         initialise,
-        getEditorView
+        getEditorView,
+        updateCurrentConversation
     }
     const mainWindowController = MainWindowController(self);
     const sidebarController = SideBarController(self);
@@ -27,6 +28,7 @@ function MasterController() {
     modalController.setView(view.getViews()[2]);
     let editorView = undefined;
     view.setController(self);
+    model.setView(view);
 
 
     const modelInitialise = model.initialiseFromJson("./json/storage.json");
@@ -86,6 +88,11 @@ function MasterController() {
         }
 
         return editorView;
+    }
+
+
+    function updateCurrentConversation(conversation) {
+        sidebarController.updateCurrentConversation(conversation);
     }
 
     return self;

@@ -79,6 +79,12 @@ sidebar-conversations {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        
+        & p {
+            padding: 0px;
+            margin: 0px;
+            min-width: 0px;
+        }
     }
 }
 

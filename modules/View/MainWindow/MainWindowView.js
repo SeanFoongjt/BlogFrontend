@@ -61,15 +61,18 @@ function MainWindowView(imagePath="") {
         const resizeChatSize = (newHeight) => {
             console.log("test: " + `${Math.round(newHeight)}px`);
             const chatlogElement = document.getElementById("chatlog");
+            const qltoolbarHeight = document.querySelector(".ql-toolbar").offsetHeight;
+            const bottomToolbarHeight = document.querySelector(".bottom-toolbar").offsetHeight;
             chatlogElement.style.height = 
-                `calc(59% + 100px - ${newHeight}px)`;
+                `calc(79% + 100px - ${bottomToolbarHeight + qltoolbarHeight}px - ${newHeight}px)`;
             chatlogElement.style.maxHeight =
-                `calc(59% + 100px - ${newHeight}px)`;
+                `calc(79% + 100px - ${bottomToolbarHeight + qltoolbarHeight}px - ${newHeight}px)`;
 
             // Adjust height of chatlog
-            chatlogElement.scrollTop = chatlogElement.scrollTop + newHeight - prevHeight; 
+            if (editorView.isShowing) {
+                chatlogElement.scrollTop = chatlogElement.scrollTop + newHeight - prevHeight; 
+            }
             prevHeight = newHeight;
-            //document.getElementById("chatlog").style.height = "40%";
         }
 
         console.log("Chat resized");

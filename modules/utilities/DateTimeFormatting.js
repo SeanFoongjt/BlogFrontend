@@ -6,6 +6,9 @@ class DateTimeFormatting {
     // Undefined being passed reverts to the runtimes default locale
     static formatter = new Intl.DateTimeFormat(undefined, this.formatOptions);
 
+    // en-GB locale to force 24 hour representation
+    static sidebarFormatter = new Intl.DateTimeFormat("en-GB", this.formatOptions);
+
     /**
      * Format time to follow the HH:MM a.m./p.m. format. This is done via the format method of the
      * Intl.DateTimeFormat class.
@@ -14,6 +17,10 @@ class DateTimeFormatting {
      */
     static formatTime(timeString) {
         return this.formatter.format(new Date(timeString));
+    }
+
+    static formatTimeForSidebar(timeString) {
+        return this.sidebarFormatter.format(new Date(timeString));
     }
 
     /**

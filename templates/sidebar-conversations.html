@@ -1,7 +1,7 @@
 
 
 <button class="list-group-item list-group-item-action d-flex flex-row 
-mw-100 w-100 align-items-center justify-content-start chat-selection">
+mw-100 w-100 align-items-center justify-content-start chat-selection sidebar-id-{{sidebarId}}">
     <div class="sidebar-image rounded-circle d-flex align-items-center">
         <img class="w-100 h-100 rounded-circle" src="{{imagePath}}" alt="{{imageAlt}}">
     </div>
@@ -15,7 +15,7 @@ mw-100 w-100 align-items-center justify-content-start chat-selection">
         </div>
 
         <div class="d-flex flex-row justify-content-between align-items-center sidebar-notifications ms-3" style="min-width:0px;">
-            <div class="text-muted sidebar-text">
+            <div class="text-muted sidebar-text latest-message-text">
                 {{latestMessageText}}
             </div>
             {{#if (isPositive unread)}}

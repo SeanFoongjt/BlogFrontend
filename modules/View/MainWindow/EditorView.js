@@ -52,7 +52,8 @@ function EditorView() {
     
         // Adjust height and scroll position of chatlog
         const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
-        chatlog.scrollTop = Math.max(chatlog.scrollTop - editorToolbarContainerHeight, 0);
+        chatlog.scrollTop = 
+            Math.max(chatlog.scrollTop - editorToolbarContainerHeight + editorPrompt.offsetHeight, 0);
         chatlog.style.height = "90%";
         chatlog.style.maxHeight = "90%";
     

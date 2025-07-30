@@ -1,4 +1,8 @@
 /**
+ * NOTE THAT SECURITY IS PROBABLY VERY BAD RIGHT NOW
+ */
+
+/**
  * Encode string according to the encoding type provided such that syntax for each type of
  * encoding is properly parsed.
  * @param {String} string the string to be encoded
@@ -12,16 +16,13 @@ function encodeText(string, encoding="Plaintext") {
     // Process text based on encoding type selected
     if (encoding == "Plaintext") {
         console.log("After : " + string);
-        //console.log("After : " + formatPlaintext(string));
-        //return formatPlaintext(string);
         return string;
+
     } else if (encoding == "HTML") {
-        //console.log(editorHTML);
         console.log("After :" + unescapeHTML(format(string)));
         return unescapeHTML(format(string));
+
     }  else if (encoding == "Markdown") {
-        //console.log(editorHTML);
-        //console.log(removeP(editorHTML, "Markdown"));
         console.log("Before marked: " + format(string, "Markdown"));
 
         // Currently HTML is enabled in markdown via the use of unescapeHTML.
@@ -39,6 +40,7 @@ function encodeText(string, encoding="Plaintext") {
 
         console.log("After :" + marked.parser(tokens));
         return marked.parser(tokens);
+
     }
 }
 
@@ -90,6 +92,7 @@ function decodeText(string, encoding="Plaintext") {
     }
 }
 
+
 /**
  * Remove <p> and </p> inserted by the quill editor using a sliding window
  * @param {String} string string from which the auto inserted <p> and </p>s are removed
@@ -134,6 +137,7 @@ function format(string, encoding="HTML") {
         }
     }
 
+    // Remove ending linebreaks
     while (finalString.trim().substring(finalString.trim().length - 4) === "<br>") {
         finalString = finalString.trim().substring(0, finalString.trim().length - 4);
     }

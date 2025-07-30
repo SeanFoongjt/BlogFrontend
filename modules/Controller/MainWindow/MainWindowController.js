@@ -2,6 +2,7 @@ import { ChatlogController } from "./ChatlogController.js";
 import { EditorController } from "./EditorController.js";
 import { TitleSectionController } from "./TitleSectionController.js";
 import { encodeText } from "../../utilities/encodeText.js";
+import { MessageFactory } from "../../Model/MessageModel.js";
 
 
 function MainWindowController(parent) {
@@ -24,6 +25,7 @@ function MainWindowController(parent) {
     const chatlogController = ChatlogController(self);
     const editorController = EditorController(self);
     const quill = editorController.getEditor();
+    let messageFactory;
     let mainWindowView;
     let conversation;
 
@@ -35,6 +37,7 @@ function MainWindowController(parent) {
         view.setController(self);
         chatlogController.setView(views[1]);
         editorController.setView(views[2]);
+        messageFactory = MessageFactory(views[1]);
     }
 
 
@@ -281,9 +284,6 @@ function MainWindowController(parent) {
         // Get text from the editor
         var rawtext = quill.getText()
         var contents = quill.getContents();
-        console.log(quill.root.innerHTML);
-        console.log(quill.getSemanticHTML());
-        console.log(quill.getContents());
         var rawHTML = quill.root.innerHTML;
         quill.setText("");
         rawtext = rawtext.trim();
@@ -295,21 +295,21 @@ function MainWindowController(parent) {
         }
 
         // use createConversation to create html component
-        const newChat = createConversation(
-            "my-chat", 
+        const newChat = messageFactory.createSentMessage(
             rawHTML.trim(), 
-            Date.now(), 
-            rawtext, 
+            Date(Date.now()),
             encodingType, 
-            isReply
+            isReply,
+            rawtext
         );
+
+        conversation.addMessage(newChat);
+        console.log(conversation.getListOfMessages());
 
         // Store original html in rawcontentMap
         rawcontentMap.set(newChat, rawHTML);
 
-        // Some bug, probably has to do with async shenanigans
-        // Automatically scroll to bottom
-        chatlog.scrollTo(0, chatlog.scrollHeight);
+        parent.updateCurrentConversation(conversation);
 
         return newChat;
     }
@@ -343,6 +343,9 @@ function MainWindowController(parent) {
 
 
     function unblock(prevHeight) {
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.removeAttribute("hidden");
+
         const chatlogAndEditor = document.getElementById("chatlog-editor-container");
         chatlogAndEditor.style.height = prevHeight;
 
@@ -351,13 +354,7 @@ function MainWindowController(parent) {
 
         const userInput = document.querySelector(".editor-click-prompt");
         userInput.removeAttribute("hidden");
-
-        const chatlogElement = document.querySelector(".chatlog");
-        chatlogElement.removeAttribute("hidden");
-
     }
-
-
 
 
     return self;

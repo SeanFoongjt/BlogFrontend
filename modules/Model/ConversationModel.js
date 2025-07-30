@@ -1,10 +1,11 @@
 import { MessageFactory } from "./MessageModel.js";
-import { encodeText } from "../utilities/encodeText.js";
+import {  } from "../utilities/encodeText.js";
+import { DateTimeFormatting } from "../utilities/DateTimeFormatting.js";
 
 function ConversationModel(imagePath="", title="") {
     const listOfMessages = [];
     const messageFactory = MessageFactory();
-    const repltMap = new Map();
+    const replyMap = new Map();
 
     const self = {
         imagePath,
@@ -29,8 +30,17 @@ function ConversationModel(imagePath="", title="") {
 
     function sidebarInformation() {
         const lastMessage = listOfMessages[listOfMessages.length - 1]
-        const latestMessageText = encodeText(lastMessage.rawHTML);
-        const latestMessageTime = lastMessage.time.substring(lastMessage.time.length - 5);
+        let latestMessageText;
+
+        if (lastMessage.type === "my-chat") {
+            latestMessageText = "You: " + lastMessage.text.replace(/[\r\n]+/gm, " ");
+
+        } else if (lastMessage.type === "other-chat") {
+            latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
+        }
+
+        console.log(lastMessage.time);
+        const latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
 
         return {
             imagePath: self.imagePath,

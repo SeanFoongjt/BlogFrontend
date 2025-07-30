@@ -3,7 +3,8 @@ function SideBarController(parent) {
 
     const self = {
         setView,
-        initialise
+        initialise,
+        updateCurrentConversation
     }
 
     function setView(view) {
@@ -18,6 +19,10 @@ function SideBarController(parent) {
 
     function changeConversation() {
             
+    }
+
+    function updateCurrentConversation(conversation) {
+        sidebarView.update(conversation);
     }
 
     return self;

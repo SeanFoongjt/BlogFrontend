@@ -4,11 +4,14 @@ import { ConversationModel } from './ConversationModel.js';
 function ModelManager() {
     const filePromise = fetch("../../json/storage.json");
     const listOfConversations = [];
+    let viewManager;
+    let views = {};
 
     const self = {
         initialiseFromJson,
         getSidebarList,
-        getMainConversation
+        getMainConversation,
+        setView
     }
 
     async function initialiseFromJson(path) {
@@ -31,6 +34,16 @@ function ModelManager() {
         return Promise.all([storedJson]);
     }
 
+    function setView(newView) {
+        viewManager = newView;
+        const temp = newView.getViews();
+        views = {
+            sidebar: temp[0],
+            mainWindow : temp[1],
+            modal : temp[2]
+        }
+    }
+
     function getSidebarList() {
         const returnList = [];
         for (const conversation of listOfConversations) {
@@ -45,22 +58,6 @@ function ModelManager() {
     }
 
     return self
-
-        // I dont think this is possible (usage of fs in the web environment)
-    /** 
-    function saveToJson(path) {
-        const objectToWrite = {
-            "conversations" : [],
-        }
-        filePromise.then(handle => {
-            for (const conversation of listOfConversations) {
-                objectToWrite["conversations"].push(conversation);
-            }
-            handle.writeFile(objectToWrite.stringify());
-        })
-    }
-    */
-
 }
 
 export { ModelManager };

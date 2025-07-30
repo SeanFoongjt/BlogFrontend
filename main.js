@@ -1,15 +1,9 @@
-import { ModelManager } from "./modules/Model/ModelManager.js";
 import { MasterController } from "./modules/Controller/MasterController.js";
  
 /**
  * Launch app
  */
 const controller = MasterController();
-const quill = controller.getEditor();
-const editorView = controller.getEditorView();
-
-
-
 
 /**
 function refreshInputPopup() {
@@ -78,5 +72,3 @@ recognition.onresult = function(event) {
     );
     console.log(speechText);
 }
-
-export { editorView, quill }

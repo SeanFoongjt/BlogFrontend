@@ -9,7 +9,6 @@ function ChatlogView(imagePath) {
         setImage,
         renderConversation,
         renderSentMessage,
-        renderReceivedMessage,
         setController
     }
 
@@ -71,6 +70,8 @@ function ChatlogView(imagePath) {
                     .addEventListener("click", () => chatlogController.editFunction(chatbox));
                 chatbox.querySelector("[name='delete-button']")
                     .addEventListener("click", () => chatlogController.deleteFunction(chatbox));
+
+                // Scroll to bottom of chatlog
                 chatlog.scrollTop = chatlog.scrollHeight;
             });
 
