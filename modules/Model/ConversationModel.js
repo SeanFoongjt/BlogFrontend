@@ -10,15 +10,18 @@ function ConversationModel(imagePath="", title="") {
     const self = {
         imagePath,
         title,
+        availableId : undefined,
         initialiseFromJson,
         sidebarInformation,
         addMessage,
-        getListOfMessages
+        getListOfMessages,
+        deleteMessage
     }
 
     function initialiseFromJson(json) {
         self.imagePath = json["imagePath"];
         self.title = json["title"];
+        self.availableId = Number.parseInt(json["availableId"]);
 
         console.log(json);
         for (const message of json["messages"]) {
@@ -39,7 +42,6 @@ function ConversationModel(imagePath="", title="") {
             latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
         }
 
-        console.log(lastMessage.time);
         const latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
 
         return {
@@ -51,7 +53,14 @@ function ConversationModel(imagePath="", title="") {
     }
 
     function addMessage(message) {
+        self.availableId += 1;
         listOfMessages.push(message);
+    }
+
+    function deleteMessage(id) {
+        const findFunction = message => message.id == id
+        listOfMessages.splice(listOfMessages.findIndex(findFunction));
+        console.log(listOfMessages);
     }
 
     function getListOfMessages() {

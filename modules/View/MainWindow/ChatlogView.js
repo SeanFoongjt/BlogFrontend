@@ -21,7 +21,7 @@ function ChatlogView(imagePath) {
         imagePath = newImagePath;
     }  
 
-    function renderSentMessage(editorHTML, time, encoding="Plaintext", replyingTo="false") {
+    function renderSentMessage(editorHTML, time, encoding="Plaintext", replyingTo="false", id) {
         var contextObj = {
             text : encodeText(editorHTML, encoding),
             time : DateTimeFormatting.formatTime(time),
@@ -35,6 +35,7 @@ function ChatlogView(imagePath) {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("my-chat");
+        chatbox.setAttribute("conversation-id", id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
 
@@ -79,7 +80,7 @@ function ChatlogView(imagePath) {
         return chatbox;
     }
 
-    function renderReceivedMessage(editorHTML, time, encoding="Plaintext", imagePath="") {
+    function renderReceivedMessage(editorHTML, time, encoding="Plaintext", imagePath="", id) {
         var contextObj = {
             text : encodeText(editorHTML, encoding),
             time : DateTimeFormatting.formatTime(time),
@@ -94,6 +95,7 @@ function ChatlogView(imagePath) {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("other-chat");
+        chatbox.setAttribute("conversation-id", id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
 
@@ -117,7 +119,7 @@ function ChatlogView(imagePath) {
             // console.log(message);
             if (message.type === "my-chat") {
                 listOfChatboxes.push(renderSentMessage(
-                    message.rawHTML, message.time, message.encoding, message.replyingTo
+                    message.rawHTML, message.time, message.encoding, message.replyingTo, message.id
                 ));
 
             } else if (message.type === "other-chat") {

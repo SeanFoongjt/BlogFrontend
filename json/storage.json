@@ -2,6 +2,7 @@
     "conversations" : [{
         "imagePath" : "../img/cornflower.webp",
         "title" : "Cornflower",
+        "availableId" : "7",
         "messages" : [
             {
                 "type" : "other-chat",
@@ -68,6 +69,7 @@
     {
         "imagePath" : "../img/elster.jpg",
         "title" : "Elster",
+        "availableId" : "3",
         "messages" : [
             {
                 "type" : "my-chat",

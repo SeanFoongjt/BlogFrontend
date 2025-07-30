@@ -65,7 +65,6 @@ function SidebarView() {
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
             let sidebarId = 0;
             for (const conversation of listOfConversations) {
-                console.log(conversation);
                 conversation["sidebarId"] = sidebarId;
                 currOrder.push(conversation);
                 conversationsHTML = conversationsHTML.concat(array[0](conversation));

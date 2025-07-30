@@ -247,7 +247,7 @@ function MainWindowController(parent) {
      * @param {MyChat} object object to be deleted
      */
     function deleteFunction(object) {
-        notifyCancellableProcesses();
+        parent.notifyCancellableProcesses();
 
         // Check if object to be deleted is referenced in the reply banners of other chats
         if (replyMap.has(object)) {
@@ -264,6 +264,9 @@ function MainWindowController(parent) {
                 replyText.style.color = "#bebebe";
             });
         }
+
+        conversation.deleteMessage(object.getAttribute("conversation-id"))
+
         object.remove();
     }
 
@@ -300,7 +303,8 @@ function MainWindowController(parent) {
             Date(Date.now()),
             encodingType, 
             isReply,
-            rawtext
+            rawtext,
+            conversation.availableId
         );
 
         conversation.addMessage(newChat);
