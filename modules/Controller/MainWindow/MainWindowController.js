@@ -17,7 +17,8 @@ function MainWindowController(parent) {
         pushCancellableProcess : parent.pushCancellableProcess,
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
         cancellableProcessesLength : parent.cancellableProcessesLength,
-        block
+        block,
+        changeConversation
     }
 
 
@@ -60,6 +61,16 @@ function MainWindowController(parent) {
         }
     }
 
+
+    function changeConversation(newConversation) {
+        conversation = newConversation;
+        document.getElementById("chatlog").replaceChildren();
+        const chatboxes = mainWindowView.render(newConversation);
+        rawcontentMap.clear();
+        for (const i in chatboxes) {
+            rawcontentMap.set(chatboxes[i], newConversation.getListOfMessage()[i].rawHTML);
+        }
+    }
     
 
     /**
@@ -112,6 +123,9 @@ function MainWindowController(parent) {
 
         // Change text in chatbox to edited text, display '(edited)' after time
         function edit() {
+            const conversationId = object.getAttribute("conversation-id");
+
+
             // Terminate function early if no actual text is in the editor
             if (quill.getText().trim() == "" && quill.getContents()["ops"].length == 1) {
                 console.log("terminated early due to no text");
@@ -120,7 +134,6 @@ function MainWindowController(parent) {
             }
             
             // TODO check if text and encoding are the same
-            console.log(currEncoding.getAttribute("value"));
             rawcontentMap.set(object, quill.root.innerHTML);
             
             // encode contents of quill editor and put it into the edited chat
@@ -137,11 +150,13 @@ function MainWindowController(parent) {
 
             // Check if the object is referenced in the reply banner of other chats. If yes,
             // change text in these reply banners as appropriate
+            /**
             if (replyMap.has(object)) {
                 replyMap
                     .get(object)
                     .forEach((chat) => {
-                        console.log(chat);
+                        console.log("chat: " + chat);
+                        console.log("object: " + object);
                         const rawText = quill.getText().trim();
                         chat
                             .shadowRoot
@@ -149,8 +164,14 @@ function MainWindowController(parent) {
                             .innerText = formatForReply(rawText);
                     });
             }
+            */
 
+            conversation.editMessage(
+                conversationId, quill.getText().trim(), quill.root.innerHTML,
+                currEncoding.getAttribute("value")
+            )
             chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
+            parent.updateCurrentConversation(conversation);
             cleanup();
         }
 
@@ -181,12 +202,12 @@ function MainWindowController(parent) {
     function replyFunction(object) {
         console.log("Enter replyFunction");
         // Only one cancellableProcess should be active at a time
-        notifyCancellableProcesses();
+        parent.notifyCancellableProcesses();
 
-        pushCancellableProcess(object);
+        parent.pushCancellableProcess(object);
 
         // Show editor if it is not currently displayed
-        editorView.show();
+        editorController.show();
         
         // Make the cancel button visible
         var cancelButton = document.getElementById("cancel-button");
@@ -234,7 +255,7 @@ function MainWindowController(parent) {
             replyButton.addEventListener("click", sendFunction);
             replyButton.innerText="Send";
 
-            removeFromCancellableProcesses(object);
+            parent.removeFromCancellableProcesses(object);
             console.log("cleanup complete");
         }
     }
@@ -249,6 +270,7 @@ function MainWindowController(parent) {
     function deleteFunction(object) {
         parent.notifyCancellableProcesses();
 
+        /*
         // Check if object to be deleted is referenced in the reply banners of other chats
         if (replyMap.has(object)) {
             replyMap
@@ -264,8 +286,10 @@ function MainWindowController(parent) {
                 replyText.style.color = "#bebebe";
             });
         }
+        */
 
-        conversation.deleteMessage(object.getAttribute("conversation-id"))
+        conversation.deleteMessage(object.getAttribute("conversation-id"));
+        parent.updateCurrentConversation(conversation);
 
         object.remove();
     }
@@ -297,8 +321,9 @@ function MainWindowController(parent) {
             return;
         }
 
+        console.log("Available id : " + conversation.availableId);
         // use createConversation to create html component
-        const newChat = messageFactory.createSentMessage(
+        const [newChat, newElement] = messageFactory.createSentMessage(
             rawHTML.trim(), 
             Date(Date.now()),
             encodingType, 
@@ -307,11 +332,16 @@ function MainWindowController(parent) {
             conversation.availableId
         );
 
-        conversation.addMessage(newChat);
+        if (!isReply) {
+            conversation.addMessage(newChat);
+        } else {
+            conversation.addMessage(newChat, isReply.getAttribute("conversation-id"));
+        }
         console.log(conversation.getListOfMessages());
 
         // Store original html in rawcontentMap
-        rawcontentMap.set(newChat, rawHTML);
+        rawcontentMap.set(newElement, rawHTML);
+        console.log(rawcontentMap);
 
         parent.updateCurrentConversation(conversation);
 

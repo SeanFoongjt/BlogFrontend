@@ -21,11 +21,11 @@ function ChatlogView(imagePath) {
         imagePath = newImagePath;
     }  
 
-    function renderSentMessage(editorHTML, time, encoding="Plaintext", replyingTo="false", id) {
+    function renderSentMessage(message) {
         var contextObj = {
-            text : encodeText(editorHTML, encoding),
-            time : DateTimeFormatting.formatTime(time),
-            encoding: encoding,
+            text : encodeText(message.rawHTML, message.encoding),
+            time : DateTimeFormatting.formatTime(message.time),
+            encoding: message.encoding,
         }
         var conversationTemplate = fetch("../../templates/my-conversation.html")
             .then(res => res.text())
@@ -35,24 +35,24 @@ function ChatlogView(imagePath) {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("my-chat");
-        chatbox.setAttribute("conversation-id", id);
+        chatbox.setAttribute("conversation-id", message.id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
-        if (replyingTo) {
+        if (message.replyingTo) {
             var replyBanner = chatbox.shadowRoot.querySelector("div[name='replyBanner']");
             var text = replyBanner.querySelector("span[name='replyText']");
 
-            /**
+            
             // Inner text used here so that text in reply banner has no formatting
             fillChatbox = formatForReply(
-                replyingTo.querySelector("div[name='text']").innerText,
+                message.replyingTo.querySelector("div[name='text']").innerText,
                 chatbox,
                 fillChatbox
             );
-            */
+            
 
             // make completed replyBanner visible, 
             replyBanner.removeAttribute("hidden");
@@ -76,16 +76,16 @@ function ChatlogView(imagePath) {
                 chatlog.scrollTop = chatlog.scrollHeight;
             });
 
-
+        message.setHTMLElement(chatbox);
         return chatbox;
     }
 
-    function renderReceivedMessage(editorHTML, time, encoding="Plaintext", imagePath="", id) {
+    function renderReceivedMessage(message, imagePath="") {
         var contextObj = {
-            text : encodeText(editorHTML, encoding),
-            time : DateTimeFormatting.formatTime(time),
+            text : encodeText(message.rawHTML, message.encoding),
+            time : DateTimeFormatting.formatTime(message.time),
             imgsrc: imagePath,
-            encoding: encoding,
+            encoding: message.encoding,
         }
         var conversationTemplate = fetch("../../templates/other-conversation.html")
             .then(res => res.text())
@@ -95,7 +95,7 @@ function ChatlogView(imagePath) {
         // Initialise chatbox, add dropdown menu
         var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("other-chat");
-        chatbox.setAttribute("conversation-id", id);
+        chatbox.setAttribute("conversation-id", message.id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
 
@@ -115,22 +115,28 @@ function ChatlogView(imagePath) {
     function renderConversation(conversation) {
         const listOfChatboxes = [];
 
-        for (const message of conversation) {
+        for (const messageModel of conversation) {
             // console.log(message);
-            if (message.type === "my-chat") {
-                listOfChatboxes.push(renderSentMessage(
-                    message.rawHTML, message.time, message.encoding, message.replyingTo, message.id
-                ));
+            if (messageModel.type === "my-chat") {
+                listOfChatboxes.push(renderSentMessage(messageModel));
 
-            } else if (message.type === "other-chat") {
-                listOfChatboxes.push(renderReceivedMessage(
-                    message.rawHTML, message.time, message.encoding, imagePath
-                ));
+            } else if (messageModel.type === "other-chat") {
+                listOfChatboxes.push(renderReceivedMessage(messageModel, imagePath));
             }
         }
 
         return listOfChatboxes;
     }
+
+    /** 
+    function updateBanners(affectedMessages, isOriginalDeleted = false) {
+        if (! isOriginalDeleted) {
+            for (const message in affectedMessages) {
+                message.
+            }
+        }
+    }
+    */
 
     /**
      * Format the string to be used as text for the reply banner.

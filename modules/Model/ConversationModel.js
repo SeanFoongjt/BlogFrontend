@@ -1,11 +1,11 @@
 import { MessageFactory } from "./MessageModel.js";
-import {  } from "../utilities/encodeText.js";
 import { DateTimeFormatting } from "../utilities/DateTimeFormatting.js";
 
 function ConversationModel(imagePath="", title="") {
     const listOfMessages = [];
     const messageFactory = MessageFactory();
     const replyMap = new Map();
+    const findFunction = id => message => message.id == id;
 
     const self = {
         imagePath,
@@ -15,7 +15,8 @@ function ConversationModel(imagePath="", title="") {
         sidebarInformation,
         addMessage,
         getListOfMessages,
-        deleteMessage
+        deleteMessage,
+        editMessage
     }
 
     function initialiseFromJson(json) {
@@ -48,18 +49,49 @@ function ConversationModel(imagePath="", title="") {
             imagePath: self.imagePath,
             title: self.title,
             latestMessageText,
-            latestMessageTime
+            latestMessageTime,
+            self
         }
     }
 
-    function addMessage(message) {
+    function addMessage(message, replyingTo = false) {
         self.availableId += 1;
         listOfMessages.push(message);
+        const chatRepliedTo = listOfMessages.find(findFunction(replyingTo)); 
+
+        if (replyMap.get(chatRepliedTo) === undefined) {
+            replyMap.set(chatRepliedTo, []);
+        }
+
+        if (replyingTo || replyingTo === 0) {
+            replyMap.get(chatRepliedTo).push(message);
+        }
+
+        console.log(replyMap);
+    }
+
+    function editMessage(id, text, rawHTML, encoding) {
+        const message = listOfMessages.find(findFunction(id));
+        message.rawHTML = rawHTML,
+        message.text = text;
+        message.encoding = encoding;
+        for (const i of replyMap.get(message)) {
+            console.log(i);
+            console.log(i.htmlElement);
+            i.htmlElement.shadowRoot.querySelector("span[name='replyText']").innerText = text;
+        }
     }
 
     function deleteMessage(id) {
-        const findFunction = message => message.id == id
-        listOfMessages.splice(listOfMessages.findIndex(findFunction));
+        console.log(listOfMessages.find(findFunction(id)));
+        for (const i of replyMap.get(listOfMessages.find(findFunction(id)))) {
+            const replyText = i.htmlElement.shadowRoot.querySelector("span[name='replyText']");
+            replyText.innerText = "Message Deleted";
+            replyText.style.fontStyle = "italic";
+            replyText.style.color = "#bebebe";
+        }
+        listOfMessages.splice(listOfMessages.findIndex(findFunction(id)));
+
         console.log(listOfMessages);
     }
 

@@ -33,6 +33,8 @@ function MasterController() {
 
     const modelInitialise = model.initialiseFromJson("./json/storage.json");
 
+    const cancelEvent = new Event("cancel");
+
     
 
     modelInitialise
@@ -93,6 +95,10 @@ function MasterController() {
 
     function updateCurrentConversation(conversation) {
         sidebarController.updateCurrentConversation(conversation);
+    }
+
+    function changeCurrentConversation(conversation) {
+        mainWindowController.changeConversation(conversation);
     }
 
     return self;

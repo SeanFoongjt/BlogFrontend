@@ -12,12 +12,12 @@ function MessageFactory(chatlogView = undefined) {
     function createSentMessage(rawHTML, time, encoding, replyingTo, rawtext, id) {
         const chat = SentMessage(rawHTML, time, encoding, replyingTo, rawtext, id);
         if (chatlogView != undefined) {
-            chatlogView.renderSentMessage(
-                chat.rawHTML, chat.time, chat.encoding, chat.replyingTo
+            var element = chatlogView.renderSentMessage(
+                chat
             );
         }
 
-        return chat;
+        return [chat, element];
     }
 
     function initialiseFromJson(json) {
@@ -43,19 +43,25 @@ function MessageFactory(chatlogView = undefined) {
 }
 
 function ReceivedMessage(rawHTML, time, encoding, text, id) {
+    const setHTMLElement = element => self.htmlElement = element;
+
     const self = {
         rawHTML,
         time,
         encoding,
         type: "other-chat",
         text,
-        id
+        id,
+        htmlElement: undefined,
+        setHTMLElement
     }
 
     return self
 }
 
 function SentMessage(rawHTML, time, encoding, replyingTo, text, id) {
+    const setHTMLElement = element => self.htmlElement = element;
+
     const self = {
         rawHTML,
         time,
@@ -63,7 +69,9 @@ function SentMessage(rawHTML, time, encoding, replyingTo, text, id) {
         replyingTo,
         type: "my-chat",
         text,
-        id
+        id,
+        htmlElement: undefined,
+        setHTMLElement
     }
 
     return self

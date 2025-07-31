@@ -17,8 +17,8 @@ function SideBarController(parent) {
         sidebarView.render(conversationList);
     }
 
-    function changeConversation() {
-            
+    function changeConversation(conversation) {
+        parent.changeCurrentConversation(conversation);
     }
 
     function updateCurrentConversation(conversation) {
