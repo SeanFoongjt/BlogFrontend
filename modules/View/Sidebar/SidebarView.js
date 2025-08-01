@@ -57,25 +57,30 @@ function SidebarView() {
 
         const container = document.createElement("div");
         container.setAttribute("class", "w-100 h-100 px-2 list-container");
-        let conversationsHTML = `
-            <div class="chat-selection list-group w-100 h-100">
-        `;
+        const list = document.createElement("div");
+        list.setAttribute("class", "chat-selection list-group w-100 h-100");
+        container.appendChild(list);
         const sidebar = document.querySelector(".sidebar");
 
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
             let sidebarId = 0;
+            let currOption;
             for (const conversation of listOfConversations) {
+                currOption = document.createElement("template");
                 conversation["sidebarId"] = sidebarId;
                 currOrder.push(conversation);
-                conversationsHTML = conversationsHTML.concat(array[0](conversation));
+                currOption.innerHTML = array[0](conversation);
+                currOption = currOption.content.firstElementChild;
+
+                currOption.addEventListener("click", () => changeActive(conversation.self));
+                list.appendChild(currOption);
                 sidebarId++;
             }
-            conversationsHTML = conversationsHTML.concat("</div>");
-            container.innerHTML = conversationsHTML;
             sidebar.appendChild(container);
             activeConversationId = 0;
         });
 
+        console.log(currOrder);
         conversationsElement = container;
     }
 
@@ -89,8 +94,9 @@ function SidebarView() {
         currElement.querySelector(".latest-message-text").innerText = newMessage.latestMessageText;
     }
 
-    function changeActive(index) {
-
+    function changeActive(conversation) {
+        sidebarController.changeConversation(conversation)
+        
     }
 
     return self

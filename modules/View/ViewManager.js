@@ -14,6 +14,7 @@ function ViewManager() {
         setController,
         getEditor,
         getViews,
+        renderConversation
     }
 
     function setController(newController) {
@@ -35,6 +36,10 @@ function ViewManager() {
 
     function getViews() {
         return [sidebar, mainWindow, modal];
+    }
+
+    function renderConversation(conversation) {
+        mainWindow.render(conversation);
     }
 
     

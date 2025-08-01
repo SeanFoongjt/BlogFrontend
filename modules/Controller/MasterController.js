@@ -16,7 +16,9 @@ function MasterController() {
         getEditor,
         initialise,
         getEditorView,
-        updateCurrentConversation
+        updateCurrentConversation,
+        changeCurrentConversation,
+        model
     }
     const mainWindowController = MainWindowController(self);
     const sidebarController = SideBarController(self);
@@ -38,7 +40,10 @@ function MasterController() {
     
 
     modelInitialise
-        .then(() => self.initialise(model.getSidebarList(), model.getMainConversation()));
+        .then(() => self.initialise(
+            model.getSidebarList(), 
+            model.getMainConversation(),
+        ));
 
     
     
@@ -54,6 +59,7 @@ function MasterController() {
     function initialise(conversationList, mainConversation) {
         mainWindowController.initialise(mainConversation);
         sidebarController.initialise(conversationList);
+        modalController.initialise(conversationList);
         //view.initialise(conversationList, mainConversation);
     }
 

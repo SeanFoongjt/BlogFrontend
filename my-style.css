@@ -9,11 +9,27 @@ body {
     box-sizing: border-box;
 }
 
+.modal-test {
+    aspect-ratio: 1;
+    height: 50px;
+}
+
 .application {
     box-sizing: border-box;
     height: 100dvh;
     width: 100dvw;
     min-width: 100dvw;
+}
+
+/* Modal */
+#forwarding-modal {
+    & .list-group-item:hover {
+        background-color: #ececec;
+    }
+
+    & .list-group-item {
+        border: 0px
+    }
 }
 
 /* Sidebar */

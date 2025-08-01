@@ -11,7 +11,8 @@ function ModelManager() {
         initialiseFromJson,
         getSidebarList,
         getMainConversation,
-        setView
+        setView,
+        forwardMessagesByTitle
     }
 
     async function initialiseFromJson(path) {
@@ -55,6 +56,19 @@ function ModelManager() {
     function getMainConversation() {
         console.log(listOfConversations[0]);
         return listOfConversations[0];
+    }
+
+    function forwardMessagesByTitle(message, conversationList) {
+        const filteredList = listOfConversations.filter(
+            conversation => conversationList.includes(conversation.title)
+        )
+
+        for (var conversation of filteredList) {
+            console.log(conversation);
+            conversation.addMessage(message);
+        }
+
+        viewManager.renderConversation(conversation);
     }
 
     return self

@@ -13,6 +13,7 @@ function MainWindowController(parent) {
         editFunction,
         replyFunction,
         deleteFunction,
+        forwardFunction,
         notifyCancellableProcesses : parent.notifyCancellableProcesses,
         pushCancellableProcess : parent.pushCancellableProcess,
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
@@ -63,12 +64,19 @@ function MainWindowController(parent) {
 
 
     function changeConversation(newConversation) {
+        // Active conversation is the newConversation
         conversation = newConversation;
+
+        // blank space with a height of 5px to provide padding to the top of the chatlog
+        const blankSpace = document.createElement("div");
+        blankSpace.setAttribute("class", "blank-space");
         document.getElementById("chatlog").replaceChildren();
+        document.getElementById("chatlog").appendChild(blankSpace);
+
         const chatboxes = mainWindowView.render(newConversation);
         rawcontentMap.clear();
         for (const i in chatboxes) {
-            rawcontentMap.set(chatboxes[i], newConversation.getListOfMessage()[i].rawHTML);
+            rawcontentMap.set(chatboxes[i], newConversation.getListOfMessages()[i].rawHTML);
         }
     }
     
@@ -348,6 +356,45 @@ function MainWindowController(parent) {
         return newChat;
     }
 
+
+
+
+
+    /**
+     * 
+     */
+    function forwardFunction(messageElement) {
+        const forwardingPopup = document.getElementById("forwarding-popup-modal");
+
+        const confirmButton = forwardingPopup.querySelector("[name='confirm']");
+        confirmButton.addEventListener("click", forward);
+        const messageList = conversation.getListOfMessages()
+        const message = messageList.find(
+            chat => chat.id == messageElement.getAttribute("conversation-id")
+        );
+        console.log(message);
+
+        let titleList = [];
+
+
+        function forward() {
+            for (const child of forwardingPopup.querySelector(".list-group").children) {
+                if (child.querySelector("[type='checkbox']").checked == true) {
+                    titleList.push(child.querySelector(".conversation-title").innerText);
+                }
+            }
+
+            parent.model.forwardMessagesByTitle(message, titleList);
+
+            console.log(titleList);
+            cleanup();
+        }
+
+        function cleanup() {
+            confirmButton.removeEventListener("click", forward);
+            titleList = [];
+        }
+    }
 
 
 

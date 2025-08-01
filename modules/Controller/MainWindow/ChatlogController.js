@@ -5,7 +5,8 @@ function ChatlogController(parent) {
         setView,
         editFunction: parent.editFunction,
         replyFunction: parent.replyFunction,
-        deleteFunction: parent.deleteFunction
+        deleteFunction: parent.deleteFunction,
+        forwardFunction: parent.forwardFunction
     }
 
     function setView(view) {

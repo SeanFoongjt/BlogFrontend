@@ -1,9 +1,11 @@
 function ModalView() {
     let modalController;
+    let conversationMap = new Map();
 
     self = {
         setController,
-        confirmationPopupFunction
+        confirmationPopupFunction,
+        renderForwardingPopup
     }
 
     function setController(controller) {
@@ -40,6 +42,45 @@ function ModalView() {
         confirmationPopupBodyText.innerText = body;
         confirmationPopupTitle.innerText = header;
     }
+
+
+    // Constant and variable declarations for forwarding popup
+    const forwardingPopup = document.getElementById("forwarding-popup-modal");
+    const forwardingPopupBody = forwardingPopup.querySelector(".modal-body");
+    const forwardingPopupTitle = forwardingPopup.querySelector(".modal-title");
+    const forwardingPopupFooter = forwardingPopup.querySelector(".modal-footer");
+    var forwardingConfirmButton = forwardingPopupFooter.querySelector("button[name='confirm']");
+
+    function renderForwardingPopup(conversationList) {
+        const list = forwardingPopupBody.querySelector(".list-group");
+        console.log(forwardingPopupBody);
+        
+
+        var elementTemplate = fetch("../../../templates/forward-menu-item.html")
+            .then(res => res.text())
+            .then(text => Handlebars.compile(text));
+
+
+        elementTemplate.then(template => {
+            for (const conversation of conversationList) {
+                let currOption;
+                currOption = document.createElement("template");
+                conversation["htmlId"] = "forward-to-" + conversation["title"];
+                currOption.innerHTML = template(conversation);
+                currOption = currOption.content.firstElementChild;
+
+                currOption.addEventListener(
+                    "click", 
+                    () => currOption.querySelector("[type='checkbox']").checked = ! currOption.querySelector("[type='checkbox']").checked
+                );
+
+                conversationMap.set(currOption, conversation.self);
+                list.appendChild(currOption);
+            }
+        });
+
+    }
+    
 
     return self;
 }

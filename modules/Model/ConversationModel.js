@@ -75,6 +75,7 @@ function ConversationModel(imagePath="", title="") {
         message.rawHTML = rawHTML,
         message.text = text;
         message.encoding = encoding;
+        console.log(replyMap.get(message));
         for (const i of replyMap.get(message)) {
             console.log(i);
             console.log(i.htmlElement);
