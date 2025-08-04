@@ -68,7 +68,7 @@ function ModelManager() {
             conversation.addMessage(message);
         }
 
-        viewManager.renderConversation(conversation);
+        return conversation;
     }
 
     return self

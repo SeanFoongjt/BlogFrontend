@@ -58,6 +58,18 @@ function ChatlogView(imagePath) {
             replyBanner.removeAttribute("hidden");
         }
 
+        if (message.forwardedFrom) {
+            var forwardBanner = chatbox.shadowRoot.querySelector("div[name='forwardBanner']");
+            var text = forwardBanner.querySelector("span[name='forwardText']");
+
+            
+            fillChatbox.then(item => text.innerText = "Forwarded from " + message.forwardedFrom);
+            
+
+            // make completed replyBanner visible, 
+            forwardBanner.removeAttribute("hidden");
+        }
+
         chatlog.appendChild(chatbox);
         
         

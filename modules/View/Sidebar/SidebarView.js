@@ -96,7 +96,6 @@ function SidebarView() {
 
     function changeActive(conversation) {
         sidebarController.changeConversation(conversation)
-        
     }
 
     return self

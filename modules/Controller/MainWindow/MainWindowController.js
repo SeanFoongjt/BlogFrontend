@@ -19,6 +19,7 @@ function MainWindowController(parent) {
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
         cancellableProcessesLength : parent.cancellableProcessesLength,
         block,
+        unblock,
         changeConversation
     }
 
@@ -156,24 +157,6 @@ function MainWindowController(parent) {
                 subtext.innerText += " (edited)"
             }
 
-            // Check if the object is referenced in the reply banner of other chats. If yes,
-            // change text in these reply banners as appropriate
-            /**
-            if (replyMap.has(object)) {
-                replyMap
-                    .get(object)
-                    .forEach((chat) => {
-                        console.log("chat: " + chat);
-                        console.log("object: " + object);
-                        const rawText = quill.getText().trim();
-                        chat
-                            .shadowRoot
-                            .querySelector("span[name='replyText']")
-                            .innerText = formatForReply(rawText);
-                    });
-            }
-            */
-
             conversation.editMessage(
                 conversationId, quill.getText().trim(), quill.root.innerHTML,
                 currEncoding.getAttribute("value")
@@ -278,24 +261,6 @@ function MainWindowController(parent) {
     function deleteFunction(object) {
         parent.notifyCancellableProcesses();
 
-        /*
-        // Check if object to be deleted is referenced in the reply banners of other chats
-        if (replyMap.has(object)) {
-            replyMap
-            .get(object)
-            .forEach((chat) => {
-                console.log(chat);
-                const replyText = chat.shadowRoot.querySelector("span[name='replyText']");
-
-                // If so, replace all these references to a 'Message Deleted' text that is italic and
-                // faded in color
-                replyText.innerText = "Message Deleted";
-                replyText.style.fontStyle = "italic";
-                replyText.style.color = "#bebebe";
-            });
-        }
-        */
-
         conversation.deleteMessage(object.getAttribute("conversation-id"));
         parent.updateCurrentConversation(conversation);
 
@@ -337,7 +302,8 @@ function MainWindowController(parent) {
             encodingType, 
             isReply,
             rawtext,
-            conversation.availableId
+            conversation.availableId,
+            false
         );
 
         if (!isReply) {
@@ -372,9 +338,12 @@ function MainWindowController(parent) {
         const message = messageList.find(
             chat => chat.id == messageElement.getAttribute("conversation-id")
         );
-        console.log(message);
 
         let titleList = [];
+
+        const messageToForward = message.copy();
+        messageToForward.setForwardedFrom(conversation.title);
+        console.log(messageToForward);
 
 
         function forward() {
@@ -384,7 +353,9 @@ function MainWindowController(parent) {
                 }
             }
 
-            parent.model.forwardMessagesByTitle(message, titleList);
+            const newConversation = 
+                parent.model.forwardMessagesByTitle(messageToForward, titleList);
+            changeConversation(newConversation);
 
             console.log(titleList);
             cleanup();
@@ -393,48 +364,22 @@ function MainWindowController(parent) {
         function cleanup() {
             confirmButton.removeEventListener("click", forward);
             titleList = [];
+            for (const child of forwardingPopup.querySelector(".list-group").children) {
+                child.querySelector("[type='checkbox']").checked = false;
+            }
         }
     }
 
 
 
     function block() {
-        const chatlogElement = document.querySelector(".chatlog");
-        chatlogElement.setAttribute("hidden", "");
-
-
-        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
-        const prevHeight = chatlogAndEditor.style.height;
-        chatlogAndEditor.style.height = 0;
-
-        editorController.hide()
-        const editorClickPrompt = document.querySelector(".editor-click-prompt");
-        editorClickPrompt.setAttribute("hidden", "");
-        
-        const blockedChat = document.getElementById("blocked-chat-container");
-        blockedChat.removeAttribute("hidden");
-
-
-
-        // Provide option to unblock conversation when appropriate button is clicked
-        const unblockButton = document.getElementById("unblock-button");
-        unblockButton.addEventListener("click", () => unblock(prevHeight))
+        conversation.block();
+        mainWindowView.renderBlocked();
     }
 
-
-
     function unblock(prevHeight) {
-        const chatlogElement = document.querySelector(".chatlog");
-        chatlogElement.removeAttribute("hidden");
-
-        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
-        chatlogAndEditor.style.height = prevHeight;
-
-        const blockedChat = document.getElementById("blocked-chat-container");
-        blockedChat.setAttribute("hidden", "");
-
-        const userInput = document.querySelector(".editor-click-prompt");
-        userInput.removeAttribute("hidden");
+        conversation.unblock();
+        mainWindowView.renderUnblocked(prevHeight);
     }
 
 

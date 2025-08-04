@@ -13,7 +13,9 @@ function MainWindowView(imagePath="") {
         render,
         getEditor,
         getViews,
-        setController
+        setController,
+        renderBlocked,
+        renderUnblocked
     }
 
 
@@ -27,8 +29,16 @@ function MainWindowView(imagePath="") {
         titleSection.changeConversation(conversation.imagePath, conversation.title);
         editorView.clear();
 
-        return listOfChatboxes;
+        
 
+        if (conversation.isBlocked()) {
+            renderBlocked();
+            
+        } else {
+            renderUnblocked();
+        }
+
+        return listOfChatboxes;
     }
 
     function getViews() {
@@ -95,6 +105,56 @@ function MainWindowView(imagePath="") {
     function getEditor() {
         return editorView;
     }
+
+    function renderBlocked() {
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.setAttribute("hidden", "");
+
+
+        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
+        const prevHeight = chatlogAndEditor.style.height;
+        chatlogAndEditor.style.height = 0;
+        
+
+        editorView.hide()
+        const editorClickPrompt = document.querySelector(".editor-click-prompt");
+        editorClickPrompt.setAttribute("hidden", "");
+        
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.removeAttribute("hidden");
+
+
+
+        // Provide option to unblock conversation when appropriate button is clicked
+        const unblockButton = document.getElementById("unblock-button");
+        unblockButton.addEventListener("click", () => mainWindowController.unblock(prevHeight))
+
+    }
+
+    function renderUnblocked(prevHeight) {
+        const chatlogElement = document.querySelector(".chatlog");
+        chatlogElement.removeAttribute("hidden");
+
+        const chatlogAndEditor = document.getElementById("chatlog-editor-container");
+
+        if (prevHeight != undefined) {
+            chatlogAndEditor.style.height = prevHeight;
+        } else {
+            chatlogAndEditor.style.height = "min(88%, calc(100% - 60px))"
+        }
+
+        const blockedChat = document.getElementById("blocked-chat-container");
+        blockedChat.setAttribute("hidden", "");
+
+        const userInput = document.querySelector(".editor-click-prompt");
+        userInput.removeAttribute("hidden");
+    }
+
+    function clear() {
+        
+    }
+
+    
 
     return self
 }

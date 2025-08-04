@@ -6,6 +6,7 @@ function ConversationModel(imagePath="", title="") {
     const messageFactory = MessageFactory();
     const replyMap = new Map();
     const findFunction = id => message => message.id == id;
+    let blocked = false;
 
     const self = {
         imagePath,
@@ -16,7 +17,10 @@ function ConversationModel(imagePath="", title="") {
         addMessage,
         getListOfMessages,
         deleteMessage,
-        editMessage
+        editMessage,
+        block,
+        unblock,
+        isBlocked,
     }
 
     function initialiseFromJson(json) {
@@ -98,6 +102,18 @@ function ConversationModel(imagePath="", title="") {
 
     function getListOfMessages() {
         return listOfMessages;
+    }
+
+    function block() {
+        blocked = true;
+    }
+
+    function unblock() {
+        blocked = false;
+    }
+
+    function isBlocked() {
+        return blocked;
     }
 
     return self
