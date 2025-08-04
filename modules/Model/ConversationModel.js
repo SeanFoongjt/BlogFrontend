@@ -1,7 +1,7 @@
 import { MessageFactory } from "./MessageModel.js";
 import { DateTimeFormatting } from "../utilities/DateTimeFormatting.js";
 
-function ConversationModel(imagePath="", title="") {
+function ConversationModel(parent, imagePath="", title="") {
     const listOfMessages = [];
     const messageFactory = MessageFactory();
     const replyMap = new Map();
@@ -21,6 +21,7 @@ function ConversationModel(imagePath="", title="") {
         block,
         unblock,
         isBlocked,
+        changeTitle
     }
 
     function initialiseFromJson(json) {
@@ -71,6 +72,10 @@ function ConversationModel(imagePath="", title="") {
             replyMap.get(chatRepliedTo).push(message);
         }
 
+        self.latestMessageTime = message.time;
+
+        parent.updateForwardingPopup();
+
         console.log(replyMap);
     }
 
@@ -80,11 +85,15 @@ function ConversationModel(imagePath="", title="") {
         message.text = text;
         message.encoding = encoding;
         console.log(replyMap.get(message));
-        for (const i of replyMap.get(message)) {
-            console.log(i);
-            console.log(i.htmlElement);
-            i.htmlElement.shadowRoot.querySelector("span[name='replyText']").innerText = text;
+        if (replyMap.get(message) !=  undefined) {
+            for (const i of replyMap.get(message)) {
+                console.log(i);
+                console.log(i.htmlElement);
+                i.htmlElement.shadowRoot.querySelector("span[name='replyText']").innerText = text;
+            }
         }
+
+        parent.updateForwardingPopup();
     }
 
     function deleteMessage(id) {
@@ -97,7 +106,14 @@ function ConversationModel(imagePath="", title="") {
         }
         listOfMessages.splice(listOfMessages.findIndex(findFunction(id)));
 
+        parent.updateForwardingPopup();
+
         console.log(listOfMessages);
+    }
+
+    function changeTitle(newTitle) {
+        self.title = newTitle;
+        parent.updateForwardingPopup();
     }
 
     function getListOfMessages() {

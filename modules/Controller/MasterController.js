@@ -18,6 +18,7 @@ function MasterController() {
         getEditorView,
         updateCurrentConversation,
         changeCurrentConversation,
+        showForwardingPopup,
         model
     }
     const mainWindowController = MainWindowController(self);
@@ -106,6 +107,11 @@ function MasterController() {
     function changeCurrentConversation(conversation) {
         mainWindowController.changeConversation(conversation);
     }
+
+    function showForwardingPopup() {
+        return;
+    }
+
 
     return self;
 }

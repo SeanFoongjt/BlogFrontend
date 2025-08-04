@@ -47,13 +47,13 @@ function ModalView() {
     // Constant and variable declarations for forwarding popup
     const forwardingPopup = document.getElementById("forwarding-popup-modal");
     const forwardingPopupBody = forwardingPopup.querySelector(".modal-body");
-    const forwardingPopupTitle = forwardingPopup.querySelector(".modal-title");
     const forwardingPopupFooter = forwardingPopup.querySelector(".modal-footer");
     var forwardingConfirmButton = forwardingPopupFooter.querySelector("button[name='confirm']");
 
     function renderForwardingPopup(conversationList) {
         const list = forwardingPopupBody.querySelector(".list-group");
-        console.log(forwardingPopupBody);
+        list.replaceChildren();
+        console.log(list);
         
 
         var elementTemplate = fetch("../../../templates/forward-menu-item.html")
@@ -64,6 +64,7 @@ function ModalView() {
         elementTemplate.then(template => {
             for (const conversation of conversationList) {
                 let currOption;
+                conversation.latest
                 currOption = document.createElement("template");
                 conversation["htmlId"] = "forward-to-" + conversation["title"];
                 currOption.innerHTML = template(conversation);

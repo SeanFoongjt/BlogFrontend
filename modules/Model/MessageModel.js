@@ -45,7 +45,6 @@ function MessageFactory(chatlogView = undefined) {
 
 function ReceivedMessage(rawHTML, time, encoding, text, id, forwardedFrom) {
     const setHTMLElement = element => self.htmlElement = element;
-    const setForwardedFrom = string => self.forwardedFrom = string;
 
     const self = {
         rawHTML,
@@ -57,7 +56,6 @@ function ReceivedMessage(rawHTML, time, encoding, text, id, forwardedFrom) {
         forwardedFrom,
         htmlElement: undefined,
         setHTMLElement,
-        setForwardedFrom,
         copy: () => copy(self)
     }
 
@@ -66,7 +64,6 @@ function ReceivedMessage(rawHTML, time, encoding, text, id, forwardedFrom) {
 
 function SentMessage(rawHTML, time, encoding, replyingTo, text, id, forwardedFrom) {
     const setHTMLElement = element => self.htmlElement = element;
-    const setForwardedFrom = string => self.forwardedFrom = string;
 
 
     const self = {
@@ -80,7 +77,6 @@ function SentMessage(rawHTML, time, encoding, replyingTo, text, id, forwardedFro
         forwardedFrom,
         htmlElement: undefined,
         setHTMLElement,
-        setForwardedFrom,
         copy : () => copy(self)
     }
 
@@ -90,10 +86,8 @@ function SentMessage(rawHTML, time, encoding, replyingTo, text, id, forwardedFro
 function copy(object) {
     const objectToReturn = {}
     Object.assign(objectToReturn, object);
-    const setForwardedFrom = string => objectToReturn.forwardedFrom = string;
     const setHTMLElement = element => objectToReturn.htmlElement = element;
     objectToReturn.setHTMLElement = setHTMLElement;
-    objectToReturn.setForwardedFrom = setForwardedFrom;
     objectToReturn.copy = () => copy(objectToReturn);
 
     console.log(objectToReturn);

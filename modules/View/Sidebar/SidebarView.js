@@ -63,18 +63,19 @@ function SidebarView() {
         const sidebar = document.querySelector(".sidebar");
 
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
-            let sidebarId = 0;
+            let count = 0;
             let currOption;
             for (const conversation of listOfConversations) {
+                const sidebarId = count;
                 currOption = document.createElement("template");
                 conversation["sidebarId"] = sidebarId;
                 currOrder.push(conversation);
                 currOption.innerHTML = array[0](conversation);
                 currOption = currOption.content.firstElementChild;
 
-                currOption.addEventListener("click", () => changeActive(conversation.self));
+                currOption.addEventListener("click", () => changeActive(conversation.self, sidebarId));
                 list.appendChild(currOption);
-                sidebarId++;
+                count++;
             }
             sidebar.appendChild(container);
             activeConversationId = 0;
@@ -92,10 +93,14 @@ function SidebarView() {
         const currElement = document.querySelector(`.sidebar-id-${activeConversationId}`);
         currElement.querySelector(".latest-message-time").innerText = newMessage.latestMessageTime;
         currElement.querySelector(".latest-message-text").innerText = newMessage.latestMessageText;
+        currElement.querySelector(".conversation-title").innerHTML = 
+            `<strong>${currConversation.title}</strong>`;
     }
 
-    function changeActive(conversation) {
+    function changeActive(conversation, sidebarId) {
         sidebarController.changeConversation(conversation)
+        activeConversationId = sidebarId;
+        console.log(activeConversationId);
     }
 
     return self

@@ -12,7 +12,8 @@ function ModelManager() {
         getSidebarList,
         getMainConversation,
         setView,
-        forwardMessagesByTitle
+        forwardMessagesByTitle,
+        updateForwardingPopup
     }
 
     async function initialiseFromJson(path) {
@@ -25,7 +26,7 @@ function ModelManager() {
             // For each conversation found in the json, create a conversation model and push
             // to list of conversations
             for (const conversationJson of json["conversations"]) {
-                const conversationModel = ConversationModel()
+                const conversationModel = ConversationModel(self)
                 conversationModel.initialiseFromJson(conversationJson);
                 console.log(conversationModel);
                 listOfConversations.push(conversationModel);
@@ -69,6 +70,10 @@ function ModelManager() {
         }
 
         return conversation;
+    }
+
+    function updateForwardingPopup() {
+        viewManager.getModal().renderForwardingPopup(self.getSidebarList());
     }
 
     return self

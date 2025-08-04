@@ -13,6 +13,7 @@ function ViewManager() {
         getMainWindow,
         setController,
         getEditor,
+        getModal,
         getViews,
         renderConversation
     }
@@ -28,6 +29,10 @@ function ViewManager() {
 
     function getMainWindow() {
         return mainWindow;
+    }
+
+    function getModal() {
+        return modal;
     }
 
     function getEditor() {

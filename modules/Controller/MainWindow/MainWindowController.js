@@ -14,6 +14,7 @@ function MainWindowController(parent) {
         replyFunction,
         deleteFunction,
         forwardFunction,
+        changeTitle,
         notifyCancellableProcesses : parent.notifyCancellableProcesses,
         pushCancellableProcess : parent.pushCancellableProcess,
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
@@ -54,9 +55,20 @@ function MainWindowController(parent) {
     const replyMap = new Map();
 
 
+    function changeTitle(newTitle) {
+        conversation.changeTitle(newTitle);
+        parent.updateCurrentConversation(conversation);
+    }
 
+
+    /**
+     * Initialise the controller with a given conversation
+     * @param {ConversationModel} mainConversation main conversation to initialise with
+     */
     function initialise(mainConversation) {
         conversation = mainConversation;
+
+        // Render the conversation and add to rawcontentMap for editFunction
         const chatboxes = mainWindowView.render(mainConversation);
         for (const i in chatboxes) {
             rawcontentMap.set(chatboxes[i], mainConversation.getListOfMessages()[i].rawHTML)
@@ -327,12 +339,15 @@ function MainWindowController(parent) {
 
 
     /**
-     * 
+     * Function to forward a message to another conversation
+     * @param {HTMLElement} messageElement HTMLElement of the message to be forwarded
      */
     function forwardFunction(messageElement) {
+        // Popup and confirm button of the popup initialisation
         const forwardingPopup = document.getElementById("forwarding-popup-modal");
-
         const confirmButton = forwardingPopup.querySelector("[name='confirm']");
+
+        // Add event listener, get the message model via the id of the element
         confirmButton.addEventListener("click", forward);
         const messageList = conversation.getListOfMessages()
         const message = messageList.find(
@@ -341,27 +356,33 @@ function MainWindowController(parent) {
 
         let titleList = [];
 
+        // Create a copy of the message and set the ForwardedFrom attribute
         const messageToForward = message.copy();
-        messageToForward.setForwardedFrom(conversation.title);
+        messageToForward.forwardedFrom = conversation.title;
+        messageToForward.time = Date(Date.now());
         console.log(messageToForward);
 
 
         function forward() {
+            // Collect titles of ticked conversations into titleList
             for (const child of forwardingPopup.querySelector(".list-group").children) {
                 if (child.querySelector("[type='checkbox']").checked == true) {
                     titleList.push(child.querySelector(".conversation-title").innerText);
                 }
             }
 
+            // Invoke forwardMessagesByTitle in the ModelManager
             const newConversation = 
                 parent.model.forwardMessagesByTitle(messageToForward, titleList);
+
+            // Change conversation to the last conversation message is forwarded to
             changeConversation(newConversation);
 
-            console.log(titleList);
             cleanup();
         }
 
         function cleanup() {
+            // Remove the forward function from the confirm button, reset titleList and checkboxes
             confirmButton.removeEventListener("click", forward);
             titleList = [];
             for (const child of forwardingPopup.querySelector(".list-group").children) {
@@ -372,11 +393,14 @@ function MainWindowController(parent) {
 
 
 
+
+    // Block the current conversation
     function block() {
         conversation.block();
         mainWindowView.renderBlocked();
     }
 
+    // Unblock the current conversation
     function unblock(prevHeight) {
         conversation.unblock();
         mainWindowView.renderUnblocked(prevHeight);

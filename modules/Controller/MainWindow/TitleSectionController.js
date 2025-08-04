@@ -16,7 +16,9 @@ function TitleSectionController(parent) {
         view.setController(self);
     }
 
-
+    /**
+     * Function to rename the title of the current conversation
+     */
     function renameTitleFunction() {
         inputPopupConfirm.addEventListener("click", confirm);
         inputPopupInput.value = conversationTitle.innerText;
@@ -26,6 +28,7 @@ function TitleSectionController(parent) {
             const newTitle = inputPopupInput.value.trim();
             if (newTitle != "") {
                 conversationTitle.innerText = newTitle;
+                parent.changeTitle(newTitle);
             }
         }
     }
@@ -51,6 +54,7 @@ function TitleSectionController(parent) {
         cancel.removeAttribute("hidden");
         conversationTitleInput.focus();
 
+
         // Add event listener for enter key press, enable cancel button
         conversationTitleInput.addEventListener("keypress", validate);
         var cancelButton = document.getElementById("conversationTitleInputCancel");
@@ -62,7 +66,9 @@ function TitleSectionController(parent) {
                 if (conversationTitleInput.value.trim() != "") {
                     event.preventDefault();
                     conversationTitle.innerText = conversationTitleInput.value.trim();
+                    parent.changeTitle(conversationTitleInput.value.trim());
                 }
+
                 cleanup();
                 console.log(conversationTitle.innerText);
             }
