@@ -12,6 +12,7 @@ function ConversationModel(parent, imagePath="", title="") {
         imagePath,
         title,
         availableId : undefined,
+        conversationId : undefined,
         initialiseFromJson,
         sidebarInformation,
         addMessage,
@@ -28,6 +29,7 @@ function ConversationModel(parent, imagePath="", title="") {
         self.imagePath = json["imagePath"];
         self.title = json["title"];
         self.availableId = Number.parseInt(json["availableId"]);
+        self.conversationId = Number.parseInt(json["conversationId"]);
 
         console.log(json);
         for (const message of json["messages"]) {
@@ -53,6 +55,7 @@ function ConversationModel(parent, imagePath="", title="") {
         return {
             imagePath: self.imagePath,
             title: self.title,
+            conversationId : self.conversationId,
             latestMessageText,
             latestMessageTime,
             self
@@ -62,14 +65,17 @@ function ConversationModel(parent, imagePath="", title="") {
     function addMessage(message, replyingTo = false) {
         self.availableId += 1;
         listOfMessages.push(message);
-        const chatRepliedTo = listOfMessages.find(findFunction(replyingTo)); 
 
-        if (replyMap.get(chatRepliedTo) === undefined) {
-            replyMap.set(chatRepliedTo, []);
-        }
+        if (replyingTo) {
+            const chatRepliedTo = listOfMessages.find(findFunction(replyingTo)); 
 
-        if (replyingTo || replyingTo === 0) {
-            replyMap.get(chatRepliedTo).push(message);
+            if (replyMap.get(chatRepliedTo) === undefined) {
+                replyMap.set(chatRepliedTo, []);
+            }
+
+            if (replyingTo || replyingTo === 0) {
+                replyMap.get(chatRepliedTo).push(message);
+            }
         }
 
         self.latestMessageTime = message.time;
@@ -98,14 +104,15 @@ function ConversationModel(parent, imagePath="", title="") {
 
     function deleteMessage(id) {
         console.log(listOfMessages.find(findFunction(id)));
-        for (const i of replyMap.get(listOfMessages.find(findFunction(id)))) {
-            const replyText = i.htmlElement.shadowRoot.querySelector("span[name='replyText']");
-            replyText.innerText = "Message Deleted";
-            replyText.style.fontStyle = "italic";
-            replyText.style.color = "#bebebe";
+        if (replyMap.get(listOfMessages.find(findFunction(id)) != undefined)) {
+            for (const i of replyMap.get(listOfMessages.find(findFunction(id)))) {
+                const replyText = i.htmlElement.shadowRoot.querySelector("span[name='replyText']");
+                replyText.innerText = "Message Deleted";
+                replyText.style.fontStyle = "italic";
+                replyText.style.color = "#bebebe";
+            }
         }
         listOfMessages.splice(listOfMessages.findIndex(findFunction(id)));
-
         parent.updateForwardingPopup();
 
         console.log(listOfMessages);

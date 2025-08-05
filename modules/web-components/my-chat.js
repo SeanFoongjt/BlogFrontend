@@ -10,19 +10,17 @@ myChatTemplate.innerHTML = `
 
         <!--Actual text goes here-->
         <div class="d-flex flex-column text-with-reply">
-            <div class="d-flex" name="">
-                <div class="" name="replyBanner" hidden>
-                    <slot name="replyingToIcon"></slot>
-                    <span class="text-muted" style="font-size:14px;" name="replyText">
-                        Placeholder text
-                    </span>
-                </div>
-                <div class="" name="forwardBanner" hidden>
-                    <slot name="forwardedFromIcon"></slot>
-                    <span class="text-muted" style="font-size:14px;" name="forwardText">
-                        Placeholder text
-                    </span>
-                </div>
+            <div class="" name="replyBanner" hidden>
+                <slot name="replyingToIcon"></slot>
+                <span class="text-muted" style="font-size:14px;" name="replyText">
+                    Placeholder text
+                </span>
+            </div>
+            <div class="" name="forwardBanner" hidden>
+                <slot name="forwardedFromIcon"></slot>
+                <span class="text-muted" style="font-size:14px;" name="forwardText">
+                    Placeholder text
+                </span>
             </div>
             <div class="border-1 rounded border-dark py-2 px-3 my-text-box text-box flex-shrink-1" name="text-box">
                 <slot name="chatText"></slot>

@@ -3,6 +3,7 @@
         "imagePath" : "../img/cornflower.webp",
         "title" : "Cornflower",
         "availableId" : "7",
+        "conversationId" : "0",
         "blocked" : "false",
         "messages" : [
             {
@@ -78,6 +79,7 @@
         "imagePath" : "../img/elster.jpg",
         "title" : "Elster",
         "availableId" : "3",
+        "conversationId" : "1",
         "blocked" : "false",
         "messages" : [
             {
@@ -107,6 +109,53 @@
                 "encoding" : "Plaintext",
                 "forwardedFrom" : "false",
                 "id" : "2"
+            }
+        ]
+    },
+        {
+        "imagePath" : "../img/penrose.jpg",
+        "title" : "Penrose",
+        "availableId" : "4",
+        "conversationId" : "2",
+        "blocked" : "false",
+        "messages" : [
+            {
+                "type" : "my-chat",
+                "text" : "Testing a new conversation",
+                "rawHTML" : "Testing a new conversation",
+                "time" : "5 August, 2025 14:14",
+                "encoding" : "Plaintext",
+                "replyingTo" : "false",
+                "forwardedFrom" : "false",
+                "id" : "0"
+            },
+            {
+                "type" : "other-chat",
+                "text" : "You free for lunch later?",
+                "rawHTML" : "You free for lunch later?",
+                "time" : "5 August, 2025 14:17",
+                "encoding" : "Plaintext",
+                "forwardedFrom" : "false",
+                "id" : "1"
+            }, 
+            {
+                "type" : "other-chat",
+                "text" : "Got a place I wanna see",
+                "rawHTML" : "Got a place I wanna see",
+                "time" : "5 August, 2025 14:23",
+                "encoding" : "Plaintext",
+                "forwardedFrom" : "false",
+                "id" : "2"
+            },
+            {
+                "type" : "my-chat",
+                "text" : "sure when?",
+                "rawHTML" : "sure when?",
+                "time" : "5 August, 2025 15:13",
+                "encoding" : "Plaintext",
+                "replyingTo" : "false",
+                "forwardedFrom" : "false",
+                "id" : "3"
             }
         ]
     }

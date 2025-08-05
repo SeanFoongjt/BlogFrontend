@@ -19,6 +19,7 @@ function MasterController() {
         updateCurrentConversation,
         changeCurrentConversation,
         showForwardingPopup,
+        changeSidebarConversation,
         model
     }
     const mainWindowController = MainWindowController(self);
@@ -106,6 +107,10 @@ function MasterController() {
 
     function changeCurrentConversation(conversation) {
         mainWindowController.changeConversation(conversation);
+    }
+
+    function changeSidebarConversation(conversation) {
+        sidebarController.changeActive(conversation);
     }
 
     function showForwardingPopup() {

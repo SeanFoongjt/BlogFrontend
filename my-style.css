@@ -105,6 +105,10 @@ sidebar-conversations {
     }
 }
 
+.chat-selection.active-css {
+    background-color: #e9ecef
+}
+
 
 /* Title section */
 #title-section {
@@ -274,6 +278,18 @@ sidebar-conversations {
     & ul {
         margin-bottom: 0px;
     }
+}
+
+[name="forwardBanner"] {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+[name="replyBanner"] {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 

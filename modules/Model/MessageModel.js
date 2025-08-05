@@ -88,6 +88,8 @@ function copy(object) {
     Object.assign(objectToReturn, object);
     const setHTMLElement = element => objectToReturn.htmlElement = element;
     objectToReturn.setHTMLElement = setHTMLElement;
+    objectToReturn.replyingTo = false;
+    objectToReturn.time = Date(Date.now());
     objectToReturn.copy = () => copy(objectToReturn);
 
     console.log(objectToReturn);

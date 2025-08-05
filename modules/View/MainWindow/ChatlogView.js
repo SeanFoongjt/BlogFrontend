@@ -61,13 +61,19 @@ function ChatlogView(imagePath) {
         if (message.forwardedFrom) {
             var forwardBanner = chatbox.shadowRoot.querySelector("div[name='forwardBanner']");
             var text = forwardBanner.querySelector("span[name='forwardText']");
-
             
-            fillChatbox.then(item => text.innerText = "Forwarded from " + message.forwardedFrom);
-            
+            fillChatbox.then(item => {
+                text.innerText = "Forwarded from " + message.forwardedFrom;
+                console.log("Text width: " + chatbox.shadowRoot.querySelector(".text-box").offsetWidth)
+                console.log("Forward Banner width: " + forwardBanner.style.width);
+                forwardBanner.removeAttribute("hidden");
+                console.log("Forward Banner width after unhide: " + forwardBanner.offsetWidth);
+                forwardBanner.style.width = `${chatbox.shadowRoot.querySelector(".text-box").offsetWidth}px`;
+                console.log("Forward Banner width after adjustment: " + forwardBanner.offsetWidth)
+            });
 
             // make completed replyBanner visible, 
-            forwardBanner.removeAttribute("hidden");
+            
         }
 
         chatlog.appendChild(chatbox);
@@ -141,16 +147,6 @@ function ChatlogView(imagePath) {
 
         return listOfChatboxes;
     }
-
-    /** 
-    function updateBanners(affectedMessages, isOriginalDeleted = false) {
-        if (! isOriginalDeleted) {
-            for (const message in affectedMessages) {
-                message.
-            }
-        }
-    }
-    */
 
     /**
      * Format the string to be used as text for the reply banner.

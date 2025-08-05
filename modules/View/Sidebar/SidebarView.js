@@ -1,7 +1,7 @@
 function SidebarView() {
     const currOrder = [];
     let conversationsElement;
-    let activeConversationId = undefined;
+    let activeConversationId = 0;
     let sidebarController;
 
     const self = {
@@ -14,29 +14,6 @@ function SidebarView() {
     function setController(controller) {
         sidebarController = controller;
     }
-
-
-
-    /**
-     * Conversation searchbar logic
-     */
-    // Have the cancel button reset the searchbar
-    const conversationSearchResetButton = document.getElementById("conversation-search-reset");
-    const conversationSearchText = document.getElementById("conversation-search-text");
-    conversationSearchResetButton.addEventListener("click", () => {
-        conversationSearchText.value = "";
-        conversationSearchText.focus();
-        conversationSearchResetButton.setAttribute("hidden", "true");
-    });
-
-    // Ensure cancel button is revealed when there is text in the conversation searchbar
-    conversationSearchText.addEventListener("input", (event) => {
-        if (event.data != null) {
-            conversationSearchResetButton.removeAttribute("hidden");
-        } else if (conversationSearchText.value == "") {
-            conversationSearchResetButton.setAttribute("hidden", "");
-        }
-    })
 
 
 
@@ -55,7 +32,15 @@ function SidebarView() {
             .then(res => res.text())
             .then(text => Handlebars.compile(text));
 
-        const container = document.createElement("div");
+        var container;
+        if (conversationsElement == undefined) {
+            container = document.createElement("div");
+        } else {
+            container = conversationsElement;
+            console.log(container);
+            container.replaceChildren();
+        }
+        
         container.setAttribute("class", "w-100 h-100 px-2 list-container");
         const list = document.createElement("div");
         list.setAttribute("class", "chat-selection list-group w-100 h-100");
@@ -63,22 +48,23 @@ function SidebarView() {
         const sidebar = document.querySelector(".sidebar");
 
         const conversationPromise = Promise.all([elementTemplate]).then(array => {
-            let count = 0;
             let currOption;
             for (const conversation of listOfConversations) {
-                const sidebarId = count;
                 currOption = document.createElement("template");
-                conversation["sidebarId"] = sidebarId;
                 currOrder.push(conversation);
                 currOption.innerHTML = array[0](conversation);
                 currOption = currOption.content.firstElementChild;
 
-                currOption.addEventListener("click", () => changeActive(conversation.self, sidebarId));
+                currOption.addEventListener("click", () => changeActive(conversation.self));
+                console.log(currOption);
                 list.appendChild(currOption);
-                count++;
             }
             sidebar.appendChild(container);
-            activeConversationId = 0;
+
+            const currActive = document.querySelector(`.sidebar-id-${activeConversationId}`);
+            if (currActive != undefined) {
+                currActive.classList.add("active-css");
+            }
         });
 
         console.log(currOrder);
@@ -97,9 +83,12 @@ function SidebarView() {
             `<strong>${currConversation.title}</strong>`;
     }
 
-    function changeActive(conversation, sidebarId) {
+    function changeActive(conversation) {
         sidebarController.changeConversation(conversation)
-        activeConversationId = sidebarId;
+        document.querySelector(`.sidebar-id-${activeConversationId}`).classList.remove("active-css");
+        activeConversationId = conversation.conversationId;
+        document.querySelector(`.sidebar-id-${activeConversationId}`).classList.add("active-css");
+        
         console.log(activeConversationId);
     }
 

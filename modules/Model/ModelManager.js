@@ -13,7 +13,8 @@ function ModelManager() {
         getMainConversation,
         setView,
         forwardMessagesByTitle,
-        updateForwardingPopup
+        updateForwardingPopup,
+        searchConversationsByTitle
     }
 
     async function initialiseFromJson(path) {
@@ -70,6 +71,19 @@ function ModelManager() {
         }
 
         return conversation;
+    }
+
+    function searchConversationsByTitle(title) {
+        const resultList = [];
+        console.log(title);
+
+        for (const conversation of listOfConversations) {
+            if (conversation.title.toLowerCase().startsWith(title.toLowerCase())) {
+                resultList.push(conversation);
+            }
+        }
+
+        return resultList;
     }
 
     function updateForwardingPopup() {

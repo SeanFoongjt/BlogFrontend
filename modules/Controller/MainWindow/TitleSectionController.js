@@ -56,7 +56,7 @@ function TitleSectionController(parent) {
 
 
         // Add event listener for enter key press, enable cancel button
-        conversationTitleInput.addEventListener("keypress", validate);
+        conversationTitleInput.addEventListener("keydown", validate);
         var cancelButton = document.getElementById("conversationTitleInputCancel");
         cancelButton.addEventListener("click", cleanup);
 

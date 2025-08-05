@@ -376,7 +376,9 @@ function MainWindowController(parent) {
                 parent.model.forwardMessagesByTitle(messageToForward, titleList);
 
             // Change conversation to the last conversation message is forwarded to
-            changeConversation(newConversation);
+            parent.changeSidebarConversation(newConversation);
+            parent.updateCurrentConversation(newConversation);
+
 
             cleanup();
         }
