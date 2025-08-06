@@ -188,10 +188,19 @@ sidebar-conversations {
     background-color: white;
     color: black;
     word-wrap: break-word;
+    anchor-name: --other-text-box;
 }
 
 .other-avatar {
     height: 40px;
+}
+
+.dropdown-button {
+    position-anchor: --other-text-box;
+}
+
+.dropdown-button:hover, .dropdown-button:active {
+    display: visible;
 }
 
 /* Editor together with the bottom most buttons for sending and encoding */

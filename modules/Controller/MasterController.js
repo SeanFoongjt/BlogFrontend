@@ -13,14 +13,14 @@ function MasterController() {
         pushCancellableProcess,
         removeFromCancellableProcesses,
         cancellableProcessesLength,
-        getEditor,
         initialise,
-        getEditorView,
-        updateCurrentConversation,
+        updateSidebarConversation,
         changeCurrentConversation,
         showForwardingPopup,
         changeSidebarConversation,
-        model
+        clearActiveConversation,
+        model,
+        activeConversation : undefined
     }
     const mainWindowController = MainWindowController(self);
     const sidebarController = SideBarController(self);
@@ -62,6 +62,7 @@ function MasterController() {
         mainWindowController.initialise(mainConversation);
         sidebarController.initialise(conversationList);
         modalController.initialise(conversationList);
+        self.activeConversation = mainConversation;
         //view.initialise(conversationList, mainConversation);
     }
 
@@ -92,25 +93,23 @@ function MasterController() {
         return editorView.getEditor();
     }
 
-    function getEditorView() {
-        if (editorView === undefined) {
-            editorView = view.getEditor();
-        }
 
-        return editorView;
-    }
-
-
-    function updateCurrentConversation(conversation) {
-        sidebarController.updateCurrentConversation(conversation);
+    function updateSidebarConversation(conversation) {
+        sidebarController.updateConversation(conversation);
     }
 
     function changeCurrentConversation(conversation) {
+        self.activeConversation = conversation;
         mainWindowController.changeConversation(conversation);
     }
 
     function changeSidebarConversation(conversation) {
         sidebarController.changeActive(conversation);
+    }
+
+    function clearActiveConversation() {
+        self.activeConversation.clearMessages();
+        sidebarController.updateConversation(self.activeConversation);
     }
 
     function showForwardingPopup() {

@@ -2,7 +2,7 @@ import { MessageFactory } from "./MessageModel.js";
 import { DateTimeFormatting } from "../utilities/DateTimeFormatting.js";
 
 function ConversationModel(parent, imagePath="", title="") {
-    const listOfMessages = [];
+    var listOfMessages = [];
     const messageFactory = MessageFactory();
     const replyMap = new Map();
     const findFunction = id => message => message.id == id;
@@ -16,6 +16,7 @@ function ConversationModel(parent, imagePath="", title="") {
         initialiseFromJson,
         sidebarInformation,
         addMessage,
+        clearMessages,
         getListOfMessages,
         deleteMessage,
         editMessage,
@@ -42,15 +43,20 @@ function ConversationModel(parent, imagePath="", title="") {
     function sidebarInformation() {
         const lastMessage = listOfMessages[listOfMessages.length - 1]
         let latestMessageText;
+        let latestMessageTime;
 
-        if (lastMessage.type === "my-chat") {
+        if (lastMessage == undefined) {
+
+        } else if (lastMessage.type === "my-chat") {
             latestMessageText = "You: " + lastMessage.text.replace(/[\r\n]+/gm, " ");
+            latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
 
         } else if (lastMessage.type === "other-chat") {
             latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
+            latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
         }
 
-        const latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
+        
 
         return {
             imagePath: self.imagePath,
@@ -116,6 +122,11 @@ function ConversationModel(parent, imagePath="", title="") {
         parent.updateForwardingPopup();
 
         console.log(listOfMessages);
+    }
+
+
+    function clearMessages() {
+        listOfMessages = [];
     }
 
     function changeTitle(newTitle) {

@@ -1,6 +1,7 @@
 function ModalView() {
     let modalController;
     let conversationMap = new Map();
+    let currentlyRendering = true;
 
     self = {
         setController,
@@ -52,9 +53,6 @@ function ModalView() {
 
     function renderForwardingPopup(conversationList) {
         const list = forwardingPopupBody.querySelector(".list-group");
-        list.replaceChildren();
-        console.log(list);
-        
 
         var elementTemplate = fetch("../../../templates/forward-menu-item.html")
             .then(res => res.text())
@@ -62,9 +60,9 @@ function ModalView() {
 
 
         elementTemplate.then(template => {
+            list.replaceChildren();
             for (const conversation of conversationList) {
                 let currOption;
-                conversation.latest
                 currOption = document.createElement("template");
                 conversation["htmlId"] = "forward-to-" + conversation["title"];
                 currOption.innerHTML = template(conversation);
@@ -75,7 +73,6 @@ function ModalView() {
                     () => currOption.querySelector("[type='checkbox']").checked = ! currOption.querySelector("[type='checkbox']").checked
                 );
 
-                conversationMap.set(currOption, conversation.self);
                 list.appendChild(currOption);
             }
         });

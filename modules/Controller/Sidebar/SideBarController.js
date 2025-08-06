@@ -4,7 +4,7 @@ function SideBarController(parent) {
     const self = {
         setView,
         initialise,
-        updateCurrentConversation,
+        updateConversation,
         changeConversation,
         changeActive
     }
@@ -66,7 +66,7 @@ function SideBarController(parent) {
         sidebarView.changeActive(conversation);
     }
 
-    function updateCurrentConversation(conversation) {
+    function updateConversation(conversation) {
         sidebarView.update(conversation);
     }
 

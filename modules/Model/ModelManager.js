@@ -14,7 +14,7 @@ function ModelManager() {
         setView,
         forwardMessagesByTitle,
         updateForwardingPopup,
-        searchConversationsByTitle
+        searchConversationsByTitle,
     }
 
     async function initialiseFromJson(path) {
@@ -61,6 +61,8 @@ function ModelManager() {
     }
 
     function forwardMessagesByTitle(message, conversationList) {
+        const resultList = [];
+        
         const filteredList = listOfConversations.filter(
             conversation => conversationList.includes(conversation.title)
         )
@@ -68,9 +70,10 @@ function ModelManager() {
         for (var conversation of filteredList) {
             console.log(conversation);
             conversation.addMessage(message);
+            resultList.push(conversation);
         }
 
-        return conversation;
+        return resultList;
     }
 
     function searchConversationsByTitle(title) {

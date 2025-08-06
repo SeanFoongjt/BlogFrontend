@@ -122,11 +122,15 @@ function ChatlogView(imagePath) {
         chatlog.appendChild(chatbox);
         
 
-        chatbox
-            .shadowRoot
-            .querySelector("button[name='reply-button']")
-            .addEventListener("click", () => chatlogController.replyFunction(chatbox));
+        conversationTemplate.then(item =>  {
+            chatbox
+                .querySelector("[name='reply-button']")
+                .addEventListener("click", () => chatlogController.replyFunction(chatbox));
+            chatbox
+                .querySelector("[name='forward-button']")
+                .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
             chatlog.scrollTop = chatlog.scrollHeight;
+        });
 
         return chatbox;
 

@@ -16,8 +16,6 @@ function SidebarView() {
     }
 
 
-
-
     
     /**
      * Render the list of conversations passed as an argument in the sidebar
@@ -26,6 +24,11 @@ function SidebarView() {
     function render(listOfConversations) {
         Handlebars.registerHelper('isPositive', function (value) {
             return value > 0;
+        });
+
+        Handlebars.registerHelper('isDefined', function (value) {
+            console.log(value);
+            return value != undefined;
         });
 
         var elementTemplate = fetch("../../../templates/sidebar-conversations.html")
@@ -74,13 +77,27 @@ function SidebarView() {
 
 
 
-    function update(currConversation) {
-        const newMessage = currConversation.sidebarInformation();
-        const currElement = document.querySelector(`.sidebar-id-${activeConversationId}`);
-        currElement.querySelector(".latest-message-time").innerText = newMessage.latestMessageTime;
-        currElement.querySelector(".latest-message-text").innerText = newMessage.latestMessageText;
+    function update(conversation) {
+        const newMessage = conversation.sidebarInformation();
+        const currElement = document.querySelector(`.sidebar-id-${conversation.conversationId}`);
+
+        if (newMessage.latestMessageTime == undefined) {
+            currElement.querySelector(".latest-message-time").setAttribute("hidden","");
+        } else {
+            currElement.querySelector(".latest-message-time").removeAttribute("hidden");
+            currElement.querySelector(".latest-message-time").innerText = newMessage.latestMessageTime;
+        }
+
+        if (newMessage.latestMessageText == undefined) {
+            currElement.querySelector(".latest-message-text").setAttribute("hidden", "");
+        } else {
+            currElement.querySelector(".latest-message-text").removeAttribute("hidden");
+            currElement.querySelector(".latest-message-text").innerText = newMessage.latestMessageText;
+        }
+        
+        
         currElement.querySelector(".conversation-title").innerHTML = 
-            `<strong>${currConversation.title}</strong>`;
+            `<strong>${conversation.title}</strong>`;
     }
 
     function changeActive(conversation) {

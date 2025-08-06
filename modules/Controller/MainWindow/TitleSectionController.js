@@ -114,6 +114,7 @@ function TitleSectionController(parent) {
             () => {
                 document.getElementById('chatlog').replaceChildren();
                 parent.notifyCancellableProcesses();
+                parent.clearActiveConversation();
             }
         )
     );

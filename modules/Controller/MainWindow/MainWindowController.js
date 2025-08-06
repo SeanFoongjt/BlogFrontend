@@ -19,6 +19,7 @@ function MainWindowController(parent) {
         pushCancellableProcess : parent.pushCancellableProcess,
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
         cancellableProcessesLength : parent.cancellableProcessesLength,
+        clearActiveConversation : parent.clearActiveConversation,
         block,
         unblock,
         changeConversation
@@ -31,7 +32,6 @@ function MainWindowController(parent) {
     const quill = editorController.getEditor();
     let messageFactory;
     let mainWindowView;
-    let conversation;
 
 
     function setView(view) {
@@ -50,14 +50,10 @@ function MainWindowController(parent) {
     // May need reworking consider safety issues
     const rawcontentMap = new Map();
 
-    // Keeps track of which objects are referenced in other chats reply banners. Key is the chat
-    // referenced whereas values are the chats referencing / replying to the key
-    const replyMap = new Map();
-
 
     function changeTitle(newTitle) {
-        conversation.changeTitle(newTitle);
-        parent.updateCurrentConversation(conversation);
+        parent.activeConversation.changeTitle(newTitle);
+        parent.updateSidebarConversation(parent.activeConversation);
     }
 
 
@@ -66,8 +62,6 @@ function MainWindowController(parent) {
      * @param {ConversationModel} mainConversation main conversation to initialise with
      */
     function initialise(mainConversation) {
-        conversation = mainConversation;
-
         // Render the conversation and add to rawcontentMap for editFunction
         const chatboxes = mainWindowView.render(mainConversation);
         for (const i in chatboxes) {
@@ -77,9 +71,6 @@ function MainWindowController(parent) {
 
 
     function changeConversation(newConversation) {
-        // Active conversation is the newConversation
-        conversation = newConversation;
-
         // blank space with a height of 5px to provide padding to the top of the chatlog
         const blankSpace = document.createElement("div");
         blankSpace.setAttribute("class", "blank-space");
@@ -169,12 +160,12 @@ function MainWindowController(parent) {
                 subtext.innerText += " (edited)"
             }
 
-            conversation.editMessage(
+            parent.activeConversation.editMessage(
                 conversationId, quill.getText().trim(), quill.root.innerHTML,
                 currEncoding.getAttribute("value")
             )
             chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
-            parent.updateCurrentConversation(conversation);
+            parent.updateSidebarConversation(parent.activeConversation);
             cleanup();
         }
 
@@ -239,13 +230,6 @@ function MainWindowController(parent) {
             // No event to be sent, but there is object to be replied to
             const newChat = sendFunction(null, object);
 
-            // Have message replied to keep track of how many other messages reference it
-            // to change text if an edit is done.
-            if (!replyMap.has(object)) {
-                replyMap.set(object, [newChat]);
-            } else {
-                replyMap.get(object).push(newChat);
-            }
             cleanup();
         }
 
@@ -273,8 +257,8 @@ function MainWindowController(parent) {
     function deleteFunction(object) {
         parent.notifyCancellableProcesses();
 
-        conversation.deleteMessage(object.getAttribute("conversation-id"));
-        parent.updateCurrentConversation(conversation);
+        parent.activeConversation.deleteMessage(object.getAttribute("conversation-id"));
+        parent.updateSidebarConversation(conversation);
 
         object.remove();
     }
@@ -306,7 +290,7 @@ function MainWindowController(parent) {
             return;
         }
 
-        console.log("Available id : " + conversation.availableId);
+        console.log("Available id : " + parent.activeConversation.availableId);
         // use createConversation to create html component
         const [newChat, newElement] = messageFactory.createSentMessage(
             rawHTML.trim(), 
@@ -314,22 +298,20 @@ function MainWindowController(parent) {
             encodingType, 
             isReply,
             rawtext,
-            conversation.availableId,
+            parent.activeConversation.availableId,
             false
         );
 
         if (!isReply) {
-            conversation.addMessage(newChat);
+            parent.activeConversation.addMessage(newChat);
         } else {
-            conversation.addMessage(newChat, isReply.getAttribute("conversation-id"));
+            parent.activeConversation.addMessage(newChat, isReply.getAttribute("conversation-id"));
         }
-        console.log(conversation.getListOfMessages());
 
         // Store original html in rawcontentMap
         rawcontentMap.set(newElement, rawHTML);
-        console.log(rawcontentMap);
 
-        parent.updateCurrentConversation(conversation);
+        parent.updateSidebarConversation(parent.activeConversation);
 
         return newChat;
     }
@@ -349,7 +331,8 @@ function MainWindowController(parent) {
 
         // Add event listener, get the message model via the id of the element
         confirmButton.addEventListener("click", forward);
-        const messageList = conversation.getListOfMessages()
+        forwardingPopup.addEventListener("hidden.bs.modal", cleanup);
+        const messageList = parent.activeConversation.getListOfMessages()
         const message = messageList.find(
             chat => chat.id == messageElement.getAttribute("conversation-id")
         );
@@ -358,7 +341,8 @@ function MainWindowController(parent) {
 
         // Create a copy of the message and set the ForwardedFrom attribute
         const messageToForward = message.copy();
-        messageToForward.forwardedFrom = conversation.title;
+        messageToForward.type = "my-chat";
+        messageToForward.forwardedFrom = parent.activeConversation.title;
         messageToForward.time = Date(Date.now());
         console.log(messageToForward);
 
@@ -372,12 +356,15 @@ function MainWindowController(parent) {
             }
 
             // Invoke forwardMessagesByTitle in the ModelManager
-            const newConversation = 
+            const conversationList = 
                 parent.model.forwardMessagesByTitle(messageToForward, titleList);
 
             // Change conversation to the last conversation message is forwarded to
-            parent.changeSidebarConversation(newConversation);
-            parent.updateCurrentConversation(newConversation);
+            parent.changeSidebarConversation(conversationList[conversationList.length - 1]);
+            for (const conversation of conversationList) {
+                parent.updateSidebarConversation(conversation);
+            }
+            
 
 
             cleanup();
@@ -386,6 +373,7 @@ function MainWindowController(parent) {
         function cleanup() {
             // Remove the forward function from the confirm button, reset titleList and checkboxes
             confirmButton.removeEventListener("click", forward);
+            forwardingPopup.removeEventListener("hide.bs.modal", cleanup);
             titleList = [];
             for (const child of forwardingPopup.querySelector(".list-group").children) {
                 child.querySelector("[type='checkbox']").checked = false;
@@ -398,13 +386,13 @@ function MainWindowController(parent) {
 
     // Block the current conversation
     function block() {
-        conversation.block();
+        parent.activeConversation.block();
         mainWindowView.renderBlocked();
     }
 
     // Unblock the current conversation
     function unblock(prevHeight) {
-        conversation.unblock();
+        parent.activeConversation.unblock();
         mainWindowView.renderUnblocked(prevHeight);
     }
 
