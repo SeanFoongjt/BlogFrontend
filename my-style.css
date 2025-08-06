@@ -175,6 +175,11 @@ sidebar-conversations {
     height: 5px;
 }
 
+.new-day {
+    background-color: #808080;
+    color: white;
+}
+
 /* Styling for display of chats */
 /* Modifies text box coming from the user */
 .my-text-box {
@@ -299,6 +304,14 @@ sidebar-conversations {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.chat-dropdown.revealed {
+    visibility: visible !important;
+}
+
+.chat-dropdown {
+    visibility: hidden;
 }
 
 

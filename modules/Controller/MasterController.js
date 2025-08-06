@@ -16,6 +16,7 @@ function MasterController() {
         initialise,
         updateSidebarConversation,
         changeCurrentConversation,
+        closeActiveConversation,
         showForwardingPopup,
         changeSidebarConversation,
         clearActiveConversation,
@@ -44,7 +45,7 @@ function MasterController() {
     modelInitialise
         .then(() => self.initialise(
             model.getSidebarList(), 
-            model.getMainConversation(),
+            model.getFirstConversation(),
         ));
 
     
@@ -110,6 +111,14 @@ function MasterController() {
     function clearActiveConversation() {
         self.activeConversation.clearMessages();
         sidebarController.updateConversation(self.activeConversation);
+    }
+
+    function closeActiveConversation() {
+        model.closeConversation(self.activeConversation);
+        self.activeConversation = model.getFirstConversation();
+        sidebarController.closeConversation()
+        changeCurrentConversation(self.activeConversation);
+        changeSidebarConversation(self.activeConversation);
     }
 
     function showForwardingPopup() {

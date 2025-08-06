@@ -119,6 +119,23 @@ function TitleSectionController(parent) {
         )
     );
 
+
+
+    /**
+     * Add appropriate listener to close conversation button.
+     */
+    const closeConversationButton = document.getElementById("close-conversation");
+    closeConversationButton.addEventListener(
+        "click",
+        () => confirmationPopupFunction(
+            "Close conversation?",
+            "Are you sure you want to close the conversation?",
+            () => {
+                parent.closeActiveConversation();
+            }
+        )
+    )
+
     return self
 }
 

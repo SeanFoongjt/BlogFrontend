@@ -20,6 +20,7 @@ function MainWindowController(parent) {
         removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
         cancellableProcessesLength : parent.cancellableProcessesLength,
         clearActiveConversation : parent.clearActiveConversation,
+        closeActiveConversation : parent.closeActiveConversation,
         block,
         unblock,
         changeConversation
@@ -71,11 +72,7 @@ function MainWindowController(parent) {
 
 
     function changeConversation(newConversation) {
-        // blank space with a height of 5px to provide padding to the top of the chatlog
-        const blankSpace = document.createElement("div");
-        blankSpace.setAttribute("class", "blank-space");
         document.getElementById("chatlog").replaceChildren();
-        document.getElementById("chatlog").appendChild(blankSpace);
 
         const chatboxes = mainWindowView.render(newConversation);
         rawcontentMap.clear();
@@ -258,9 +255,13 @@ function MainWindowController(parent) {
         parent.notifyCancellableProcesses();
 
         parent.activeConversation.deleteMessage(object.getAttribute("conversation-id"));
-        parent.updateSidebarConversation(conversation);
+        parent.updateSidebarConversation(parent.activeConversation);
 
+        const chatlog = document.getElementById("chatlog");
         object.remove();
+        if (chatlog.lastChild.matches("div")) {
+            chatlog.lastChild.remove();
+        }
     }
 
 

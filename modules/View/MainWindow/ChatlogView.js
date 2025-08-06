@@ -4,6 +4,8 @@ import { DateTimeFormatting } from "../../utilities/DateTimeFormatting.js";
 
 function ChatlogView(imagePath) {
     let chatlogController;
+    let latestTime;
+    let chatlog = document.getElementById("chatlog");
 
     const self = {
         setImage,
@@ -21,19 +23,33 @@ function ChatlogView(imagePath) {
         imagePath = newImagePath;
     }  
 
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
     function renderSentMessage(message) {
         var contextObj = {
             text : encodeText(message.rawHTML, message.encoding),
             time : DateTimeFormatting.formatTime(message.time),
             encoding: message.encoding,
         }
+
+
+        const messageTime = new Date(message.time);
+        if (latestTime == undefined) {
+            renderNewDay(messageTime);
+
+        } else if (latestTime.getDate() != messageTime.getDate() || latestTime.getMonth() != messageTime.getMonth()) {
+            renderNewDay(messageTime);
+        }
+        latestTime = messageTime;
+        console.log(typeof latestTime);
+
+
         var conversationTemplate = fetch("../../templates/my-conversation.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text))
             .then(template => template(contextObj));
 
         // Initialise chatbox, add dropdown menu
-        var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("my-chat");
         chatbox.setAttribute("conversation-id", message.id);
 
@@ -92,6 +108,15 @@ function ChatlogView(imagePath) {
                 chatbox.querySelector("[name='forward-button']")
                     .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
 
+                chatbox.addEventListener(
+                    "mouseover", 
+                    () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
+                );
+                chatbox.addEventListener(
+                    "mouseout", 
+                    () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
+                );
+
                 // Scroll to bottom of chatlog
                 chatlog.scrollTop = chatlog.scrollHeight;
             });
@@ -107,19 +132,29 @@ function ChatlogView(imagePath) {
             imgsrc: imagePath,
             encoding: message.encoding,
         }
+
+
+        const messageTime = new Date(message.time);
+        if (latestTime == undefined) {
+            renderNewDay(messageTime);
+
+        } else if (latestTime.getDate() != messageTime.getDate() || latestTime.getMonth() != messageTime.getMonth()) {
+            renderNewDay(messageTime);
+        }
+        latestTime = messageTime;
+        
+
         var conversationTemplate = fetch("../../templates/other-conversation.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text))
             .then(template => template(contextObj))
 
         // Initialise chatbox, add dropdown menu
-        var chatlog = document.getElementById("chatlog");
         var chatbox = document.createElement("other-chat");
         chatbox.setAttribute("conversation-id", message.id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
-
-        chatlog.appendChild(chatbox);
+        chatlog.appendChild(chatbox)
         
 
         conversationTemplate.then(item =>  {
@@ -129,6 +164,15 @@ function ChatlogView(imagePath) {
             chatbox
                 .querySelector("[name='forward-button']")
                 .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
+
+            chatbox.addEventListener(
+                "mouseover", 
+                () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
+            );
+            chatbox.addEventListener(
+                "mouseout", 
+                () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
+            );
             chatlog.scrollTop = chatlog.scrollHeight;
         });
 
@@ -152,15 +196,27 @@ function ChatlogView(imagePath) {
         return listOfChatboxes;
     }
 
+    async function renderNewDay(time) {
+        const container = document.createElement("div");
+        const timeString = time.getDate() + " " + monthNames[time.getMonth()]
+
+        fetch("../../templates/new-day.html")
+            .then(res => res.text())
+            .then(text => Handlebars.compile(text))
+            .then(template => template({day: timeString}))
+            .then(element => container.innerHTML = element)
+
+        chatlog.append(container);
+    }
+
     /**
      * Format the string to be used as text for the reply banner.
-     * NOTE: CAN LIKELY REPLACE WITH TEXT-OVERFLOW: ELLIPSIS
      * @param {string} string string to be formatted
      * @param {HTMLElement} chatbox chatbox containing the reply banner
      * @param {Promise} promise promise to wait for before textbox is available
      * @returns 
      */
-    function formatForReply(string, chatbox, promise) {
+    async function formatForReply(string, chatbox, promise) {
         return Promise.all([promise]).then(item => {
             var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
             const textbox = chatbox.shadowRoot.querySelector(".text-box");

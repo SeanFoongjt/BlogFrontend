@@ -10,11 +10,12 @@ function ModelManager() {
     const self = {
         initialiseFromJson,
         getSidebarList,
-        getMainConversation,
+        getFirstConversation,
         setView,
         forwardMessagesByTitle,
         updateForwardingPopup,
         searchConversationsByTitle,
+        closeConversation
     }
 
     async function initialiseFromJson(path) {
@@ -55,7 +56,7 @@ function ModelManager() {
         return returnList;
     }
 
-    function getMainConversation() {
+    function getFirstConversation() {
         console.log(listOfConversations[0]);
         return listOfConversations[0];
     }
@@ -87,6 +88,14 @@ function ModelManager() {
         }
 
         return resultList;
+    }
+
+    function closeConversation(conversation) {
+        const index = listOfConversations.indexOf(conversation);
+        console.log(index);
+        listOfConversations.splice(index, 1)
+        console.log(listOfConversations);
+        updateForwardingPopup();
     }
 
     function updateForwardingPopup() {

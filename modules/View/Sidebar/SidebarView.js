@@ -1,5 +1,5 @@
 function SidebarView() {
-    const currOrder = [];
+    let currOrder = [];
     let conversationsElement;
     let activeConversationId = 0;
     let sidebarController;
@@ -8,7 +8,8 @@ function SidebarView() {
         render,
         changeActive,
         setController,
-        update
+        update,
+        closeConversation
     }
 
     function setController(controller) {
@@ -107,6 +108,13 @@ function SidebarView() {
         document.querySelector(`.sidebar-id-${activeConversationId}`).classList.add("active-css");
         
         console.log(activeConversationId);
+    }
+
+    function closeConversation() {
+        document.querySelector(`.sidebar-id-${activeConversationId}`).remove();
+        currOrder = currOrder.filter(conversation => conversation.conversationId != activeConversationId);
+
+        activeConversationId = currOrder[0].conversationId;
     }
 
     return self

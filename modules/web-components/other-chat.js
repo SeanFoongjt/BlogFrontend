@@ -5,7 +5,7 @@ otherChatTemplate.innerHTML = `
     </head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <body>
-        <div class="container">
+        <div class="">
             <div class="justify-content-start d-flex">
                 <!--Image of the person being conversed with-->
                 <div class="pe-2">
@@ -28,7 +28,7 @@ otherChatTemplate.innerHTML = `
 
                     <div class="row justify-content-start">
                         <div class="text-start">
-                            <p style="font-size: 12px;"><slot name="time">9.00 a.m.</slot></p>
+                            <p style="font-size: 12px; margin-bottom:5px;"><slot name="time">9.00 a.m.</slot></p>
                         </div>
                     </div>
                 </div>
