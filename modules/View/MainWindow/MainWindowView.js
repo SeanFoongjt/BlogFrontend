@@ -3,8 +3,8 @@ import { EditorView } from "./EditorView.js";
 import { TitleSectionView } from "./TitleSectionView.js";
 
 function MainWindowView(imagePath="") {
-    const chatlog = ChatlogView(imagePath);
-    const titleSection = TitleSectionView(imagePath);
+    const chatlogView = ChatlogView(imagePath);
+    const titleSectionView = TitleSectionView(imagePath);
     const editorView = EditorView();
     let mainWindowController;
     const quill = editorView.getEditor();
@@ -18,18 +18,11 @@ function MainWindowView(imagePath="") {
         renderUnblocked
     }
 
-
-
-    const forTitleSection = {
-    }
-
     function render(conversation) {
-        chatlog.setImage(conversation.imagePath);
-        const listOfChatboxes = chatlog.renderConversation(conversation.getListOfMessages())
-        titleSection.changeConversation(conversation.imagePath, conversation.title);
+        chatlogView.setImage(conversation.imagePath);
+        const listOfChatboxes = chatlogView.renderConversation(conversation.getListOfMessages())
+        titleSectionView.changeConversation(conversation.imagePath, conversation.title);
         editorView.clear();
-
-        
 
         if (conversation.isBlocked()) {
             renderBlocked();
@@ -41,18 +34,18 @@ function MainWindowView(imagePath="") {
         return listOfChatboxes;
     }
 
+
     function getViews() {
-        return [titleSection, chatlog, editorView];
+        return {
+            titleSectionView,
+            chatlogView,
+            editorView
+        }
     }
 
 
-    function setController(controller, ) {
+    function setController(controller) {
         mainWindowController = controller;
-
-
-        /**
-         * Send button logic
-         */
 
         // Logic for send button
         const sendButton = document.getElementById('send-button');
@@ -149,11 +142,6 @@ function MainWindowView(imagePath="") {
         const userInput = document.querySelector(".editor-click-prompt");
         userInput.removeAttribute("hidden");
     }
-
-    function clear() {
-        
-    }
-
     
 
     return self

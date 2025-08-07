@@ -20,6 +20,7 @@ function ConversationModel(parent, imagePath="", title="") {
         getListOfMessages,
         deleteMessage,
         editMessage,
+        getMessage,
         block,
         unblock,
         isBlocked,
@@ -55,7 +56,6 @@ function ConversationModel(parent, imagePath="", title="") {
             latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
             latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
         }
-
         
 
         return {
@@ -96,7 +96,7 @@ function ConversationModel(parent, imagePath="", title="") {
         message.rawHTML = rawHTML,
         message.text = text;
         message.encoding = encoding;
-        console.log(replyMap.get(message));
+        
         if (replyMap.get(message) !=  undefined) {
             for (const i of replyMap.get(message)) {
                 console.log(i);
@@ -109,7 +109,6 @@ function ConversationModel(parent, imagePath="", title="") {
     }
 
     function deleteMessage(id) {
-        console.log(listOfMessages.find(findFunction(id)));
         if (replyMap.get(listOfMessages.find(findFunction(id)) != undefined)) {
             for (const i of replyMap.get(listOfMessages.find(findFunction(id)))) {
                 const replyText = i.htmlElement.shadowRoot.querySelector("span[name='replyText']");
@@ -120,8 +119,10 @@ function ConversationModel(parent, imagePath="", title="") {
         }
         listOfMessages.splice(listOfMessages.findIndex(findFunction(id)));
         parent.updateForwardingPopup();
+    }
 
-        console.log(listOfMessages);
+    function getMessage(id) {
+        return listOfMessages.find(message => message.id == id);
     }
 
 
@@ -135,7 +136,7 @@ function ConversationModel(parent, imagePath="", title="") {
     }
 
     function getListOfMessages() {
-        return listOfMessages;
+        return listOfMessages.slice(0);
     }
 
     function block() {

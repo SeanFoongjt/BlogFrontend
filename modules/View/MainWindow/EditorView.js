@@ -1,5 +1,4 @@
 function EditorView() {
-    let isShowing = false;
     const editorPrompt = document.querySelector(".editor-click-prompt");
     const editorToolbarContainer = document.querySelector(".editor-toolbar");
     const bottomToolbar = document.querySelector(".bottom-toolbar");
@@ -7,9 +6,8 @@ function EditorView() {
     editorPrompt.addEventListener("click", show);
     let quill;
 
-
     const self = {
-        isShowing,
+        isShowing : false,
         getEditor,
         hide,
         show,
@@ -22,10 +20,6 @@ function EditorView() {
         quill = controller.getEditor();
     }
 
-    function setEditor(editor) {
-        quill = editor;
-    }
-
     function getEditor() {
         return quill;
     }
@@ -36,8 +30,7 @@ function EditorView() {
 
 
     function hide() {
-        console.log(isShowing);
-        if (!isShowing) {
+        if (!self.isShowing) {
             return
         }
         
@@ -61,14 +54,12 @@ function EditorView() {
         editorToolbarContainer.setAttribute("hidden", "")
         bottomToolbar.setAttribute("hidden", "");
         editorPrompt.removeAttribute("hidden");
-        isShowing = false;
         self.isShowing = false;
 
     }
 
     function show() {
-        if (isShowing) {
-            console.log(" editor is showing")
+        if (self.isShowing) {
             return
         }
 
@@ -77,11 +68,9 @@ function EditorView() {
         editorToolbarContainer.removeAttribute("hidden");
         bottomToolbar.removeAttribute("hidden");
         const editorPromptHeight = editorPrompt.offsetHeight;
-        const titleSectionHeight = document.getElementById("title-section").offsetHeight;
         editorPrompt.setAttribute("hidden", "");
         quill.focus();
         const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
-        console.log("editor height: " + editorToolbarContainerHeight);
         chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
         document.querySelector(".ql-container").style.height = 
             `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
@@ -90,7 +79,6 @@ function EditorView() {
         chatlog.addEventListener("click", editorController.hide);
         document.getElementById("title-section").addEventListener("click", editorController.hide);
         document.getElementById("sidebar").addEventListener("click", editorController.hide);
-        isShowing = true;
         self.isShowing = true;
         
     }

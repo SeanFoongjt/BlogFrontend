@@ -28,7 +28,6 @@ function SidebarView() {
         });
 
         Handlebars.registerHelper('isDefined', function (value) {
-            console.log(value);
             return value != undefined;
         });
 
@@ -61,7 +60,7 @@ function SidebarView() {
 
                 currOption.addEventListener("click", () => {
                     if (activeConversationId != conversation.conversationId) {
-                        changeActive(conversation.self)
+                        sidebarController.changeConversation(conversation.self)
                     }
                 });
                 console.log(currOption);
@@ -75,7 +74,6 @@ function SidebarView() {
             }
         });
 
-        console.log(currOrder);
         conversationsElement = container;
     }
 
@@ -106,7 +104,6 @@ function SidebarView() {
     }
 
     function changeActive(conversation) {
-        sidebarController.changeConversation(conversation)
         document.querySelector(`.sidebar-id-${activeConversationId}`).classList.remove("active-css");
         activeConversationId = conversation.conversationId;
         document.querySelector(`.sidebar-id-${activeConversationId}`).classList.add("active-css");

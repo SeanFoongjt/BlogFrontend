@@ -33,11 +33,11 @@ function MainWindowController(parent) {
     function setView(view) {
         mainWindowView = view;
         const views = mainWindowView.getViews();
-        titleSectionController.setView(views[0]);
+        titleSectionController.setView(views.titleSectionView);
         view.setController(self);
-        chatlogController.setView(views[1]);
-        editorController.setView(views[2]);
-        messageFactory = MessageFactory(views[1]);
+        chatlogController.setView(views.chatlogView);
+        editorController.setView(views.editorView);
+        messageFactory = MessageFactory(views.chatlogView);
     }
 
 
@@ -68,8 +68,8 @@ function MainWindowController(parent) {
 
     function changeConversation(newConversation) {
         document.getElementById("chatlog").replaceChildren();
-
         const chatboxes = mainWindowView.render(newConversation);
+
         rawcontentMap.clear();
         for (const i in chatboxes) {
             rawcontentMap.set(chatboxes[i], newConversation.getListOfMessages()[i].rawHTML);
@@ -328,11 +328,8 @@ function MainWindowController(parent) {
         // Add event listener, get the message model via the id of the element
         confirmButton.addEventListener("click", forward);
         forwardingPopup.addEventListener("hidden.bs.modal", cleanup);
-        const messageList = parent.activeConversation.getListOfMessages()
-        const message = messageList.find(
-            chat => chat.id == messageElement.getAttribute("conversation-id")
-        );
-
+        const id = messageElement.getAttribute("conversation-id");
+        const message = parent.activeConversation.getMessage(id)
         let titleList = [];
 
         // Create a copy of the message and set the ForwardedFrom attribute
@@ -356,7 +353,7 @@ function MainWindowController(parent) {
                 parent.model.forwardMessagesByTitle(messageToForward, titleList);
 
             // Change conversation to the last conversation message is forwarded to
-            parent.changeSidebarConversation(conversationList[conversationList.length - 1]);
+            parent.changeCurrentConversation(conversationList[conversationList.length - 1]);
             for (const conversation of conversationList) {
                 parent.updateSidebarConversation(conversation);
             }

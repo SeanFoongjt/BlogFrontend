@@ -40,7 +40,11 @@ function ViewManager() {
     }
 
     function getViews() {
-        return [sidebar, mainWindow, modal];
+        return {
+            sidebar, 
+            mainWindow,
+            modal
+        };
     }
 
     function renderConversation(conversation) {

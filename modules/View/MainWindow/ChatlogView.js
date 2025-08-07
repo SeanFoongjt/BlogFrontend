@@ -6,6 +6,7 @@ function ChatlogView(imagePath) {
     let chatlogController;
     let latestTime;
     let chatlog = document.getElementById("chatlog");
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const self = {
         setImage,
@@ -22,8 +23,7 @@ function ChatlogView(imagePath) {
     function setImage(newImagePath) {
         imagePath = newImagePath;
     }  
-
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
 
     function renderSentMessage(message) {
         var contextObj = {
@@ -80,12 +80,8 @@ function ChatlogView(imagePath) {
             
             fillChatbox.then(item => {
                 text.innerText = "Forwarded from " + message.forwardedFrom;
-                console.log("Text width: " + chatbox.shadowRoot.querySelector(".text-box").offsetWidth)
-                console.log("Forward Banner width: " + forwardBanner.style.width);
                 forwardBanner.removeAttribute("hidden");
-                console.log("Forward Banner width after unhide: " + forwardBanner.offsetWidth);
                 forwardBanner.style.width = `${chatbox.shadowRoot.querySelector(".text-box").offsetWidth}px`;
-                console.log("Forward Banner width after adjustment: " + forwardBanner.offsetWidth)
             });
 
             // make completed replyBanner visible, 
@@ -185,7 +181,6 @@ function ChatlogView(imagePath) {
         latestTime = undefined;
 
         for (const messageModel of conversation) {
-            // console.log(message);
             if (messageModel.type === "my-chat") {
                 listOfChatboxes.push(renderSentMessage(messageModel));
 

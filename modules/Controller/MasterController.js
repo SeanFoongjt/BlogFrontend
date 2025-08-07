@@ -13,8 +13,6 @@ function MasterController() {
         updateSidebarConversation,
         changeCurrentConversation,
         closeActiveConversation,
-        showForwardingPopup,
-        changeSidebarConversation,
         clearActiveConversation,
         model,
         activeConversation : undefined
@@ -24,10 +22,9 @@ function MasterController() {
     const modalController = ModalController(self);
 
     // Bind views to controllers
-    sidebarController.setView(view.getViews()[0]);
-    mainWindowController.setView(view.getViews()[1]);
-    modalController.setView(view.getViews()[2]);
-    let editorView = undefined;
+    sidebarController.setView(view.getViews().sidebar);
+    mainWindowController.setView(view.getViews().mainWindow);
+    modalController.setView(view.getViews().modal);
     view.setController(self);
     model.setView(view);
 
@@ -55,11 +52,8 @@ function MasterController() {
 
     function changeCurrentConversation(conversation) {
         self.activeConversation = conversation;
+        sidebarController.changeActive(conversation)
         mainWindowController.changeConversation(conversation);
-    }
-
-    function changeSidebarConversation(conversation) {
-        sidebarController.changeActive(conversation);
     }
 
     function clearActiveConversation() {
@@ -72,13 +66,7 @@ function MasterController() {
         self.activeConversation = model.getFirstConversation();
         sidebarController.closeConversation()
         changeCurrentConversation(self.activeConversation);
-        changeSidebarConversation(self.activeConversation);
     }
-
-    function showForwardingPopup() {
-        return;
-    }
-
 
     return self;
 }

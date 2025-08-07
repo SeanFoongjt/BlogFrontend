@@ -5,7 +5,7 @@ function SideBarController(parent) {
         setView,
         initialise,
         updateConversation,
-        changeConversation,
+        changeConversation : parent.changeCurrentConversation,
         changeActive,
         closeConversation
     }
@@ -62,6 +62,7 @@ function SideBarController(parent) {
     }
 
     function changeConversation(conversation) {
+        sidebarView.changeActive(conversation);
         parent.changeCurrentConversation(conversation);
     }
 
