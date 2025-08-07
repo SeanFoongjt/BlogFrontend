@@ -18,7 +18,10 @@ function MainWindowController(parent) {
         changeTitle,
         block,
         unblock,
-        changeConversation
+        changeConversation,
+        clearConversation,
+        clearActiveConversation : parent.clearActiveConversation,
+        closeActiveConversation : parent.closeActiveConversation
     }
 
 
@@ -375,6 +378,9 @@ function MainWindowController(parent) {
     }
 
 
+    function clearConversation() {
+        return;
+    }
 
 
     // Block the current conversation

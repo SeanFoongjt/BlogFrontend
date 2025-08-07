@@ -12,7 +12,8 @@ function ChatlogView(imagePath) {
         setImage,
         renderConversation,
         renderSentMessage,
-        setController
+        setController,
+        clear
     }
 
     function setController(controller) {
@@ -222,6 +223,10 @@ function ChatlogView(imagePath) {
             console.log(text.clientWidth);
 
         }) 
+    }
+
+    function clear() {
+        document.getElementById("chatlog").replaceChildren();
     }
 
 

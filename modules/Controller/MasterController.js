@@ -43,7 +43,6 @@ function MasterController() {
         sidebarController.initialise(conversationList);
         modalController.initialise(conversationList);
         self.activeConversation = mainConversation;
-        //view.initialise(conversationList, mainConversation);
     }
 
     function updateSidebarConversation(conversation) {
@@ -58,6 +57,7 @@ function MasterController() {
 
     function clearActiveConversation() {
         self.activeConversation.clearMessages();
+        mainWindowController.clearConversation();
         sidebarController.updateConversation(self.activeConversation);
     }
 

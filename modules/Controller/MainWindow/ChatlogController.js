@@ -6,12 +6,17 @@ function ChatlogController(parent) {
         editFunction: parent.editFunction,
         replyFunction: parent.replyFunction,
         deleteFunction: parent.deleteFunction,
-        forwardFunction: parent.forwardFunction
+        forwardFunction: parent.forwardFunction,
+        clear
     }
 
     function setView(view) {
         chatlogView = view;
         view.setController(self);
+    }
+
+    function clear() {
+        chatlogView.clear();
     }
 
 
