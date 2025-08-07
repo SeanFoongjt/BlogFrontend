@@ -1,3 +1,5 @@
+import { cancellableProcessesMonitor as cpm } from "../CancellableProcessesMonitor.js";
+
 function EditorController(parent) {
     let editorView;
 
@@ -45,7 +47,7 @@ function EditorController(parent) {
         // in the midst of being edited or replied to.
         console.log("Controller hide called");
         if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 
-            || parent.cancellableProcessesLength() != 0) {
+            || cpm.cancellableProcessesLength() != 0) {
             return;
         }
 

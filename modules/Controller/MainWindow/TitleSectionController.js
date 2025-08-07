@@ -1,4 +1,5 @@
 import { confirmationPopupFunction } from "../../utilities/confirmationPopupFunction.js";
+import { cancellableProcessesMonitor as cpm } from "../CancellableProcessesMonitor.js";
 
 function TitleSectionController(parent) {
     var inputPopup = document.getElementById("input-popup-modal");
@@ -113,7 +114,7 @@ function TitleSectionController(parent) {
             "Are you sure you want to clear the conversation?", 
             () => {
                 document.getElementById('chatlog').replaceChildren();
-                parent.notifyCancellableProcesses();
+                cpm.notifyCancellableProcesses();
                 parent.clearActiveConversation();
             }
         )

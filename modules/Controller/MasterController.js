@@ -48,6 +48,15 @@ function MasterController() {
             model.getFirstConversation(),
         ));
 
+
+    function initialise(conversationList, mainConversation) {
+        mainWindowController.initialise(mainConversation);
+        sidebarController.initialise(conversationList);
+        modalController.initialise(conversationList);
+        self.activeConversation = mainConversation;
+        //view.initialise(conversationList, mainConversation);
+    }
+
     
     
     const cancellableProcesses = [];
@@ -57,14 +66,6 @@ function MasterController() {
     function notifyCancellableProcesses() {
         console.log("Cancel event broadcast!");
         cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
-    }
-
-    function initialise(conversationList, mainConversation) {
-        mainWindowController.initialise(mainConversation);
-        sidebarController.initialise(conversationList);
-        modalController.initialise(conversationList);
-        self.activeConversation = mainConversation;
-        //view.initialise(conversationList, mainConversation);
     }
 
 
@@ -83,15 +84,6 @@ function MasterController() {
 
     function cancellableProcessesLength() {
         return cancellableProcesses.length;
-    }
-
-
-    function getEditor() {
-        if (editorView === undefined) {
-            editorView = view.getEditor();
-        }
-        
-        return editorView.getEditor();
     }
 
 

@@ -3,6 +3,7 @@ import { EditorController } from "./EditorController.js";
 import { TitleSectionController } from "./TitleSectionController.js";
 import { encodeText } from "../../utilities/encodeText.js";
 import { MessageFactory } from "../../Model/MessageModel.js";
+import { cancellableProcessesMonitor as cpm } from "../CancellableProcessesMonitor.js";
 
 
 function MainWindowController(parent) {
@@ -15,12 +16,6 @@ function MainWindowController(parent) {
         deleteFunction,
         forwardFunction,
         changeTitle,
-        notifyCancellableProcesses : parent.notifyCancellableProcesses,
-        pushCancellableProcess : parent.pushCancellableProcess,
-        removeFromCancellableProcesses : parent.removeFromCancellableProcesses,
-        cancellableProcessesLength : parent.cancellableProcessesLength,
-        clearActiveConversation : parent.clearActiveConversation,
-        closeActiveConversation : parent.closeActiveConversation,
         block,
         unblock,
         changeConversation
@@ -88,10 +83,10 @@ function MainWindowController(parent) {
      */
     function editFunction(object) {
         // Cancel other potentially interfering processes
-        parent.notifyCancellableProcesses();
+        cpm.notifyCancellableProcesses();
 
         // Push self to cancellableProcesses
-        parent.pushCancellableProcess(object);
+        cpm.pushCancellableProcess(object);
 
         // Get previous encoding
         const textbox = object.shadowRoot.querySelector(".text-box")
@@ -178,7 +173,7 @@ function MainWindowController(parent) {
             // Revert chat's background color
             object.shadowRoot.querySelector(".text-box").style.backgroundColor = prevBackground;
 
-            parent.removeFromCancellableProcesses(object);
+            cpm.removeFromCancellableProcesses(object);
             console.log("cleanup complete");
         }
     }
@@ -193,9 +188,9 @@ function MainWindowController(parent) {
     function replyFunction(object) {
         console.log("Enter replyFunction");
         // Only one cancellableProcess should be active at a time
-        parent.notifyCancellableProcesses();
+        cpm.notifyCancellableProcesses();
 
-        parent.pushCancellableProcess(object);
+        cpm.pushCancellableProcess(object);
 
         // Show editor if it is not currently displayed
         editorController.show();
@@ -239,7 +234,7 @@ function MainWindowController(parent) {
             replyButton.addEventListener("click", sendFunction);
             replyButton.innerText="Send";
 
-            parent.removeFromCancellableProcesses(object);
+            cpm.removeFromCancellableProcesses(object);
             console.log("cleanup complete");
         }
     }
@@ -252,7 +247,7 @@ function MainWindowController(parent) {
      * @param {MyChat} object object to be deleted
      */
     function deleteFunction(object) {
-        parent.notifyCancellableProcesses();
+        cpm.notifyCancellableProcesses();
 
         parent.activeConversation.deleteMessage(object.getAttribute("conversation-id"));
         parent.updateSidebarConversation(parent.activeConversation);
