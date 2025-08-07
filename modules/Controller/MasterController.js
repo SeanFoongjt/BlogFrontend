@@ -9,10 +9,6 @@ function MasterController() {
     const model = ModelManager();
     const view = ViewManager();
     const self = {
-        notifyCancellableProcesses,
-        pushCancellableProcess,
-        removeFromCancellableProcesses,
-        cancellableProcessesLength,
         initialise,
         updateSidebarConversation,
         changeCurrentConversation,
@@ -38,10 +34,6 @@ function MasterController() {
 
     const modelInitialise = model.initialiseFromJson("./json/storage.json");
 
-    const cancelEvent = new Event("cancel");
-
-    
-
     modelInitialise
         .then(() => self.initialise(
             model.getSidebarList(), 
@@ -56,36 +48,6 @@ function MasterController() {
         self.activeConversation = mainConversation;
         //view.initialise(conversationList, mainConversation);
     }
-
-    
-    
-    const cancellableProcesses = [];
-
-
-
-    function notifyCancellableProcesses() {
-        console.log("Cancel event broadcast!");
-        cancellableProcesses.forEach((process) => process.dispatchEvent(cancelEvent));
-    }
-
-
-    function pushCancellableProcess(process) {
-        cancellableProcesses.push(process);
-    }
-
-
-    function removeFromCancellableProcesses(object) {
-        // Remove from cancellableProcesses record as it is no longer in the midst of execution
-        const index = cancellableProcesses.indexOf(object);
-        if (index != -1) {
-            cancellableProcesses.splice(index, 1);
-        }
-    }
-
-    function cancellableProcessesLength() {
-        return cancellableProcesses.length;
-    }
-
 
     function updateSidebarConversation(conversation) {
         sidebarController.updateConversation(conversation);
