@@ -182,6 +182,7 @@ function ChatlogView(imagePath) {
 
     function renderConversation(conversation) {
         const listOfChatboxes = [];
+        latestTime = undefined;
 
         for (const messageModel of conversation) {
             // console.log(message);

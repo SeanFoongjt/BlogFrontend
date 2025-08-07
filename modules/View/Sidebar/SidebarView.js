@@ -59,7 +59,11 @@ function SidebarView() {
                 currOption.innerHTML = array[0](conversation);
                 currOption = currOption.content.firstElementChild;
 
-                currOption.addEventListener("click", () => changeActive(conversation.self));
+                currOption.addEventListener("click", () => {
+                    if (activeConversationId != conversation.conversationId) {
+                        changeActive(conversation.self)
+                    }
+                });
                 console.log(currOption);
                 list.appendChild(currOption);
             }
