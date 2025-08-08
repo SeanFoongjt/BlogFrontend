@@ -50,12 +50,14 @@ function ConversationModel(parent, imagePath="", title="") {
 
         } else if (lastMessage.type === "my-chat") {
             latestMessageText = "You: " + lastMessage.text.replace(/[\r\n]+/gm, " ");
+            latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
 
         } else if (lastMessage.type === "other-chat") {
             latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
+            latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
         }
 
-        latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
+        
         
 
         return {

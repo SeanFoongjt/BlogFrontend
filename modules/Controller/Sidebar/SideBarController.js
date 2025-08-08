@@ -58,7 +58,7 @@ function SideBarController(parent) {
     }
 
     function initialise(conversationList) {
-        sidebarView.render(conversationList);
+        sidebarView.initialise(conversationList);
     }
 
     function changeConversation(conversation) {

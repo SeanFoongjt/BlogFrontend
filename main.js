@@ -5,23 +5,6 @@ import { MasterController } from "./modules/Controller/MasterController.js";
  */
 const controller = MasterController();
 
-/**
-function refreshInputPopup() {
-    // Add appropriate listener to the renameTitleButton
-    // cloneNode and reassign to remove all event listeners
-    const newButton = inputPopupConfirm.cloneNode(true);
-    inputPopupConfirm.parentNode.replaceChild(newButton, confirmButton);
-    inputPopupConfirm = newButton;
-
-    // Link function to button, set body and title text
-    confirmButton.addEventListener("click", renameTitleFunction);
-    confirmButton.addEventListener("click", notifyCancellableProcesses);
-    confirmationPopupBodyText.innerText = body;
-    confirmationPopupTitle.innerText = header;
-
-}
-*/
-
 // TODO start
 // Web Speech API as supported by major browsers
 const SpeechRecognition =
@@ -72,3 +55,5 @@ recognition.onresult = function(event) {
     );
     console.log(speechText);
 }
+
+// TODO end

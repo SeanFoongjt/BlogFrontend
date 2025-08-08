@@ -20,6 +20,9 @@ class DateTimeFormatting {
     }
 
     static formatTimeForSidebar(timeString) {
+        if (timeString == undefined) {
+            return undefined;
+        }
         return this.sidebarFormatter.format(new Date(timeString));
     }
 

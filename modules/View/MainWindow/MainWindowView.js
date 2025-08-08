@@ -11,7 +11,6 @@ function MainWindowView(imagePath="") {
 
     const self = {
         render,
-        getEditor,
         getViews,
         setController,
         renderBlocked,

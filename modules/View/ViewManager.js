@@ -9,12 +9,9 @@ function ViewManager() {
     var controller;
 
     const self = {
-        initialise,
-        getMainWindow,
         setController,
-        getEditor,
-        getModal,
         getViews,
+        getModal,
         renderConversation
     }
 
@@ -22,10 +19,6 @@ function ViewManager() {
         controller = newController;
     }
 
-    function initialise(conversationList, mainConversation) {
-        sidebar.render(conversationList);
-        mainWindow.render(mainConversation);
-    }
 
     function getMainWindow() {
         return mainWindow;
@@ -35,10 +28,11 @@ function ViewManager() {
         return modal;
     }
 
-    function getEditor() {
-        return mainWindow.getEditor();
-    }
 
+    /**
+     * Return the views being managed for linkage to controllers
+     * @returns Sidebar, Main window and Modal views
+     */
     function getViews() {
         return {
             sidebar, 
@@ -47,12 +41,16 @@ function ViewManager() {
         };
     }
 
+    /**
+     * Function to render conversation. Primary use is to allow the MasterController to be able
+     * to render the conversation
+     * @param {ConversationModel} conversation conversation to be rendered
+     */
     function renderConversation(conversation) {
         mainWindow.render(conversation);
     }
 
     
-
     return self
 }
 
