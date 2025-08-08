@@ -156,9 +156,12 @@ function MainWindowController(parent) {
             }
 
             parent.activeConversation.editMessage(
-                conversationId, quill.getText().trim(), quill.root.innerHTML,
+                conversationId, 
+                quill.getText().trim(), 
+                quill.root.innerHTML,
                 currEncoding.getAttribute("value")
             )
+            
             chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
             parent.updateSidebarConversation(parent.activeConversation);
             cleanup();

@@ -17,9 +17,6 @@ otherChatTemplate.innerHTML = `
                         <!--Box where the actual text goes-->
                         <div class="border-1 rounded border-dark py-2 px-3 other-text-box text-box flex-shrink-1">
                             <slot name="chatText">
-                                <span>
-                                    More reasonable amounts of text
-                                </span>
                             </slot>
                         </div>
 
@@ -28,7 +25,7 @@ otherChatTemplate.innerHTML = `
 
                     <div class="row justify-content-start">
                         <div class="text-start">
-                            <p style="font-size: 12px; margin-bottom:5px;"><slot name="time">9.00 a.m.</slot></p>
+                            <p style="font-size: 12px; margin-bottom:5px;"><slot name="time"></slot></p>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-//import * as fs from 'C:/Users/SBFJTSEA/AppData/Local/Microsoft/TypeScript/5.8/node_modules/@types/node/fs';
 import { ConversationModel } from './ConversationModel.js';
 
 function ModelManager() {
@@ -15,7 +14,7 @@ function ModelManager() {
         forwardMessagesByTitle,
         updateForwardingPopup,
         searchConversationsByTitle,
-        closeConversation
+        closeConversation,
     }
 
     async function initialiseFromJson(path) {

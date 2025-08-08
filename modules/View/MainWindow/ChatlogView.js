@@ -6,6 +6,7 @@ function ChatlogView(imagePath) {
     let chatlogController;
     let latestTime;
     let chatlog = document.getElementById("chatlog");
+    // Allows for easy printing of new date
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     const self = {
@@ -16,33 +17,37 @@ function ChatlogView(imagePath) {
         clear
     }
 
+    /**
+     * Set controller of view, part of initialisation
+     * @param {ChatlogController} controller 
+     */
     function setController(controller) {
         chatlogController = controller;
         console.log("chatlog controller is present")
     }
 
+    /**
+     * Set image path for current conversation
+     * @param {String} newImagePath String corresponding to the imagePath
+     */
     function setImage(newImagePath) {
         imagePath = newImagePath;
     }  
     
 
+    /**
+     * View function to render messages sent from the user
+     * @param {Object} message SentMessage created from MessageModel with the appropriate fields
+     * @returns HTMLElement corresponding to the message rendered
+     */
     function renderSentMessage(message) {
+        checkAndRenderNewDay(message.time);
+
         var contextObj = {
             text : encodeText(message.rawHTML, message.encoding),
             time : DateTimeFormatting.formatTime(message.time),
             encoding: message.encoding,
         }
-
-
-        const messageTime = new Date(message.time);
-        if (latestTime == undefined) {
-            renderNewDay(messageTime);
-
-        } else if (latestTime.getDate() != messageTime.getDate() || latestTime.getMonth() != messageTime.getMonth()) {
-            renderNewDay(messageTime);
-        }
-        latestTime = messageTime;
-        console.log(typeof latestTime);
 
 
         var conversationTemplate = fetch("../../templates/my-conversation.html")
@@ -75,6 +80,9 @@ function ChatlogView(imagePath) {
             replyBanner.removeAttribute("hidden");
         }
 
+
+        // If the message is forwarded from another chat, set up a forward banner with
+        // text regerencing the conversation
         if (message.forwardedFrom) {
             var forwardBanner = chatbox.shadowRoot.querySelector("div[name='forwardBanner']");
             var text = forwardBanner.querySelector("span[name='forwardText']");
@@ -84,8 +92,6 @@ function ChatlogView(imagePath) {
                 forwardBanner.removeAttribute("hidden");
                 forwardBanner.style.width = `${chatbox.shadowRoot.querySelector(".text-box").offsetWidth}px`;
             });
-
-            // make completed replyBanner visible, 
             
         }
 
@@ -105,6 +111,8 @@ function ChatlogView(imagePath) {
                 chatbox.querySelector("[name='forward-button']")
                     .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
 
+
+                // Make dropdown only visible when hovering over the chatbox
                 chatbox.addEventListener(
                     "mouseover", 
                     () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
@@ -118,11 +126,21 @@ function ChatlogView(imagePath) {
                 chatlog.scrollTop = chatlog.scrollHeight;
             });
 
+        // Link message to HTMLElement
         message.setHTMLElement(chatbox);
         return chatbox;
     }
 
+    /**
+     * View function to render messages sent from the other party
+     * @param {Object} message SentMessage object from MessageModel with the appropriate fields
+     * @param {String} imagePath string corresponding to the imagePath of the conversation's image
+     * @returns HTMLElement corresponding to the rendered message
+     */
     function renderReceivedMessage(message, imagePath="") {
+        checkAndRenderNewDay(message.time);
+
+        // Create object to be used to fill in template
         var contextObj = {
             text : encodeText(message.rawHTML, message.encoding),
             time : DateTimeFormatting.formatTime(message.time),
@@ -130,17 +148,7 @@ function ChatlogView(imagePath) {
             encoding: message.encoding,
         }
 
-
-        const messageTime = new Date(message.time);
-        if (latestTime == undefined) {
-            renderNewDay(messageTime);
-
-        } else if (latestTime.getDate() != messageTime.getDate() || latestTime.getMonth() != messageTime.getMonth()) {
-            renderNewDay(messageTime);
-        }
-        latestTime = messageTime;
-        
-
+        // Fetch and fill in template
         var conversationTemplate = fetch("../../templates/other-conversation.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text))
@@ -151,7 +159,7 @@ function ChatlogView(imagePath) {
         chatbox.setAttribute("conversation-id", message.id);
 
         var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
-        chatlog.appendChild(chatbox)
+        chatlog.appendChild(chatbox);
         
 
         conversationTemplate.then(item =>  {
@@ -177,6 +185,11 @@ function ChatlogView(imagePath) {
 
     }
 
+    /**
+     * Render entire conversation
+     * @param {ConversationModel} conversation ConversationModel containing the messages to be rendered
+     * @returns list of HTMLElement messages rendered
+     */
     function renderConversation(conversation) {
         const listOfChatboxes = [];
         latestTime = undefined;
@@ -193,17 +206,35 @@ function ChatlogView(imagePath) {
         return listOfChatboxes;
     }
 
-    async function renderNewDay(time) {
-        const container = document.createElement("div");
-        const timeString = time.getDate() + " " + monthNames[time.getMonth()]
+    /**
+     * Function to check for and render pill signifying a new day
+     * @param {string} time String corresponding to a messages's sent time
+     */
+    async function checkAndRenderNewDay(time) {
+        // If there is a new day, render the rounded pill to signify it
+        const messageTime = new Date(time);
 
-        fetch("../../templates/new-day.html")
-            .then(res => res.text())
-            .then(text => Handlebars.compile(text))
-            .then(template => template({day: timeString}))
-            .then(element => container.innerHTML = element)
+        // Check if latestTime has been defined. If not, render that it is a new day.
+        // Otherwise, render that it is a new day if there is a difference in date, month or year
+        if (latestTime == undefined ||
+            latestTime.getDate() != messageTime.getDate() ||
+            latestTime.getMonth() != messageTime.getMonth() ||
+            latestTime.getFullYear() != messageTime.getFullYear()
+        ) {
+            const container = document.createElement("div");
+            const timeString = messageTime.getDate() + " " + monthNames[messageTime.getMonth()]
 
-        chatlog.append(container);
+            fetch("../../templates/new-day.html")
+                .then(res => res.text())
+                .then(text => Handlebars.compile(text))
+                .then(template => template({day: timeString}))
+                .then(element => container.innerHTML = element)
+
+            chatlog.append(container);
+
+        }
+
+        latestTime = messageTime;
     }
 
     /**
@@ -225,6 +256,9 @@ function ChatlogView(imagePath) {
         }) 
     }
 
+    /**
+     * Function to clear the chatlog
+     */
     function clear() {
         document.getElementById("chatlog").replaceChildren();
     }
