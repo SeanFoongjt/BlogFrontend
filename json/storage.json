@@ -76,10 +76,28 @@
         ]
     },
     {
+        "imagePath" : "../img/cornflower.webp",
+        "title" : "Cornflower 2",
+        "availableId" : "1",
+        "conversationId" : "1",
+        "blocked" : "false",
+        "messages" : [
+            {
+                "type" : "other-chat",
+                "text" : "Hey how are you doing?",
+                "rawHTML" : "Hey how are you doing?",
+                "time" : "19 June, 2025 09:00",
+                "encoding" : "Plaintext",
+                "forwardedFrom" : "false",
+                "id" : "0"
+            }
+        ]
+    },
+    {
         "imagePath" : "../img/elster.jpg",
         "title" : "Elster",
         "availableId" : "3",
-        "conversationId" : "1",
+        "conversationId" : "2",
         "blocked" : "false",
         "messages" : [
             {
@@ -116,7 +134,7 @@
         "imagePath" : "../img/penrose.jpg",
         "title" : "Penrose",
         "availableId" : "4",
-        "conversationId" : "2",
+        "conversationId" : "3",
         "blocked" : "false",
         "messages" : [
             {

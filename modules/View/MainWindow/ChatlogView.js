@@ -5,6 +5,8 @@ import { DateTimeFormatting } from "../../utilities/DateTimeFormatting.js";
 function ChatlogView(imagePath) {
     let chatlogController;
     let latestTime;
+    let sentMessageTemplate;
+    let receivedMessageTemplate;
     let chatlog = document.getElementById("chatlog");
     // Allows for easy printing of new date
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -14,7 +16,27 @@ function ChatlogView(imagePath) {
         renderConversation,
         renderSentMessage,
         setController,
-        clear
+        clear,
+        initialise
+    }
+
+    async function initialise(conversation) {
+        const loadSentMessage = fetch("../../templates/my-conversation.html")
+            .then(res => res.text())
+            .then(text => Handlebars.compile(text))
+            .then(item => {sentMessageTemplate = item; return 1});
+
+        const loadReceivedMessage = fetch("../../templates/other-conversation.html")
+            .then(res => res.text())
+            .then(text => Handlebars.compile(text))
+            .then(item =>  {receivedMessageTemplate = item; return 1});
+
+        return Promise.all([loadSentMessage, loadReceivedMessage])
+            .then(() => renderConversation(conversation.getListOfMessages()));
+
+        
+        //renderConversation(conversation.getListOfMessages());
+
     }
 
     /**
@@ -50,16 +72,11 @@ function ChatlogView(imagePath) {
         }
 
 
-        var conversationTemplate = fetch("../../templates/my-conversation.html")
-            .then(res => res.text())
-            .then(text => Handlebars.compile(text))
-            .then(template => template(contextObj));
-
         // Initialise chatbox, add dropdown menu
         var chatbox = document.createElement("my-chat");
         chatbox.setAttribute("conversation-id", message.id);
 
-        var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
+        chatbox.innerHTML = sentMessageTemplate(contextObj);
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
@@ -69,7 +86,7 @@ function ChatlogView(imagePath) {
 
             
             // Inner text used here so that text in reply banner has no formatting
-            fillChatbox = formatForReply(
+            formatForReply(
                 message.replyingTo.querySelector("div[name='text']").innerText,
                 chatbox,
                 fillChatbox
@@ -87,11 +104,9 @@ function ChatlogView(imagePath) {
             var forwardBanner = chatbox.shadowRoot.querySelector("div[name='forwardBanner']");
             var text = forwardBanner.querySelector("span[name='forwardText']");
             
-            fillChatbox.then(item => {
-                text.innerText = "Forwarded from " + message.forwardedFrom;
-                forwardBanner.removeAttribute("hidden");
-                forwardBanner.style.width = `${chatbox.shadowRoot.querySelector(".text-box").offsetWidth}px`;
-            });
+            text.innerText = "Forwarded from " + message.forwardedFrom;
+            forwardBanner.removeAttribute("hidden");
+            forwardBanner.style.width = `${chatbox.shadowRoot.querySelector(".text-box").offsetWidth}px`;
             
         }
 
@@ -100,31 +115,28 @@ function ChatlogView(imagePath) {
         
         // Can move binding of functions to controller most likely, though can also just
         // stay here
-        var finalPromise = Promise.all([fillChatbox])
-            .then(item => {
-                chatbox.querySelector("[name='reply-button']")
-                    .addEventListener("click", () => chatlogController.replyFunction(chatbox));
-                chatbox.querySelector("[name='edit-button']")
-                    .addEventListener("click", () => chatlogController.editFunction(chatbox));
-                chatbox.querySelector("[name='delete-button']")
-                    .addEventListener("click", () => chatlogController.deleteFunction(chatbox));
-                chatbox.querySelector("[name='forward-button']")
-                    .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
+        chatbox.querySelector("[name='reply-button']")
+            .addEventListener("click", () => chatlogController.replyFunction(chatbox));
+        chatbox.querySelector("[name='edit-button']")
+            .addEventListener("click", () => chatlogController.editFunction(chatbox));
+        chatbox.querySelector("[name='delete-button']")
+            .addEventListener("click", () => chatlogController.deleteFunction(chatbox));
+        chatbox.querySelector("[name='forward-button']")
+            .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
 
 
-                // Make dropdown only visible when hovering over the chatbox
-                chatbox.addEventListener(
-                    "mouseover", 
-                    () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
-                );
-                chatbox.addEventListener(
-                    "mouseout", 
-                    () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
-                );
+        // Make dropdown only visible when hovering over the chatbox
+        chatbox.addEventListener(
+            "mouseover", 
+            () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
+        );
+        chatbox.addEventListener(
+            "mouseout", 
+            () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
+        );
 
-                // Scroll to bottom of chatlog
-                chatlog.scrollTop = chatlog.scrollHeight;
-            });
+        // Scroll to bottom of chatlog
+        chatlog.scrollTop = chatlog.scrollHeight;
 
         // Link message to HTMLElement
         message.setHTMLElement(chatbox);
@@ -149,37 +161,31 @@ function ChatlogView(imagePath) {
         }
 
         // Fetch and fill in template
-        var conversationTemplate = fetch("../../templates/other-conversation.html")
-            .then(res => res.text())
-            .then(text => Handlebars.compile(text))
-            .then(template => template(contextObj))
 
         // Initialise chatbox, add dropdown menu
         var chatbox = document.createElement("other-chat");
         chatbox.setAttribute("conversation-id", message.id);
 
-        var fillChatbox = conversationTemplate.then(item => chatbox.innerHTML = item);
+        chatbox.innerHTML = receivedMessageTemplate(contextObj);
         chatlog.appendChild(chatbox);
         
 
-        conversationTemplate.then(item =>  {
-            chatbox
-                .querySelector("[name='reply-button']")
-                .addEventListener("click", () => chatlogController.replyFunction(chatbox));
-            chatbox
-                .querySelector("[name='forward-button']")
-                .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
+        chatbox
+            .querySelector("[name='reply-button']")
+            .addEventListener("click", () => chatlogController.replyFunction(chatbox));
+        chatbox
+            .querySelector("[name='forward-button']")
+            .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
 
-            chatbox.addEventListener(
-                "mouseover", 
-                () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
-            );
-            chatbox.addEventListener(
-                "mouseout", 
-                () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
-            );
-            chatlog.scrollTop = chatlog.scrollHeight;
-        });
+        chatbox.addEventListener(
+            "mouseover", 
+            () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
+        );
+        chatbox.addEventListener(
+            "mouseout", 
+            () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
+        );
+        chatlog.scrollTop = chatlog.scrollHeight;
 
         return chatbox;
 

@@ -14,7 +14,22 @@ function MainWindowView(imagePath="") {
         getViews,
         setController,
         renderBlocked,
+        initialise,
         renderUnblocked
+    }
+
+    function initialise(conversation) {
+        const chatboxPromise = chatlogView.initialise(conversation)
+        titleSectionView.changeConversation(conversation.imagePath, conversation.title)
+
+        if (conversation.isBlocked()) {
+            renderBlocked();
+            
+        } else {
+            renderUnblocked();
+        }
+
+        return chatboxPromise;
     }
 
     function render(conversation) {

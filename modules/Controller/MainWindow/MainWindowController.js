@@ -61,11 +61,17 @@ function MainWindowController(parent) {
      * @param {ConversationModel} mainConversation main conversation to initialise with
      */
     function initialise(mainConversation) {
-        // Render the conversation and add to rawcontentMap for editFunction
-        const chatboxes = mainWindowView.render(mainConversation);
-        for (const i in chatboxes) {
-            rawcontentMap.set(chatboxes[i], mainConversation.getListOfMessages()[i].rawHTML)
+        function loadRawContentMap(chatboxes) {
+            for (const i in chatboxes) {
+                rawcontentMap.set(chatboxes[i], mainConversation.getListOfMessages()[i].rawHTML)
+            }
         }
+
+        // Render the conversation and add to rawcontentMap for editFunction
+        mainWindowView.initialise(mainConversation)
+            .then(loadRawContentMap);
+        
+        
     }
 
 

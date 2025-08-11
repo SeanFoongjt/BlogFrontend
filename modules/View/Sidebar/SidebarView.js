@@ -26,6 +26,10 @@ function SidebarView() {
         sidebarController = controller;
     }
 
+    /**
+     * Initialise templates, helpers and fields as well as render the intiial list of conversations
+     * @param {Array} conversationList list of conversations to be rendered in the sidebar
+     */
     function initialise(conversationList) {
         // Handlebars helper for checking if a value is positive
         Handlebars.registerHelper('isPositive', function (value) {
