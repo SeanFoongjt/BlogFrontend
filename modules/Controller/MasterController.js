@@ -10,7 +10,6 @@ function MasterController() {
     const view = ViewManager();
     const self = {
         initialise,
-        updateSidebarConversation,
         changeCurrentConversation,
         closeActiveConversation,
         clearActiveConversation,
@@ -29,6 +28,7 @@ function MasterController() {
     model.setView(view);
 
 
+    // Initialise data from json
     const modelInitialise = model.initialiseFromJson("./json/storage.json");
 
     modelInitialise
@@ -38,6 +38,11 @@ function MasterController() {
         ));
 
 
+    /**
+     * Initialise all other controllers and set active conversation
+     * @param {*} conversationList list of all current conversations
+     * @param {*} mainConversation conversation to initialise as first active conversation
+     */
     function initialise(conversationList, mainConversation) {
         mainWindowController.initialise(mainConversation);
         sidebarController.initialise(conversationList);
@@ -45,22 +50,30 @@ function MasterController() {
         self.activeConversation = mainConversation;
     }
 
-    function updateSidebarConversation(conversation) {
-        sidebarController.updateConversation(conversation);
-    }
-
+    /**
+     * Change the current active conversation
+     * @param {ConversationModel} conversation the new active conversation
+     */
     function changeCurrentConversation(conversation) {
         self.activeConversation = conversation;
         sidebarController.changeActive(conversation)
         mainWindowController.changeConversation(conversation);
     }
 
+    /**
+     * Empty the currently active conversation of all messages. This does not remove the 
+     * conversation from the sidebar and messages can still be sent / forwarded
+     */
     function clearActiveConversation() {
         self.activeConversation.clearMessages();
         mainWindowController.clearConversation();
         sidebarController.updateConversation(self.activeConversation);
     }
 
+    /**
+     * Close the currently active conversation. This deletes all messages and removes it's tab
+     * from the sidebar
+     */
     function closeActiveConversation() {
         model.closeConversation(self.activeConversation);
         self.activeConversation = model.getFirstConversation();

@@ -61,11 +61,6 @@ function SideBarController(parent) {
         sidebarView.initialise(conversationList);
     }
 
-    function changeConversation(conversation) {
-        sidebarView.changeActive(conversation);
-        parent.changeCurrentConversation(conversation);
-    }
-
     function changeActive(conversation) {
         sidebarView.changeActive(conversation);
     }

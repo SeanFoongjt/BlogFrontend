@@ -47,7 +47,7 @@ function EditorController(parent) {
         // in the midst of being edited or replied to.
         console.log("Controller hide called");
         if (quill.getText().trim() != "" || quill.getContents()["ops"].length != 1 
-            || cpm.cancellableProcessesLength() != 0) {
+            || cpm.hasCancellableProcess()) {
             return;
         }
 

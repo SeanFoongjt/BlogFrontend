@@ -257,7 +257,7 @@ function ChatlogView(imagePath) {
      * @param {Promise} promise promise to wait for before textbox is available
      * @returns 
      */
-    async function formatForReply(string, chatbox, ) {
+    function formatForReply(string, chatbox, ) {
 
         var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
         const textbox = chatbox.shadowRoot.querySelector(".text-box");
