@@ -92,8 +92,7 @@ function ChatlogView(imagePath) {
             // Inner text used here so that text in reply banner has no formatting
             formatForReply(
                 message.replyingTo.querySelector("div[name='text']").innerText,
-                chatbox,
-                fillChatbox
+                chatbox
             );
             
 
@@ -116,8 +115,6 @@ function ChatlogView(imagePath) {
             
         }
 
-        
-        
         
         // Binding of functions like reply, edit, delete and forward
         chatbox.querySelector("[name='reply-button']")
@@ -260,16 +257,15 @@ function ChatlogView(imagePath) {
      * @param {Promise} promise promise to wait for before textbox is available
      * @returns 
      */
-    async function formatForReply(string, chatbox, promise) {
-        return Promise.all([promise]).then(item => {
-            var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
-            const textbox = chatbox.shadowRoot.querySelector(".text-box");
+    async function formatForReply(string, chatbox, ) {
 
-            let sliced = string.slice(0, Math.round(textbox.clientWidth / 7) - 4)
-            text.innerText = sliced + "..";
-            console.log(text.clientWidth);
+        var text = chatbox.shadowRoot.querySelector("span[name='replyText']");
+        const textbox = chatbox.shadowRoot.querySelector(".text-box");
 
-        }) 
+        let sliced = string.slice(0, Math.round(textbox.clientWidth / 7) - 4)
+        text.innerText = sliced + "..";
+        console.log(text.clientWidth);
+
     }
 
     /**
