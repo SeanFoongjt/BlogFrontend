@@ -48,7 +48,10 @@ function MainWindowView(imagePath="") {
         return listOfChatboxes;
     }
 
-
+    /**
+     * Returns title section, chatlog and editor views. Used for initialisation of controller
+     * @returns Object with title section, chatlog and editor views
+     */
     function getViews() {
         return {
             titleSectionView,
@@ -109,9 +112,6 @@ function MainWindowView(imagePath="") {
 
 
 
-    function getEditor() {
-        return editorView;
-    }
 
     function renderBlocked() {
         const chatlogElement = document.querySelector(".chatlog");

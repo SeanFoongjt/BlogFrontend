@@ -19,7 +19,6 @@ function MainWindowController(parent) {
         block,
         unblock,
         changeConversation,
-        clearConversation,
         clearActiveConversation : parent.clearActiveConversation,
         closeActiveConversation : parent.closeActiveConversation
     }
@@ -50,9 +49,12 @@ function MainWindowController(parent) {
     const rawcontentMap = new Map();
 
 
+    /**
+     * Change title of a conversation
+     * @param {String} newTitle new title to be changed to
+     */
     function changeTitle(newTitle) {
         parent.activeConversation.changeTitle(newTitle);
-        parent.updateSidebarConversation(parent.activeConversation);
     }
 
 
@@ -161,6 +163,7 @@ function MainWindowController(parent) {
                 subtext.innerText += " (edited)"
             }
 
+            // Ensure the conversation model is also edited
             parent.activeConversation.editMessage(
                 conversationId, 
                 quill.getText().trim(), 
@@ -169,7 +172,8 @@ function MainWindowController(parent) {
             )
             
             chatText.setAttribute("data-encoding", currEncoding.getAttribute("value"));
-            parent.updateSidebarConversation(parent.activeConversation);
+
+            // Cleanup should always be called
             cleanup();
         }
 
@@ -198,7 +202,6 @@ function MainWindowController(parent) {
      * @param {MyChat} object chat being replied to
      */
     function replyFunction(object) {
-        console.log("Enter replyFunction");
         // Only one cancellableProcess should be active at a time
         cpm.notifyCancellableProcesses();
 
@@ -222,7 +225,7 @@ function MainWindowController(parent) {
         replyButton.addEventListener("click", reply);
         object.addEventListener("cancel", cleanup);
 
-
+        // Function for if the reply button is clicked
         function reply() {
             // Terminate function early if no actual text is sent
             if (quill.getText().trim() == "" && quill.getContents()["ops"].length == 1) {
@@ -261,8 +264,8 @@ function MainWindowController(parent) {
     function deleteFunction(object) {
         cpm.notifyCancellableProcesses();
 
+        // Delete message from conversation model
         parent.activeConversation.deleteMessage(object.getAttribute("conversation-id"));
-        parent.updateSidebarConversation(parent.activeConversation);
 
         const chatlog = document.getElementById("chatlog");
         object.remove();
@@ -298,7 +301,6 @@ function MainWindowController(parent) {
             return;
         }
 
-        console.log("Available id : " + parent.activeConversation.availableId);
         // use createConversation to create html component
         const [newChat, newElement] = messageFactory.createSentMessage(
             rawHTML.trim(), 
@@ -310,6 +312,7 @@ function MainWindowController(parent) {
             false
         );
 
+        // Add message to conversation model
         if (!isReply) {
             parent.activeConversation.addMessage(newChat);
         } else {
@@ -318,8 +321,6 @@ function MainWindowController(parent) {
 
         // Store original html in rawcontentMap
         rawcontentMap.set(newElement, rawHTML);
-
-        parent.updateSidebarConversation(parent.activeConversation);
 
         return newChat;
     }
@@ -366,11 +367,6 @@ function MainWindowController(parent) {
 
             // Change conversation to the last conversation message is forwarded to
             parent.changeCurrentConversation(conversationList[conversationList.length - 1]);
-            for (const conversation of conversationList) {
-                parent.updateSidebarConversation(conversation);
-            }
-            
-
 
             cleanup();
         }
@@ -384,11 +380,6 @@ function MainWindowController(parent) {
                 child.querySelector("[type='checkbox']").checked = false;
             }
         }
-    }
-
-
-    function clearConversation() {
-        return;
     }
 
 

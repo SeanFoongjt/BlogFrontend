@@ -70,10 +70,17 @@ function ConversationModel(parent, imagePath="", title="") {
         }
     }
 
+    /**
+     * Function to add a message model to the conversation model
+     * @param {Object} message message to be added to the conversation model
+     * @param {Number} replyingTo whether the message is replying to another message, and if so
+     * the conversation id of the message replied to
+     */
     function addMessage(message, replyingTo = false) {
         self.availableId += 1;
         listOfMessages.push(message);
 
+        // Set reply map if the message is replying to another message
         if (replyingTo) {
             const chatRepliedTo = listOfMessages.find(findFunction(replyingTo)); 
 
@@ -88,7 +95,9 @@ function ConversationModel(parent, imagePath="", title="") {
 
         self.latestMessageTime = message.time;
 
+        parent.updateSidebarConversation(self);
         parent.updateForwardingPopup();
+
 
         console.log(replyMap);
     }
@@ -107,6 +116,7 @@ function ConversationModel(parent, imagePath="", title="") {
             }
         }
 
+        parent.updateSidebarConversation(self);
         parent.updateForwardingPopup();
     }
 
@@ -119,7 +129,9 @@ function ConversationModel(parent, imagePath="", title="") {
                 replyText.style.color = "#bebebe";
             }
         }
+
         listOfMessages.splice(listOfMessages.findIndex(findFunction(id)));
+        parent.updateSidebarConversation(self);
         parent.updateForwardingPopup();
     }
 
@@ -134,6 +146,7 @@ function ConversationModel(parent, imagePath="", title="") {
 
     function changeTitle(newTitle) {
         self.title = newTitle;
+        parent.updateSidebarConversation(self);
         parent.updateForwardingPopup();
     }
 

@@ -4,7 +4,7 @@ function ModelManager() {
     const filePromise = fetch("../../json/storage.json");
     const listOfConversations = [];
     let viewManager;
-    let views = {};
+    let views;
 
     const self = {
         initialiseFromJson,
@@ -15,6 +15,7 @@ function ModelManager() {
         updateForwardingPopup,
         searchConversationsByTitle,
         closeConversation,
+        updateSidebarConversation
     }
 
     async function initialiseFromJson(path) {
@@ -39,12 +40,7 @@ function ModelManager() {
 
     function setView(newView) {
         viewManager = newView;
-        const temp = newView.getViews();
-        views = {
-            sidebar: temp[0],
-            mainWindow : temp[1],
-            modal : temp[2]
-        }
+        views = newView.getViews();
     }
 
     function getSidebarList() {
@@ -60,6 +56,10 @@ function ModelManager() {
         return listOfConversations[0];
     }
 
+    function updateSidebarConversation(conversation) {
+        views.sidebar.update(conversation);
+    }
+
     function forwardMessagesByTitle(message, conversationList) {
         const resultList = [];
         
@@ -71,6 +71,7 @@ function ModelManager() {
             console.log(conversation);
             conversation.addMessage(message);
             resultList.push(conversation);
+            updateSidebarConversation(conversation);
         }
 
         return resultList;

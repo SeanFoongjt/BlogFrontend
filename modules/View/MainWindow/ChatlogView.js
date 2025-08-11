@@ -20,6 +20,11 @@ function ChatlogView(imagePath) {
         initialise
     }
 
+    /**
+     * Initialisation function, primarily serves to load in templates
+     * @param {*} conversation conversation to initialise the chatlog with
+     * @returns Promise containing the list of rendered chatbox elements
+     */
     async function initialise(conversation) {
         const loadSentMessage = fetch("../../templates/my-conversation.html")
             .then(res => res.text())
@@ -71,12 +76,11 @@ function ChatlogView(imagePath) {
             encoding: message.encoding,
         }
 
-
         // Initialise chatbox, add dropdown menu
         var chatbox = document.createElement("my-chat");
         chatbox.setAttribute("conversation-id", message.id);
-
         chatbox.innerHTML = sentMessageTemplate(contextObj);
+        chatlog.appendChild(chatbox);
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
@@ -101,8 +105,10 @@ function ChatlogView(imagePath) {
         // If the message is forwarded from another chat, set up a forward banner with
         // text regerencing the conversation
         if (message.forwardedFrom) {
+            console.log(chatbox);
             var forwardBanner = chatbox.shadowRoot.querySelector("div[name='forwardBanner']");
             var text = forwardBanner.querySelector("span[name='forwardText']");
+            console.log(text);
             
             text.innerText = "Forwarded from " + message.forwardedFrom;
             forwardBanner.removeAttribute("hidden");
@@ -110,11 +116,10 @@ function ChatlogView(imagePath) {
             
         }
 
-        chatlog.appendChild(chatbox);
         
         
-        // Can move binding of functions to controller most likely, though can also just
-        // stay here
+        
+        // Binding of functions like reply, edit, delete and forward
         chatbox.querySelector("[name='reply-button']")
             .addEventListener("click", () => chatlogController.replyFunction(chatbox));
         chatbox.querySelector("[name='edit-button']")
@@ -170,6 +175,7 @@ function ChatlogView(imagePath) {
         chatlog.appendChild(chatbox);
         
 
+        // Add event listeners for reply, forward etc.
         chatbox
             .querySelector("[name='reply-button']")
             .addEventListener("click", () => chatlogController.replyFunction(chatbox));
@@ -177,6 +183,8 @@ function ChatlogView(imagePath) {
             .querySelector("[name='forward-button']")
             .addEventListener("click", () => chatlogController.forwardFunction(chatbox));
 
+
+        // Make dropdown only visible when hovering over the chatbox
         chatbox.addEventListener(
             "mouseover", 
             () => chatbox.querySelector(".chat-dropdown").classList.add("revealed")
@@ -185,6 +193,8 @@ function ChatlogView(imagePath) {
             "mouseout", 
             () => chatbox.querySelector(".chat-dropdown").classList.remove("revealed")
         );
+
+        // Scroll to bottom
         chatlog.scrollTop = chatlog.scrollHeight;
 
         return chatbox;
@@ -268,8 +278,6 @@ function ChatlogView(imagePath) {
     function clear() {
         document.getElementById("chatlog").replaceChildren();
     }
-
-
 
     return self
 }

@@ -41,9 +41,7 @@ myChatTemplate.innerHTML = `
 class MyChat extends HTMLElement {
     constructor() {
         super();
-    }
 
-    connectedCallback() {
         console.log("my-chat element added to webpage");
 
         let template = myChatTemplate;
@@ -51,6 +49,9 @@ class MyChat extends HTMLElement {
 
         const shadowRoot = this.attachShadow({mode: "open"});
         shadowRoot.appendChild(templateContent.cloneNode(true));
+    }
+
+    connectedCallback() {
     }
 }
 
