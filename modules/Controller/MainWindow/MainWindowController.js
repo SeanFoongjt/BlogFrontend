@@ -32,6 +32,10 @@ function MainWindowController(parent) {
     let mainWindowView;
 
 
+    /**
+     * Set the main window view as well as the views of title section, editor and chatlog
+     * @param {MainWindowView} view 
+     */
     function setView(view) {
         mainWindowView = view;
         const views = mainWindowView.getViews();

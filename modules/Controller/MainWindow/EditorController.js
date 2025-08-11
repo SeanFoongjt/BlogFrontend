@@ -4,11 +4,6 @@ function EditorController(parent) {
     let editorView;
 
     // Initialise editor with custom toolbar
-
-    var Block = Quill.import('blots/block');
-    Block.tagName = 'p';
-    Quill.register(Block, true);
-
     const editor = document.getElementById('editor');
     const quill = new Quill("#editor", {
         theme: "snow",
@@ -33,15 +28,26 @@ function EditorController(parent) {
         hide
     }
 
+    /**
+     * Set editor view. Used during intialisation
+     * @param {EditorView} view 
+     */
     function setView(view) {
         editorView = view;
         view.setController(self);
     }
 
+    /**
+     * Show the editor
+     */
     function show() {
         editorView.show();
     }
 
+    /**
+     * Hide the editor
+     * @returns 
+     */
     function hide() {
         // Disallow editor to be hidden if there is content in the editor or if a chat is 
         // in the midst of being edited or replied to.
@@ -54,6 +60,10 @@ function EditorController(parent) {
         editorView.hide();
     }
 
+    /**
+     * Get a reference to the Quill instance
+     * @returns the singleton quill instance
+     */
     function getEditor() {
         return quill;
     }
