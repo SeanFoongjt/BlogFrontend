@@ -8,28 +8,35 @@ function EditorView() {
 
     const self = {
         isShowing : false,
-        getEditor,
         hide,
         show,
         clear,
         setController
     }
 
+    /**
+     * Set editor controller. Generally used during initialisation.
+     * @param {EditorController} controller 
+     */
     function setController(controller) {
         editorController = controller;
         quill = controller.getEditor();
     }
 
-    function getEditor() {
-        return quill;
-    }
-
+    /**
+     * Clear editor of all contents
+     */
     function clear() {
         quill.setContents([{ insert: '\n' }]);
     }
 
 
+    /**
+     * Hide editor and toolbars, display a prompt that opens the editor on click
+     * @returns 
+     */
     function hide() {
+        // Terminate if already hiding
         if (!self.isShowing) {
             return
         }
@@ -60,7 +67,14 @@ function EditorView() {
 
     }
 
+
+    /**
+     * Show the editor and toolbars. Revert to the clickable prompt if focus is lost while
+     * there is no ongoing process or text in the editor
+     * @returns 
+     */
     function show() {
+        // Terminate if already showing
         if (self.isShowing) {
             return
         }

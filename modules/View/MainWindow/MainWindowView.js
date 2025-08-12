@@ -7,7 +7,6 @@ function MainWindowView(imagePath="") {
     const titleSectionView = TitleSectionView(imagePath);
     const editorView = EditorView();
     let mainWindowController;
-    const quill = editorView.getEditor();
 
     const self = {
         render,
