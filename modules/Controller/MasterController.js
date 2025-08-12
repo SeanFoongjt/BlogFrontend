@@ -76,8 +76,9 @@ function MasterController() {
      */
     function closeActiveConversation() {
         model.closeConversation(self.activeConversation);
+        sidebarController.closeConversation(self.activeConversation);
         self.activeConversation = model.getFirstConversation();
-        sidebarController.closeConversation()
+        
         changeCurrentConversation(self.activeConversation);
     }
 

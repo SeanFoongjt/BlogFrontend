@@ -152,9 +152,9 @@ function SidebarView() {
      * Function to close the conversation. For the sidebar view this involves primarily the 
      * deletion of the tab that would have allowed access to the conversation
      */
-    function closeConversation() {
-        document.querySelector(`.sidebar-id-${activeConversationId}`).remove();
-        currOrder = currOrder.filter(conversation => conversation.conversationId != activeConversationId);
+    function closeConversation(conversation) {
+        document.querySelector(`.sidebar-id-${conversation.conversationId}`).remove();
+        currOrder = currOrder.filter(item => item.conversationId != conversation.conversationId);
 
         activeConversationId = currOrder[0].conversationId;
     }

@@ -82,10 +82,16 @@ function MainWindowController(parent) {
     }
 
 
+    /**
+     * Change the current conversation in the main window to another one.
+     * @param {ConversationModel} newConversation conversation being changed to
+     */
     function changeConversation(newConversation) {
+        // Empty main window and render new conversation
         document.getElementById("chatlog").replaceChildren();
         const chatboxes = mainWindowView.render(newConversation);
 
+        // Reset raw content map for edit function
         rawcontentMap.clear();
         for (const i in chatboxes) {
             rawcontentMap.set(chatboxes[i], newConversation.getListOfMessages()[i].rawHTML);

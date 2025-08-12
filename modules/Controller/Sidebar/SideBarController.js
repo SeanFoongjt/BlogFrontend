@@ -28,7 +28,6 @@ function SideBarController(parent) {
     }
 
 
-
     /**
      * Conversation searchbar logic
      */
