@@ -27,6 +27,10 @@ function ConversationModel(parent, imagePath="", title="") {
         changeTitle
     }
 
+    /**
+     * Initialise a conversation model from a json representation of a conversation
+     * @param {JSON} json json object to be processed
+     */
     function initialiseFromJson(json) {
         self.imagePath = json["imagePath"];
         self.title = json["title"];
@@ -111,10 +115,10 @@ function ConversationModel(parent, imagePath="", title="") {
 
     /**
      * Function to edit a message of the conversation
-     * @param {*} id id of the message to be edited
-     * @param {*} text new text
-     * @param {*} rawHTML rawHTMl corresponding to the new text
-     * @param {*} encoding new encoding
+     * @param {String || Number} id id of the message to be edited
+     * @param {String} text new text
+     * @param {String} rawHTML rawHTMl corresponding to the new text
+     * @param {String} encoding new encoding
      */
     function editMessage(id, text, rawHTML, encoding) {
         const message = listOfMessages.find(findFunction(id));
@@ -140,7 +144,7 @@ function ConversationModel(parent, imagePath="", title="") {
 
     /**
      * Delete a message from the conversation model
-     * @param {*} id if of the message to be deleted
+     * @param {String || Number} id if of the message to be deleted
      */
     function deleteMessage(id) {
         // If another message has replied to the message, their reply banner has to be modified
@@ -162,7 +166,7 @@ function ConversationModel(parent, imagePath="", title="") {
 
     /**
      * Getter for messages
-     * @param {*} id id of the message
+     * @param {String || Number} id id of the message
      * @returns Message model of the id passed as argument
      */
     function getMessage(id) {

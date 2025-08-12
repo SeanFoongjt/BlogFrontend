@@ -9,6 +9,18 @@ function MessageFactory(chatlogView = undefined) {
         createSentMessage
     }
 
+    /**
+     * Create a sent message with the appropriate fields. Also renders the message if a view has
+     * been passed to the MessageFactory instance
+     * @param {String} rawHTML 
+     * @param {String} time 
+     * @param {String} encoding 
+     * @param {String || Number} replyingTo 
+     * @param {String} rawtext 
+     * @param {String || Number} id 
+     * @param {String || Number} forwardedFrom 
+     * @returns A SentMessage object
+     */
     function createSentMessage(rawHTML, time, encoding, replyingTo, rawtext, id, forwardedFrom) {
         const chat = SentMessage(rawHTML, time, encoding, replyingTo, rawtext, id, forwardedFrom);
         if (chatlogView != undefined) {
@@ -20,6 +32,11 @@ function MessageFactory(chatlogView = undefined) {
         return [chat, element];
     }
 
+    /**
+     * Initialise a message model from a JSON object
+     * @param {JSON} json 
+     * @returns The message object corresponding to the correct message type
+     */
     function initialiseFromJson(json) {
         const type = json["type"];
         const rawHTML = json["rawHTML"];
@@ -43,6 +60,16 @@ function MessageFactory(chatlogView = undefined) {
     return self
 }
 
+/**
+ * Function to create a received message object with the appropriate fields
+ * @param {String} rawHTML 
+ * @param {String} time 
+ * @param {String} encoding 
+ * @param {String} text 
+ * @param {String || Number} id 
+ * @param {String || Number} forwardedFrom 
+ * @returns 
+ */
 function ReceivedMessage(rawHTML, time, encoding, text, id, forwardedFrom) {
     const setHTMLElement = element => self.htmlElement = element;
 
@@ -62,6 +89,17 @@ function ReceivedMessage(rawHTML, time, encoding, text, id, forwardedFrom) {
     return self
 }
 
+/**
+ * Function to create a sent message object with the appropriate fields.
+ * @param {String} rawHTML 
+ * @param {String} time 
+ * @param {String} encoding 
+ * @param {String || Number} replyingTo 
+ * @param {String} text 
+ * @param {String || Number} id 
+ * @param {String || Number} forwardedFrom 
+ * @returns 
+ */
 function SentMessage(rawHTML, time, encoding, replyingTo, text, id, forwardedFrom) {
     const setHTMLElement = element => self.htmlElement = element;
 
@@ -83,16 +121,25 @@ function SentMessage(rawHTML, time, encoding, replyingTo, text, id, forwardedFro
     return self
 }
 
-function copy(object) {
+/**
+ * Function to create a copy of a message decoupled from replies
+ * @param {Object} message Message to be copied
+ * @returns 
+ */
+function copy(message) {
     const objectToReturn = {}
-    Object.assign(objectToReturn, object);
+    // Copy fields
+    Object.assign(objectToReturn, message);
+    
+    // Reassign setHTMLElement and copy function to work on the new message's fields
     const setHTMLElement = element => objectToReturn.htmlElement = element;
     objectToReturn.setHTMLElement = setHTMLElement;
-    objectToReturn.replyingTo = false;
-    objectToReturn.time = Date(Date.now());
     objectToReturn.copy = () => copy(objectToReturn);
 
-    console.log(objectToReturn);
+    // Remove reply coupling, set time
+    objectToReturn.replyingTo = false;
+    objectToReturn.time = Date(Date.now());
+    
     return objectToReturn;
 }
 
