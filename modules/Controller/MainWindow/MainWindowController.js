@@ -295,7 +295,6 @@ function MainWindowController(parent) {
      * @returns 
      */
     function sendFunction(event, isReply=false) {
-        console.log("test");
         // Retrieve encoding type
         var encodingType = document.getElementById("encoding-dropup").getAttribute("value");
 
@@ -306,7 +305,7 @@ function MainWindowController(parent) {
         quill.setText("");
         rawtext = rawtext.trim();
 
-        // Terminate function early if no actual text is sent
+        // Terminate function early if there is no actual content sent
         if (rawtext == "" && contents["ops"].length == 1) {
             console.log("terminated early");
             return;
@@ -356,7 +355,7 @@ function MainWindowController(parent) {
         const message = parent.activeConversation.getMessage(id)
         let titleList = [];
 
-        // Create a copy of the message and set the ForwardedFrom attribute
+        // Create a copy of the message and set the ForwardedFrom field
         const messageToForward = message.copy();
         messageToForward.type = "my-chat";
         messageToForward.forwardedFrom = parent.activeConversation.title;
