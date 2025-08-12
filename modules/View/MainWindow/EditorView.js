@@ -44,9 +44,8 @@ function EditorView() {
         
     
         // Adjust height and scroll position of chatlog
-        const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight;
-        chatlog.scrollTop = 
-            Math.max(chatlog.scrollTop - editorToolbarContainerHeight + editorPrompt.offsetHeight, 0);
+        const editorToolbarContainerHeight = 
+            editorToolbarContainer.offsetHeight;
         chatlog.style.height = "90%";
         chatlog.style.maxHeight = "90%";
     
@@ -55,6 +54,9 @@ function EditorView() {
         bottomToolbar.setAttribute("hidden", "");
         editorPrompt.removeAttribute("hidden");
         self.isShowing = false;
+
+        chatlog.scrollTop = 
+            Math.max(chatlog.scrollTop - editorToolbarContainerHeight + editorPrompt.offsetHeight, 0);
 
     }
 
@@ -71,7 +73,7 @@ function EditorView() {
         editorPrompt.setAttribute("hidden", "");
         quill.focus();
         const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
-        chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
+        
         document.querySelector(".ql-container").style.height = 
             `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
     
@@ -79,6 +81,8 @@ function EditorView() {
         chatlog.addEventListener("click", editorController.hide);
         document.getElementById("title-section").addEventListener("click", editorController.hide);
         document.getElementById("sidebar").addEventListener("click", editorController.hide);
+
+        chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
         self.isShowing = true;
         
     }

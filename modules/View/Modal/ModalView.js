@@ -6,7 +6,7 @@ function ModalView() {
     self = {
         setController,
         confirmationPopupFunction,
-        renderForwardingPopup
+        loadForwardingPopup
     }
 
     function setController(controller) {
@@ -51,7 +51,11 @@ function ModalView() {
     const forwardingPopupFooter = forwardingPopup.querySelector(".modal-footer");
     var forwardingConfirmButton = forwardingPopupFooter.querySelector("button[name='confirm']");
 
-    function renderForwardingPopup(conversationList) {
+    /**
+     * Function to load 
+     * @param {*} conversationList 
+     */
+    function loadForwardingPopup(conversationList) {
         const list = forwardingPopupBody.querySelector(".list-group");
 
         var elementTemplate = fetch("../../../templates/forward-menu-item.html")

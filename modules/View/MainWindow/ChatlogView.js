@@ -26,6 +26,7 @@ function ChatlogView(imagePath) {
      * @returns Promise containing the list of rendered chatbox elements
      */
     async function initialise(conversation) {
+        // Initialise templates for sent and received messages
         const loadSentMessage = fetch("../../templates/my-conversation.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text))
@@ -36,12 +37,9 @@ function ChatlogView(imagePath) {
             .then(text => Handlebars.compile(text))
             .then(item =>  {receivedMessageTemplate = item; return 1});
 
+        // Once the templates have finished loading, render the conversations
         return Promise.all([loadSentMessage, loadReceivedMessage])
             .then(() => renderConversation(conversation.getListOfMessages()));
-
-        
-        //renderConversation(conversation.getListOfMessages());
-
     }
 
     /**
@@ -80,7 +78,9 @@ function ChatlogView(imagePath) {
         var chatbox = document.createElement("my-chat");
         chatbox.setAttribute("conversation-id", message.id);
         chatbox.innerHTML = sentMessageTemplate(contextObj);
+
         chatlog.appendChild(chatbox);
+        
 
         // If the chat is replying to another chat, set up a reply banner with text
         // referencing the chat replied
@@ -207,6 +207,8 @@ function ChatlogView(imagePath) {
         const listOfChatboxes = [];
         latestTime = undefined;
 
+        // Render all messages in the conversation, checking message type to render
+        // the correct chatboxes
         for (const messageModel of conversation) {
             if (messageModel.type === "my-chat") {
                 listOfChatboxes.push(renderSentMessage(messageModel));
@@ -234,9 +236,11 @@ function ChatlogView(imagePath) {
             latestTime.getMonth() != messageTime.getMonth() ||
             latestTime.getFullYear() != messageTime.getFullYear()
         ) {
+            // CCreate a container and format the string
             const container = document.createElement("div");
             const timeString = messageTime.getDate() + " " + monthNames[messageTime.getMonth()]
 
+            // Fetch and fill template then use it as HTML
             fetch("../../templates/new-day.html")
                 .then(res => res.text())
                 .then(text => Handlebars.compile(text))
@@ -244,14 +248,13 @@ function ChatlogView(imagePath) {
                 .then(element => container.innerHTML = element)
 
             chatlog.append(container);
-
         }
 
         latestTime = messageTime;
     }
 
     /**
-     * Format the string to be used as text for the reply banner.
+     * Format the string to be used as text for the reply banner
      * @param {string} string string to be formatted
      * @param {HTMLElement} chatbox chatbox containing the reply banner
      * @param {Promise} promise promise to wait for before textbox is available

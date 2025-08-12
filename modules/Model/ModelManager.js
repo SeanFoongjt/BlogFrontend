@@ -99,7 +99,7 @@ function ModelManager() {
     }
 
     function updateForwardingPopup() {
-        viewManager.getModal().renderForwardingPopup(self.getSidebarList());
+        viewManager.getModal().loadForwardingPopup(self.getSidebarList());
     }
 
     return self

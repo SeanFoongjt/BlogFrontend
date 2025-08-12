@@ -11,7 +11,7 @@ function ModalController(parent) {
 
 
     function initialise(conversationList) {
-        modalView.renderForwardingPopup(conversationList);
+        modalView.loadForwardingPopup(conversationList);
     }
 
     function setView(view) {

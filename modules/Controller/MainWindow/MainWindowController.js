@@ -33,7 +33,8 @@ function MainWindowController(parent) {
 
 
     /**
-     * Set the main window view as well as the views of title section, editor and chatlog
+     * Set the main window view as well as the views of title section, editor and chatlog. Used
+     * during intialisation
      * @param {MainWindowView} view 
      */
     function setView(view) {
