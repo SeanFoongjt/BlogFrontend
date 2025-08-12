@@ -137,6 +137,18 @@ function TitleSectionController(parent) {
         )
     )
 
+
+    const selectConversationButton = document.getElementById("open-conversation-selection");
+    selectConversationButton.addEventListener(
+        "click",
+        () => {
+            const sidebarClassList = document.getElementById("sidebar").classList;
+            sidebarClassList.remove("d-none");
+            sidebarClassList.add("d-flex");
+            document.querySelector(".chat-container").style.display = "none";
+        }
+    )
+
     return self
 }
 

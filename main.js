@@ -3,7 +3,7 @@ import { MasterController } from "./modules/Controller/MasterController.js";
 /**
  * Launch app
  */
-const controller = MasterController();
+const controller = MasterController("./json/storage.json");
 
 // TODO start
 // Web Speech API as supported by major browsers

@@ -65,6 +65,12 @@ function MainWindowView(imagePath="") {
         sendButton.addEventListener("click", controller.sendFunction);
     }
 
+    /**
+     * Render a provided conversation
+     * @param {ConversationModel} conversation Conversation to be rendered
+     * @returns Array of chatboxes rendered. Each chatbox corresponds to a message of the 
+     * conversation
+     */
     function render(conversation) {
         chatlogView.setImage(conversation.imagePath);
         const listOfChatboxes = chatlogView.renderConversation(conversation.getListOfMessages())
@@ -76,6 +82,18 @@ function MainWindowView(imagePath="") {
             
         } else {
             renderUnblocked();
+        }
+
+        // For mobile, currently used for when the conversation is changed. Detects if the 
+        // chat container is currently hidden and exposes it if it is.
+        const chatContainer = document.querySelector(".chat-container");
+        if (chatContainer.style.display == "none") {
+            console.log(true);
+            chatContainer.style.display = "block";
+            document.getElementById("sidebar").classList.remove("d-flex");
+            document.getElementById("sidebar").classList.add("d-none");
+            const chatlog = document.getElementById("chatlog");
+            chatlog.scrollTop = chatlog.scrollHeight;
         }
 
         return listOfChatboxes;

@@ -5,7 +5,7 @@ import { ModalController } from "./Modal/ModalController.js";
 import { SideBarController } from "./Sidebar/SideBarController.js";
 
 
-function MasterController() {
+function MasterController(path) {
     const model = ModelManager();
     const view = ViewManager();
     const self = {
@@ -29,7 +29,7 @@ function MasterController() {
 
 
     // Initialise data from json
-    const modelInitialise = model.initialiseFromJson("./json/storage.json");
+    const modelInitialise = model.initialiseFromJson(path);
 
     modelInitialise
         .then(() => self.initialise(

@@ -90,7 +90,9 @@ function SidebarView() {
 
             // Add event listener to the tab to change conversation on click
             currOption.addEventListener("click", () => {
-                if (activeConversationId != conversation.conversationId) {
+                if (activeConversationId != conversation.conversationId ||
+                    document.querySelector(".chat-container").style.display == "none"
+                ) {
                     sidebarController.changeConversation(conversation.self)
                 }
             });

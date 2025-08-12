@@ -106,7 +106,7 @@
     
         <!-- Search bar for other conversations -->
         <div class="d-flex my-2 ps-3 py-2 rounded-pill border border-1 align-items-center
-        text-muted text-opacity-50" id="chat-searchbar">
+        text-muted text-opacity-50 flex-grow-1" id="chat-searchbar">
             <i class="fa-search fa-solid pe-2"></i>
             <input class="w-80 flex-grow-1 me-2" contenteditable="true" 
             placeholder="Search" id="conversation-search-text" autocomplete="off">
@@ -156,6 +156,9 @@
                         data-bs-toggle="modal" data-bs-target="#confirmation-popup-modal">Close Conversation</a>
                     <a class="dropdown-item" href="#" id="rename-title"
                         data-bs-toggle="modal" data-bs-target="#input-popup-modal">Rename title</a>
+                    <a class="dropdown-item d-md-none d-block" href="#" id="open-conversation-selection">
+                        Open conversations
+                    </a>
                 </div>
             </div>
         </div>

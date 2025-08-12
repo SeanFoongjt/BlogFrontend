@@ -66,8 +66,6 @@ function ConversationModel(parent, imagePath="", title="") {
             latestMessageText = lastMessage.text.replace(/[\r\n]+/gm, " ");
             latestMessageTime = DateTimeFormatting.formatTimeForSidebar(lastMessage.time);
         }
-
-        
         
 
         return {

@@ -52,21 +52,28 @@ function ModalView() {
     var forwardingConfirmButton = forwardingPopupFooter.querySelector("button[name='confirm']");
 
     /**
-     * Function to load 
-     * @param {*} conversationList 
+     * Function to load (but not necessarily render) the popup that shows when forwarding a message
+     * @param {Array} conversationList list of conversation models to update the popup with
      */
     function loadForwardingPopup(conversationList) {
         const list = forwardingPopupBody.querySelector(".list-group");
 
+        // fetch template
         var elementTemplate = fetch("../../../templates/forward-menu-item.html")
             .then(res => res.text())
             .then(text => Handlebars.compile(text));
 
 
+        // Once template is loaded
         elementTemplate.then(template => {
+            // Empty old popup
             list.replaceChildren();
+
+            // Then for each conversation, fill in title, information about latest message and
+            // the appropriate event listener
             for (const conversation of conversationList) {
                 let currOption;
+                // Used to temporarily hold handlebars template
                 currOption = document.createElement("template");
                 conversation["htmlId"] = "forward-to-" + conversation["title"];
                 currOption.innerHTML = template(conversation);
