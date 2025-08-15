@@ -121,7 +121,9 @@ function MainWindowView(imagePath="") {
 
             // Adjust height of chatlog
             if (editorView.isShowing) {
+                console.log("Resize before: " + chatlog.scrollTop);
                 chatlogElement.scrollTop = chatlogElement.scrollTop + newHeight - prevHeight; 
+                console.log("Resize after: " + chatlog.scrollTop);
                 console.log("chatlog moved");
             }
             prevHeight = newHeight;

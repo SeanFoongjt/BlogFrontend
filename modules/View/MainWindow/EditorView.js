@@ -52,7 +52,7 @@ function EditorView() {
     
         // Adjust height and scroll position of chatlog
         const editorToolbarContainerHeight = 
-            editorToolbarContainer.offsetHeight;
+            editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
         chatlog.style.height = "90%";
         chatlog.style.maxHeight = "90%";
     
@@ -62,9 +62,12 @@ function EditorView() {
         editorPrompt.removeAttribute("hidden");
         self.isShowing = false;
 
+        console.log("Editor hide before: " + chatlog.scrollTop);
+        console.log("Prompt " + editorPrompt.offsetHeight);
+        console.log("Container " + editorToolbarContainerHeight);
         chatlog.scrollTop = 
             Math.max(chatlog.scrollTop - editorToolbarContainerHeight + editorPrompt.offsetHeight, 0);
-
+        console.log("Editor hide after: " + chatlog.scrollTop);
     }
 
 
@@ -86,17 +89,23 @@ function EditorView() {
         const editorPromptHeight = editorPrompt.offsetHeight;
         editorPrompt.setAttribute("hidden", "");
         quill.focus();
-        const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
+        
         
         document.querySelector(".ql-container").style.height = 
             `calc(100% - ${document.querySelector(".ql-toolbar").offsetHeight}px)`;
+        const editorToolbarContainerHeight = editorToolbarContainer.offsetHeight + bottomToolbar.offsetHeight;
     
         // Add listeners to chatlog and title section to hide editor when they are clicked
         chatlog.addEventListener("click", editorController.hide);
         document.getElementById("title-section").addEventListener("click", editorController.hide);
         document.getElementById("sidebar").addEventListener("click", editorController.hide);
 
-        chatlog.scrollTop = chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight;
+        console.log("Editor show before: " + chatlog.scrollTop);
+        console.log("Prompt " + editorPromptHeight);
+        console.log("Container " + editorToolbarContainerHeight);
+        chatlog.scrollTop = 
+            chatlog.scrollTop + editorToolbarContainerHeight - editorPromptHeight
+        console.log("Editor show after: " + chatlog.scrollTop);
         self.isShowing = true;
         
     }

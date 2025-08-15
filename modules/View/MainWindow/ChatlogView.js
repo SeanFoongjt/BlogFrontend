@@ -138,7 +138,7 @@ function ChatlogView(imagePath) {
         );
 
         // Scroll to bottom of chatlog
-        chatlog.scrollTop = chatlog.scrollHeight;
+        chatlog.scrollTop = chatlog.scrollHeight - chatlog.clientHeight;
 
         // Link message to HTMLElement
         message.setHTMLElement(chatbox);
@@ -192,7 +192,7 @@ function ChatlogView(imagePath) {
         );
 
         // Scroll to bottom
-        chatlog.scrollTop = chatlog.scrollHeight;
+        chatlog.scrollTop = chatlog.scrollHeight - chatlog.clientHeight;
 
         return chatbox;
 
